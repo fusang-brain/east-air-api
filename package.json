@@ -28,7 +28,8 @@
   "scripts": {
     "start": "concurrently --kill-others \"better-npm-run start-prod-api\"",
     "lint": "eslint -c .eslintrc src",
-    "dev": "better-npm-run dev-api"
+    "dev": "better-npm-run dev-api",
+    "migrate": ""
   },
   "betterScripts": {
     "start-prod-api": {
@@ -65,9 +66,11 @@
     "mdi": "^1.8.36",
     "mongoose": "^4.9.2",
     "multer": "^1.3.0",
+    "mysql": "^2.13.0",
     "path": "^0.12.7",
     "piping": "^1.0.0-rc.4",
-    "pretty-error": "^2.0.3"
+    "pretty-error": "^2.0.3",
+    "sequelize": "^3.30.4"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -84,6 +87,7 @@
     "eslint-loader": "^1.7.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-standard": "^2.1.1",
+    "sequelize-cli": "^2.7.0",
     "webpack": "^2.3.2",
     "webpack-hot-middleware": "^2.17.1"
   }

@@ -1,5 +1,5 @@
 /**
- * Created by alixez on 17-6-6.
+ * Created by alixez on 17-6-7.
  */
 import path from 'path';
 const uploadFolder = path.join(__dirname, '../uploads');

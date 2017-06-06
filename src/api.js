@@ -5,20 +5,23 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import * as actions from './actions/index';
 import config from './config';
-import apiConfig from './api_config';
+import apiConfig from './apiConfig';
 import mongoose from 'mongoose';
 import log4js from 'log4js';
 import multer from 'multer';
+import models from './models';
 import { mapUrl } from './utils/url';
 import { randomString } from './utils/utils';
 
 console.log('Good jobs!! ==> Start to load server ...');
 mongoose.connect(apiConfig.mongoose.db);
 mongoose.Promise = Promise;
+
 const log = log4js.getLogger("app");
 const pretty = new PrettyError();
 const app = express();
 const server = new http.Server(app);
+
 const storage = multer.diskStorage({
   destination: (req, filter, cb) => {
     cb(null, apiConfig.uploadFolder);
@@ -43,6 +46,7 @@ log4js.configure({
   ],
   replaceConsole: true
 });
+
 app.use(multer(storage).single('file'));
 app.use(log4js.connectLogger(log4js.getLogger('http'), { level: 'auto' }));
 app.use(bodyParser.urlencoded( { extended: true }));
@@ -54,7 +58,7 @@ app.use((req, res) => {
   const {action, params} = mapUrl(actions, splittedUrlPath);
 
   if (action) {
-    action(req, params)
+    action(req, params, {models})
       .then((result) => {
         if (result instanceof Function) {
           result(res);

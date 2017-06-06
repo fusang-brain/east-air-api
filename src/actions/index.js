@@ -3,8 +3,3 @@
  * Filename:
  * Author  : alixez
  */
-
-import '../models/User';
-
-export login from './login';
-export register from './register';
