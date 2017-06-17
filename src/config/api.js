@@ -12,6 +12,18 @@ export default {
       min: 0,
       idle: 10000
     },
+    dialectOptions: {
+      charset: 'utf8mb4'
+    },
+    define: {
+      underscored: true,
+      paranoid: true,
+    }
+  },
+
+  jwt: {
+    secret: 'its-20160612-uibki131-21nhusfd',
+
   },
 
   db: {

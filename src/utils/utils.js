@@ -8,3 +8,11 @@ export function randomString() {
   let suffix = Math.random().toString(36).substring(5);
   return `${time}-${suffix}`;
 }
+
+export function getIPAddress(req) {
+  const ip = req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress;
+  return ip;
+}

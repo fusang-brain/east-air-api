@@ -5,17 +5,15 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import * as actions from './actions/index';
 import config from './config';
-import apiConfig from './apiConfig';
-import mongoose from 'mongoose';
+import apiConfig from './config/api';
+// import mongoose from 'mongoose';
 import log4js from 'log4js';
 import multer from 'multer';
 import models from './models';
 import { mapUrl } from './utils/url';
 import { randomString } from './utils/utils';
-
-console.log('Good jobs!! ==> Start to load server ...');
-mongoose.connect(apiConfig.mongoose.db);
-mongoose.Promise = Promise;
+// mongoose.connect(apiConfig.mongoose.db);
+// mongoose.Promise = Promise;
 
 const log = log4js.getLogger("app");
 const pretty = new PrettyError();
@@ -70,7 +68,12 @@ app.use((req, res) => {
           res.redirect(reason.redirect);
         } else {
           console.error('API ERROR:', pretty.render(reason));
-          res.status(reason.status || 500).json(reason);
+          const code = reason.code || 0;
+          let status = 500;
+          if (parseInt(code / 1000) === 2) {
+            status = 200;
+          }
+          res.status(reason.status || status).json(reason);
         }
       });
   } else {
@@ -82,6 +85,8 @@ const bufferSize = 100;
 const messageBuffer = new Array(bufferSize);
 
 let messageIndex = 0;
+
+console.log('Good jobs!! ==> Start to load server ...');
 
 if (config.apiPort) {
   const runnable = app.listen(config.apiPort, (err) => {
