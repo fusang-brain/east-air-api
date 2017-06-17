@@ -38,7 +38,7 @@ export default function (sequelize, DataTypes) {
     retire_time: {type: DataTypes.STRING},                       // 退休时间
 
     dept: {type: DataTypes.UUID},         // 所属部门 外键
-    role: {type: DataTypes.UUID},        // 角色
+    roles: {type: DataTypes.UUID},        // 角色
 
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
     create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},

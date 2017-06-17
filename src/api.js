@@ -56,7 +56,8 @@ app.use((req, res) => {
   const {action, params} = mapUrl(actions, splittedUrlPath);
 
   if (action) {
-    action(req, params, {models})
+    const device = req.header('EA-DEVICE');
+    action(req, params, {models, device})
       .then((result) => {
         if (result instanceof Function) {
           result(res);
