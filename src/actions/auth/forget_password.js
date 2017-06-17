@@ -7,6 +7,12 @@ import sha1 from 'crypto-js/sha1';
 import moment from 'moment';
 
 export default async function(req, params, {device, models}) {
+  if (!device) {
+    throw {
+      code: getErrorCode(),
+      message: '请传入调用接口的设备（app/pc）'
+    }
+  }
   const UserModel = models.User;
   const {mobile, code, password, re_password} = req.body;
 
@@ -87,6 +93,5 @@ export default async function(req, params, {device, models}) {
       message: '密码修改成功',
     }
   }
-
 
 }

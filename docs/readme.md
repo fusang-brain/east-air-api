@@ -30,3 +30,5 @@ __接口设计没有采用现在比较流行的RESTAPI设计方式, 虽然它有
 #### 认证模块
 
 * [登录接口](./auth/login.md)
+* [忘记密码](./auth/forget_password.md)
+* [修改密码(App端 忘记密码后置操作)](./auth/reset_password.md)
