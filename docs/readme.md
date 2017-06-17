@@ -20,10 +20,28 @@ __接口设计没有采用现在比较流行的RESTAPI设计方式, 虽然它有
 所有接口的数据传输都采用JSON。 当客户端需要向服务器POST数据的时候，开发者需要将数据以JSON对象的方式
 放到Http的Body里面。而GET方式的话就只需要通过GET Params方式去传参就OKay。
 
-#### 关于登录认证
+#### 关于API认证
 
 接口授权认证统一采用 JWT 权鉴认证。 因此，调用除登录接口的其他接口之前，你都需要使用用JWT权鉴。JWT权鉴
-可以在调用登录接口时获得。... 暂时先不管登录
+可以在调用登录接口时获得。
+那么获取到的 access_token 怎么用呢？当你调起除登录以外的其他接口时需要将你在登录接口获得到的 access_token 
+放到每次请求的 HTTP Headers 里面。
+```
+// 这里只是伪代码，每个平台的方法各不相同
+setHeaders('X-ACCESS-TOKEN', access_token)
+```
+web端切记，通过登录接口获取到的access_token, 只能放在local_storage 或这 WEB SQL中做本地持久化。不可以使用类似于
+Cookie的不安全存储方式。或者，也可以不做本地存储，而仅仅放在内存中，这样可以提高程序的相对安全性。
+
+**由于相同的接口在WEB端和APP端可能存在不同的业务逻辑实现。**因此每个接口的调用需要一个平台flag, 做平台区分。和access_token用法一样。
+每个接口的调用需要在HTTP Headers中放置参数 EA-DEVICE : app/pc
+```
+// for pc 
+setHeaders('EA-DEVICE', 'pc')
+
+// for app
+setHeaders('EA-DEVICE', 'app')
+```
 
 ### 接口索引
 
