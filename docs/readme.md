@@ -12,13 +12,33 @@ __接口设计没有采用现在比较流行的RESTAPI设计方式, 虽然它有
 #### 关于 HTTP Request Method
 
 所有的接口设计仅仅使用HTTP协议的两种请求方式 (POST/GET)。 接口设计最大的原则是，
-当当前接口对服务器上的数据进行了更改的时候需要用POST方式，而相反的当当前接口只是做数据查询操作的时候
+每当当前接口对服务器上的数据进行了更改的时候需要用POST方式，而相反的当当前接口只是做数据查询操作的时候
 请求方式自然就是GET。
 
 #### 关于参数传递
 
 所有接口的数据传输都采用JSON。 当客户端需要向服务器POST数据的时候，开发者需要将数据以JSON对象的方式
-放到Http的Body里面。而GET方式的话就只需要通过GET Params方式去传参就OKay。
+放到Http的Body里面。而GET方式的话就只需要通过GET Params方式去传参就OKay。下面以前端使用axios进行网络
+请求为例，做个描述
+```javascript
+
+// GET
+async () => {
+  const resp = await axios.get('http://localhost:3090/auth/login?param1=123&param2=1234');
+  
+  ...
+}
+
+// POST
+async () => {
+  const resp = await axios.post('http://localhost:3090/auth/login', {
+    param1: '123',
+    param2: 1234,
+  })
+  
+  ...
+}
+```
 
 #### 关于API认证
 
@@ -43,7 +63,7 @@ setHeaders('EA-DEVICE', 'pc')
 setHeaders('EA-DEVICE', 'app')
 ```
 
-### 接口索引
+## 接口索引
 
 #### 认证模块
 
