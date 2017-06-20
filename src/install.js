@@ -14,14 +14,14 @@ log('========== START SYNC DATABASES ==========');
 try {
   models.sequelize.sync().then(() => {
     log('========== START INIT USERINFO ==========');
-    // models.User.create({
-    //   name: '管理员',
-    //   mobile: '18627894265',
-    //   nickname: '管理员',
-    //   birthday: new Date().getTime(),
-    //   card_num: '--',
-    //   password: Auth.encodePassword('7C4A8D09CA3762AF61E59520943DC26494F8941B'), // '1234567'
-    // });
+     models.User.create({
+       name: '管理员',
+       mobile: '18627894265',
+       nickname: '管理员',
+       birthday: new Date().getTime(),
+       card_num: '--',
+       password: Auth.encodePassword('7C4A8D09CA3762AF61E59520943DC26494F8941B'), // '1234567'
+     });
     log('========== START INIT DEPT ==========');
     // models.Dept.bulkCreate([
     //   {
