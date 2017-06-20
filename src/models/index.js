@@ -7,29 +7,9 @@ import Sequelize from 'sequelize';
 
 const db = {};
 const env = process.env.NODE_ENV || 'development';
-const config = require(path.join(__dirname, '..', 'config', 'sequelize.json'))[env];
-const apiConfig = require('../config/api');
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: 'localhost',
-  dialect: 'mysql',
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  },
-  dialectOptions: {
-    charset: "utf8",
-    collate: "utf8_unicode_ci",
-    supportBigNumbers: true,
-    bigNumberStrings: true
-  },
-  define: {
-    underscored: false,
-    timestamps: false,
-    deletedAt: false,
-    paranoid: true
-  }
-});
+const config = require(path.join(__dirname, '..', 'config', 'sequelize.json'));
+const DBConfig = config[env];
+const sequelize = new Sequelize(DBConfig.database, DBConfig.username, DBConfig.password, config.options);
 
 fs.readdirSync(__dirname)
   .filter(file => {

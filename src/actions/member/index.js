@@ -3,3 +3,4 @@
  */
 export * as dept from './dept';
 export create from './create';
+export list from './list';
