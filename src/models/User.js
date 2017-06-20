@@ -3,7 +3,7 @@
  */
 
 export default function (sequelize, DataTypes) {
-  return sequelize.define('User', {
+  const User = sequelize.define('User', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     name: {type: DataTypes.STRING, allowNull: false},
     birthday: {type: DataTypes.STRING, allowNull: false},
@@ -37,17 +37,19 @@ export default function (sequelize, DataTypes) {
     quit_time: {type: DataTypes.STRING},                         // 离职时间
     retire_time: {type: DataTypes.STRING},                       // 退休时间
 
-    dept: {type: DataTypes.UUID},         // 所属部门 外键
+    dept: {type: DataTypes.UUID, references: null},         // 所属部门 外键
     roles: {type: DataTypes.UUID},        // 角色
 
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
     create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
     update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
   }, {
-    // classMethods: {
-    //   associate(models) {
-    //     User.hasMany(models.Task)
-    //   }
-    // }
+    classMethods: {
+      associate(models) {
+        User.belongsTo(models.Dept, {as: 'department', foreignKey: 'dept', sourceKey: 'id'});
+      }
+    }
   });
+
+  return User;
 }

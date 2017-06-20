@@ -18,5 +18,6 @@ try {
     process.exit(1);
   }
 }
+
 require('../server.babel'); // babel registration (runtime transpilation for node)
 require('../src/api');

@@ -23,7 +23,6 @@ export default {
 
   jwt: {
     secret: 'its-20160612-uibki131-21nhusfd',
-
   },
 
   db: {
