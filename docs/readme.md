@@ -70,3 +70,8 @@ setHeaders('EA-DEVICE', 'app')
 * [登录接口](./auth/login.md)
 * [忘记密码](./auth/forget_password.md)
 * [修改密码(App端 忘记密码后置操作)](./auth/reset_password.md)
+
+#### 会员管理模块
+
+* [获取工会列表接口](./memberManager/dept_list.md)
+* [创建工会](./memberManager/dept.md)
