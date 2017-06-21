@@ -1,6 +1,7 @@
 /**
  * Created by alixez on 17-6-15.
  */
+
 export default function (sequelize, DataTypes) {
   return sequelize.define('Dept', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},

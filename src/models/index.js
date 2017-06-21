@@ -9,6 +9,16 @@ const db = {};
 const env = process.env.NODE_ENV || 'development';
 const config = require(path.join(__dirname, '..', 'config', 'sequelize.json'));
 const DBConfig = config[env];
+
+function log(...message) {
+  if (process.env.NODE_ACTION === 'install') return;
+  if (env === 'development') {
+    console.log(message);
+  }
+  return true;
+}
+
+config.options.logging = log;
 const sequelize = new Sequelize(DBConfig.database, DBConfig.username, DBConfig.password, config.options);
 
 fs.readdirSync(__dirname)

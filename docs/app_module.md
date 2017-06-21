@@ -63,7 +63,7 @@
 |经费申请|填写申请|funding_applications|create|
 |经费申请|编辑申请|funding_applications|edit|
 |经费申请|删除申请|funding_applications|remove|
-|经费申请|删除申请|funding_applications|view|
+|经费申请|查看申请|funding_applications|view|
 |&nbsp;|&nbsp;|&nbsp;|&nbsp;|
 |经费审批|活动经费|funding_approval|activity_funding|
 |经费审批|经费审批|funding_approval|apply_funding|

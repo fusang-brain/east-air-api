@@ -12,6 +12,8 @@ import multer from 'multer';
 import models from './models';
 import { mapUrl } from './utils/url';
 import { randomString } from './utils/utils';
+import response from './config/response';
+
 // mongoose.connect(apiConfig.mongoose.db);
 // mongoose.Promise = Promise;
 
@@ -57,7 +59,7 @@ app.use((req, res) => {
 
   if (action) {
     const device = req.header('EA-DEVICE');
-    action(req, params, {models, device})
+    action(req, params, {models, device, response})
       .then((result) => {
         if (result instanceof Function) {
           result(res);

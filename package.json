@@ -44,6 +44,7 @@
     "install": {
       "command": "node ./bin/install.js",
       "env": {
+        "NODE_ACTION": "install",
         "NODE_ENV": "development",
         "APIPORT": 3050
       }

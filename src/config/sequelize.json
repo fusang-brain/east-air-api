@@ -38,6 +38,8 @@
       "bigNumberStrings": true
     },
     "define": {
+      "charset": "utf8",
+      "collate": "utf8_general_ci",
       "underscored": true,
       "timestamps": false,
       "deletedAt": false,

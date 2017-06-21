@@ -33,23 +33,40 @@ export default function (sequelize, DataTypes) {
     // city: {type: DataTypes.INTEGER, defaultValue: 0},
     // type: {type: DataTypes.STRING},
 
-    integration: {type: DataTypes.INTEGER, defaultValue: 0},  // 用户积分
+    integration: {type: DataTypes.INTEGER, defaultValue: 0},     // 用户积分
     quit_time: {type: DataTypes.STRING},                         // 离职时间
     retire_time: {type: DataTypes.STRING},                       // 退休时间
 
     dept: {type: DataTypes.UUID, references: null},         // 所属部门 外键
-    roles: {type: DataTypes.UUID},        // 角色
+    role: {type: DataTypes.UUID, references: null},        // 角色
 
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
     create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
     update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
   }, {
+    defaultScope: {
+      where: {
+        deleted: false,
+      },
+      attributes: {
+        exclude: ['password', 'deleted']
+      }
+    },
+    scopes: {
+      with_password: {
+        attributes: {
+          exclude: ['deleted']
+        },
+        where: {
+          deleted: false,
+        }
+      }
+    },
     classMethods: {
       associate(models) {
         User.belongsTo(models.Dept, {as: 'department', foreignKey: 'dept', sourceKey: 'id'});
       }
     }
   });
-
   return User;
 }

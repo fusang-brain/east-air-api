@@ -2,6 +2,7 @@
  * Created by alixez on 17-6-12.
  */
 
+
 export default function (sequelize, DataTypes) {
   return sequelize.define('UserLoginInfo', {
     id: {type: DataTypes.UUID, defaultValue: sequelize.UUIDV4, primaryKey: true},
