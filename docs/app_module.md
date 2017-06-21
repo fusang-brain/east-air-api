@@ -20,7 +20,7 @@
 ### 所有权限
 
 |模块名|权限名|模块slug|权限slug|
-|&nbsp;|&nbsp;|&nbsp;|&nbsp;|
+|-|-|-|-|
 |活动列表|发起活动|activity_list|create|
 |活动列表|编辑草稿|activity_list|edit|
 |活动列表|删除活动|activity_list|remove|
