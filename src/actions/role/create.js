@@ -3,8 +3,9 @@
  */
 
 export default async function (req, params, {models, device, response}) {
-  const {role_name, role_description, permissions, platform='web'} = req.body;
+  const {role_name, role_description, web_permissions, app_permissions} = req.body;
   const RoleModel = models.Role;
+  const RolePermissionModel = models.RolePermission;
 
   if (!role_name || !role_description) {
     return response.errorResp('参数错误');
@@ -15,8 +16,26 @@ export default async function (req, params, {models, device, response}) {
     role_description,
   });
 
-  if (permissions && permissions.length) {
-    await createdRole.setPermissions(permissions, {platform});
+  if (web_permissions) {
+    for (let i = 0; i < web_permissions.length; i ++) {
+      let item = web_permissions[i];
+      await RolePermissionModel.create({
+        role_id: createdRole.id,
+        permission_id: item,
+        platform: 'web',
+      });
+    }
+  }
+
+  if (app_permissions) {
+    for (let i = 0; i < app_permissions.length; i ++) {
+      let item = app_permissions[i];
+      await RolePermissionModel.create({
+        role_id: createdRole.id,
+        permission_id: item,
+        platform: 'web',
+      });
+    }
   }
 
   return {

@@ -19,6 +19,7 @@ export default function (sequelize, DataTypes) {
           through: {
             model: models.RolePermission,
             as: 'role_permission',
+            unique: false,
           },
           foreignKey: 'role_id',
           otherKey: 'permission_id',
