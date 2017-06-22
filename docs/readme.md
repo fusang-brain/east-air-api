@@ -75,3 +75,11 @@ setHeaders('EA-DEVICE', 'app')
 
 * [获取工会列表接口](./memberManager/dept_list.md)
 * [创建工会](./memberManager/dept.md)
+
+#### 角色 & 权限
+
+* [创建角色](./role/add_role.md)
+* [获取角色详情](./role/details.md)
+* [获取角色列表](./role/list_role.md)
+* [修改角色](./role/list_role.md)
+* [获取权限列表](./permissions/list.md)
