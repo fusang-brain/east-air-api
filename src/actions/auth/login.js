@@ -10,7 +10,7 @@ export default async function (req) {
   // password should be hash by sha1 and upper
   const {mobile, password} = req.body;
 
-  const user = await models.User.findOne({
+  const user = await models.User.scope('with_password').findOne({
     where: {
       mobile,
     }
@@ -23,6 +23,8 @@ export default async function (req) {
     }
   }
 
+  console.log(user);
+
   if (!Auth.validPassword(password, user.password)) {
     return {
       code: getErrorCode(),
@@ -31,6 +33,7 @@ export default async function (req) {
   }
 
   const accessToken = Auth.getToken(user.id);
+  console.log(accessToken);
   //todo 记录已经签发的token to redis
 
   user.password = undefined;
