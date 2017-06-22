@@ -12,6 +12,15 @@ export default function (sequelize, DataTypes) {
     classMethod: {
       associate(models) {
         this.belongsTo(models.Module, {as: 'module', foreignKey: 'module_id', sourceKey: 'id'});
+        this.belongsToMany(models.Role, {
+          as: 'role',
+          through: {
+            model: models.RolePermission,
+            as: 'role_permission',
+          },
+          foreignKey: 'permission_id',
+          otherKey: 'role_id',
+        })
       }
     }
   });

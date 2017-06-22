@@ -1,12 +1,10 @@
 /**
  * Created by alixez on 17-6-20.
  */
-import {getSuccessCode, getErrorCode} from '../../config/response';
 
 export default async function (req, params, {models, device, response}) {
-  const {role_name, role_description, permissions, platform} = req.body;
+  const {role_name, role_description, permissions, platform='web'} = req.body;
   const RoleModel = models.Role;
-  const RolePermissionModel = models.RolePermission;
 
   if (!role_name || !role_description) {
     return response.errorResp('参数错误');
@@ -18,13 +16,7 @@ export default async function (req, params, {models, device, response}) {
   });
 
   if (permissions && permissions.length) {
-    permissions.forEach(async item => {
-      await RolePermissionModel.create({
-        role_id: createdRole.id,
-        permission_id: item,
-        platform: platform || 'web',
-      });
-    })
+    await createdRole.setPermissions(permissions, {platform});
   }
 
   return {

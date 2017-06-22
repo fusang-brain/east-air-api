@@ -7,7 +7,20 @@ import {getSuccessCode, getErrorCode} from '../../config/response';
 export default async function (req, params, {models, device}) {
   const RoleModel = models.Role;
 
-  const list = await RoleModel.findAll({});
+  const list = await RoleModel.findAll({
+    include: [
+      {
+        attributes: {
+          exclude: ['role_permission'],
+        },
+        model: models.Permission,
+        as: 'permissions',
+        through: {
+          as: 'role_permission',
+        }
+      }
+    ]
+  });
 
   return {
     code: getSuccessCode(),
