@@ -23,8 +23,6 @@ export default async function (req) {
     }
   }
 
-  console.log(user);
-
   if (!Auth.validPassword(password, user.password)) {
     return {
       code: getErrorCode(),
