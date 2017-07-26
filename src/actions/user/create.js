@@ -46,7 +46,7 @@ export default async function (req, params, {models, response}) {
     }
   }
   const createdUser = await User.create(args);
-  await createdUser.setDataAccess(args.data_access);
+  await createdUser.setData_access(args.data_access);
   return {
     code: response.getSuccessCode('insert'),
     message: '创建成功',
