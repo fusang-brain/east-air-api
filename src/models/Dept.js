@@ -35,6 +35,16 @@ export default function (sequelize, DataTypes) {
         this.hasMany(models.Dept, {as: 'children', foreignKey: 'parent', sourceKey: 'id'});
         this.hasMany(models.User, {as: 'members', foreignKey: 'dept', sourceKey: 'id'});
         // Dept.belongsTo(models.Dept, {as: 'parent', foreignKey: 'parent', sourceKey: 'id'});
+        this.belongsToMany(models.User, {
+          as: 'access_to_members',
+          through: {
+            model: models.User,
+            as: 'user_data_access',
+            unique: false,
+          },
+          foreignKey: 'dept_id',
+          otherKey: 'user_id',
+        });
       }
     }
   });

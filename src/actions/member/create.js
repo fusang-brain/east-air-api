@@ -2,20 +2,62 @@
  * Created by alixez on 17-6-17.
  */
 import Auth from '../../utils/auth';
+import sha1 from 'crypto-js/sha1';
+import {filterParams} from '../../utils/filters';
 
-export default async function (req, params, {models}) {
-  const data = req.body;
-  await models.User.create({
-    name: '其他',
-    mobile: '18627894264',
-    nickname: '其他',
-    birthday: new Date().getTime(),
-    card_num: '--',
-    password: Auth.encodePassword('7C4A8D09CA3762AF61E59520943DC26494F8941B'), // '1234567'
+export default async function (req, params, {models, response}) {
+
+  const args = filterParams(req.body, {
+    name: ['required', 'string'],
+    gender: ['number', 'required'],
+    birthday: ['string', 'required'],
+    card_num: ['string', 'required'],
+    mobile: ['string', 'required'],
+    ehr: ['string', 'required'],
+    dept: ['string', 'required'],
+    role: ['string', 'required'],
+    data_access: ['array'],
+    state: ['number', 'required'],
+    no: ['number', 'required'],
+    type: ['number', 'required'],
+    qq: ['string'],
+    wechat: ['string'],
+    degree: ['number'],
+    duties: ['string'],
+    jobs: ['string'],
+    exist_job_level: ['string'],
+    now_job_level: ['string'],
+    start_work_time: ['string'],
+    join_time: 'string',
+    integration: 'number',
+    mark: 'string',
   });
+  console.log(args);
 
+  const pwd = sha1(args.card_num.substring(args.card_num.length - 6)).toString().toUpperCase();
+  args.password = Auth.encodePassword(pwd);
+  const User = models.User;
+  if (!Array.isArray(args.data_access)) {
+    args.data_access = [args.dept]
+  }
+  const userCount = await User.count({
+    where: {
+      mobile: args.mobile,
+    }
+  });
+  if (userCount > 0 ) {
+    return {
+      code: response.getErrorCode('insert'),
+      message: '该手机号已经存在',
+    }
+  }
+  const createdUser = await User.create(args);
+  await createdUser.setDataAccess(args.data_access);
   return {
-    code: 1000,
-    message: '添加成功',
+    code: response.getSuccessCode('insert'),
+    message: '创建成功',
+    data: {
+      created_user: createdUser,
+    }
   }
 }

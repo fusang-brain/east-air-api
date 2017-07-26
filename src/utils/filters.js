@@ -8,6 +8,7 @@ const validate = {
   required: value => typeof value !== 'undefined',
   array: Array.isArray,
   integer: Number.isInteger,
+  number: Number.isInteger,
   string: value => typeof value === 'string',
 };
 
@@ -31,9 +32,8 @@ const filterHandlers = {
 };
 
 
-
 export function filterParams(args, rules) {
-
+  const willDeleteKey = [];
   const res = Object.keys(rules).map(key => {
     if (typeof args[key] === 'undefined') {
       const rulesIsArray = Array.isArray(rules[key]);
@@ -42,9 +42,8 @@ export function filterParams(args, rules) {
       } else if (!rulesIsArray && rules[key] !== 'required') {
         rules[key] = 'keep';
       }
+      willDeleteKey.push(key);
     }
-
-    console.log(`log${key}`, rules[key]);
 
     if (Array.isArray(rules[key])) {
       // 依次读取规则进行过滤
@@ -55,11 +54,15 @@ export function filterParams(args, rules) {
   });
 
   const result = res.reduce((lastResult, loop) => {
+    const last = Array.isArray(lastResult) ? lastResult[0] : lastResult;
     const value = Array.isArray(loop) ? loop[0] : loop;
-    Object.assign(lastResult, value);
-    return lastResult;
+    Object.assign(last, value);
+    return last;
   });
 
-  console.log(result);
-  return args;
+  for (let i = 0; i < willDeleteKey.length; i ++) {
+    delete result[willDeleteKey[i]];
+  }
+
+  return result;
 }

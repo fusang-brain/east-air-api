@@ -6,6 +6,7 @@
 |id|UUID|标识|unique, primary key|
 |name|String(50)|用户姓名|-|
 |birthday|String|生日|-|
+|no|String|卡号|-|
 |card_num|String|身份证号|-|
 |mobile|String|手机号|
 |type|Integer|用工性质|0: 合同制 1: 劳务制|
