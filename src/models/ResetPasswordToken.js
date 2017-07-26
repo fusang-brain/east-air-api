@@ -12,6 +12,12 @@ export default function (sequelize, DataTypes) {
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
     create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
     update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
+  }, {
+    defaultScope: {
+      where: {
+        deleted: false,
+      }
+    },
   });
 }
 

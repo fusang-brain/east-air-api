@@ -79,6 +79,8 @@ setHeaders('EA-DEVICE', 'app')
 * [修改会员信息](./memberManager/update.md)
 * [标记会员](./memberManager/mark_status.md)
 * [获取会员列表](./memberManager/list.md)
+* [获取成员列表(for app)](./memberManager/user_list.md)
+* [获取会员详情](./memberManager/details.md)
 
 #### 角色 & 权限
 

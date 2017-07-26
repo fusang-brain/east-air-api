@@ -65,16 +65,19 @@ export default function (sequelize, DataTypes) {
     },
     classMethods: {
       associate(models) {
-        User.belongsTo(models.Dept, {as: 'Department', foreignKey: 'dept', sourceKey: 'id'});
-        User.belongsToMany(models.Dept, {
-          as: 'DataAccess',
+        this.belongsTo(models.Role, {
+          as: 'user_role',
+          foreignKey: 'role',
+          sourceKey: 'id',
+        });
+        this.belongsTo(models.Dept, {as: 'department', foreignKey: 'dept', sourceKey: 'id'});
+        this.belongsToMany(models.Dept, {
+          as: 'data_access',
           through: {
             model: models.DataAccess,
             as: 'user_data_access',
             unique: false,
-          },
-          foreignKey: 'user_id',
-          otherKey: 'dept_id',
+          }
         });
       }
     }

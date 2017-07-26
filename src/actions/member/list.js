@@ -60,9 +60,12 @@ export default async function(req, params, {models, device}) {
   const total = await UserModel.count();
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
-  console.log(condition);
   const list = await UserModel.all({
     where: condition,
+    attributes: ['id', 'name', 'no', 'birthday', 'ehr', 'gender', 'mobile', 'type', 'state', 'other_status'],
+    include: [
+      {model: models.Dept, as:'department'},
+    ],
     offset,
     limit,
   });

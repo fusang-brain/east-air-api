@@ -6,3 +6,5 @@ export create from './create';
 export list from './list';
 export mark_status from './mark_status';
 export update from './update';
+export list_users from './list_users';
+export details from './details';

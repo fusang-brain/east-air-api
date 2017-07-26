@@ -26,7 +26,7 @@ export default async function (req, params, {models, device}) {
     if (device === 'app') {
       includeArgs = [
         {model: models.Dept, as: 'children'},
-        {model: models.User, as: 'members', attributes: ['id', 'name', 'avatar']}
+        {model: models.User, as: 'members', required: false, attributes: ['id', 'name', 'avatar']}
       ];
     } else {
       includeArgs = [
@@ -46,12 +46,13 @@ export default async function (req, params, {models, device}) {
 
   const list = await DeptModel.findAll({
     where: {tree_level: 1},
-    include: includeArgs
+    include: includeArgs,
   });
 
   if (device === 'app') {
     for (let i = 0; i < list.length; i ++) {
       let item = list[i];
+      console.log(item);
       item.dataValues.member_total = recursiveMemberCount(item.children) + item.members.length;
     }
   }
