@@ -5,3 +5,4 @@ export * as dept from './dept';
 export create from './create';
 export list from './list';
 export mark_status from './mark_status';
+export update from './update';

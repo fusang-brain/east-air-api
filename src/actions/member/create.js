@@ -32,7 +32,6 @@ export default async function (req, params, {models, response}) {
     integration: 'number',
     mark: 'string',
   });
-  console.log(args);
 
   const pwd = sha1(args.card_num.substring(args.card_num.length - 6)).toString().toUpperCase();
   args.password = Auth.encodePassword(pwd);
