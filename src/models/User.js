@@ -42,8 +42,8 @@ export default function (sequelize, DataTypes) {
     role: {type: DataTypes.UUID, references: null},              // 角色
 
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
-    create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
-    update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
+    create_at: {type: DataTypes.STRING, defaultValue: Date.now},
+    update_at: {type: DataTypes.STRING, defaultValue: Date.now},
   }, {
     defaultScope: {
       where: {
