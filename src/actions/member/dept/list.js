@@ -52,8 +52,15 @@ export default async function (req, params, {models, device}) {
   if (device === 'app') {
     for (let i = 0; i < list.length; i ++) {
       let item = list[i];
-      console.log(item);
       item.dataValues.member_total = recursiveMemberCount(item.children) + item.members.length;
+    }
+
+    return {
+      code: getSuccessCode(),
+      message: '查看成功',
+      data: {
+        depts: list[0].children,
+      }
     }
   }
 
