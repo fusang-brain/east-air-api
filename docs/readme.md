@@ -65,6 +65,9 @@ setHeaders('EA-DEVICE', 'app')
 
 ## 接口索引
 
+#### 用户模块
+* [修改密码](./user/reset_password.md)
+
 #### 认证模块
 
 * [登录接口](./auth/login.md)

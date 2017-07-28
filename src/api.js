@@ -6,12 +6,12 @@ import bodyParser from 'body-parser';
 import * as actions from './actions/index';
 import config from './config';
 import apiConfig from './config/api';
-// import mongoose from 'mongoose';
 import log4js from 'log4js';
 import multer from 'multer';
 import models from './models';
 import { mapUrl } from './utils/url';
 import { randomString } from './utils/utils';
+import Auth from './utils/auth';
 import response from './config/response';
 
 // mongoose.connect(apiConfig.mongoose.db);
@@ -51,6 +51,21 @@ app.use(multer(storage).single('file'));
 app.use(log4js.connectLogger(log4js.getLogger('http'), { level: 'auto' }));
 app.use(bodyParser.urlencoded( { extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
+
+// auth middleware
+app.use((req, res, next) => {
+  if (config.auth.whitelist.includes(req.path)) {
+    next();
+    return;
+  }
+  Auth.checkAuth(req).then(result => {
+    if (result) {
+      next();
+    }
+  }).catch(err => {
+    res.json(err);
+  });
+});
 
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);

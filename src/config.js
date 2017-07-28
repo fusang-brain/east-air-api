@@ -8,7 +8,14 @@ require('babel-polyfill');
 
 const environment = {
   development: {
-    isProduction: false
+    isProduction: false,
+    auth: {
+      whitelist: [
+        '/auth/forget_password',
+        '/auth/login',
+        '/auth/reset_password'
+      ]
+    }
   },
   production: {
     isProduction: true
