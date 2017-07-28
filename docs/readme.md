@@ -78,6 +78,7 @@ setHeaders('EA-DEVICE', 'app')
 
 * [获取工会列表接口](./memberManager/dept_list.md)
 * [创建工会](./memberManager/dept.md)
+* [删除工会](./memberManager/dept_remove.md)
 * [新增会员](./memberManager/create.md)
 * [修改会员信息](./memberManager/update.md)
 * [标记会员](./memberManager/mark_status.md)
