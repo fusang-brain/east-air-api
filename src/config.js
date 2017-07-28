@@ -25,6 +25,10 @@ const environment = {
       pathFolder,
       uploadFolder,
       compressFolder,
+      supportFile: {
+        'act_image': ['jpg', 'png', 'jpeg'],
+        'act_attach': ['pdf'],
+      }
     }
   },
   production: {
@@ -49,6 +53,10 @@ module.exports = Object.assign({
     pathFolder,
     uploadFolder,
     compressFolder,
+    supportFile: {
+      'act_image': ['jpg', 'png', 'jpeg'],
+      'act_attach': ['pdf'],
+    }
   },
   app: {
     title: 'Eastern air API',

@@ -93,3 +93,11 @@ setHeaders('EA-DEVICE', 'app')
 * [获取角色列表](./role/list_role.md)
 * [修改角色](./role/update_role.md)
 * [获取权限列表](./permissions/list.md)
+
+#### 文件
+
+* [文件上传](./file/upload.md)
+
+#### 活动
+
+* [发起活动](./)

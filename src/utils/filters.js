@@ -8,14 +8,15 @@ const validate = {
   required: value => typeof value !== 'undefined',
   array: Array.isArray,
   integer: Number.isInteger,
-  number: Number.isInteger,
+  number: value => typeof value === 'number',
   string: value => typeof value === 'string',
 };
 
 const validateMessage = (key) => ({
   required: `${key} 参数不能为空`,
   array: `${key} 参数接收一个数组`,
-  integer: `${key} 参数必须是数字类型`,
+  integer: `${key} 参数必须是int类型`,
+  number: `${key} 参数必须是数字类型`,
   string: `${key} 参数必须是一个字符串`,
 });
 
