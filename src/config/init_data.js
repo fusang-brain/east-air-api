@@ -278,6 +278,7 @@ const permissions = [
 const sysuser = {
   name: '用户_'+ Math.round(Math.random() * 10000),
   mobile: '15500000000',
+  state: 1,
   nickname: '隔壁老王',
   birthday: new Date().getTime(),
   card_num: '--',

@@ -57,7 +57,9 @@ export default async function(req, params, {models, device}) {
     delete args.integrate;
   }
   const UserModel = models.User;
-  const total = await UserModel.count();
+  const total = await UserModel.count({
+    where: condition,
+  });
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
   const list = await UserModel.all({

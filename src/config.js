@@ -4,17 +4,27 @@
  * Author  : alixez
  */
 require('babel-polyfill');
+const path = require('path');
+const pathFolder = '/file';
+const uploadFolder = path.join(__dirname, '/../storage/origin');
+const compressFolder = path.join(__dirname, '/../storage/compress');
 
 
 const environment = {
   development: {
     isProduction: false,
     auth: {
+      jwt_secret: 'its-20160612-uibki131-21nhusfd',
       whitelist: [
         '/auth/forget_password',
         '/auth/login',
         '/auth/reset_password'
       ]
+    },
+    storage: {
+      pathFolder,
+      uploadFolder,
+      compressFolder,
     }
   },
   production: {
@@ -27,6 +37,19 @@ module.exports = Object.assign({
   port: process.env.PORT,
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
+  auth: {
+    jwtSecret: 'its-20160612-uibki131-21nhusfd',
+    whitelist: [
+      '/auth/forget_password',
+      '/auth/login',
+      '/auth/reset_password'
+    ]
+  },
+  storage: {
+    pathFolder,
+    uploadFolder,
+    compressFolder,
+  },
   app: {
     title: 'Eastern air API',
     description: 'All the modern best practices at here.',

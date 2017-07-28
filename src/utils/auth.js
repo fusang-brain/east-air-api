@@ -37,12 +37,10 @@ class Auth {
 
   static async checkAuth(req) {
     const parsed_url = url.parse(req.url, true);
-    console.log(parsed_url);
     const token = (req.body && req.body.access_token)
       || parsed_url.query.access_token
       || req.headers["x-access-token"];
 
-    console.log(token);
     if (!token) {
       throw {
         code: getErrorCode('auth'),
