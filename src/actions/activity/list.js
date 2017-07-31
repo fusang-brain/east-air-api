@@ -20,7 +20,7 @@ export default async function (req, param, {response, models}) {
   if (params.state) {
     condition.state = params.state
   }
-  console.log(condition);
+
   const list = await ActModel.all({
     where: condition,
     attributes: ['no', 'id', 'subject', 'act_type', 'create_date', 'state'],

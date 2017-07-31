@@ -105,7 +105,7 @@ export default async function (req, param, {response, models}) {
   });
 
   return {
-    code: response.getSuccessCode('insert'),
+    code: response.getSuccessCode('update'),
     message: '修改成功'
   }
 }
