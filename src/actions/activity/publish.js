@@ -5,6 +5,7 @@ import {filterParams} from '../../utils/filters';
 import Decimal from 'decimal.js';
 
 export default async function (req, param, {response, models}) {
+
   const params = filterParams(req.body, {
     act_type: ['integer', 'required'],
     subject: ['string', 'required'],
@@ -16,6 +17,12 @@ export default async function (req, param, {response, models}) {
     process: ['string', 'required'],
     integration: ['integer'],
   });
+
+  if (req.body.isDraft && req.body.isDraft === true) {
+    params.state = 0;
+  } else {
+    params.state = 1;
+  }
   if (req.body.grant_apply) {
     params.grant_apply = filterParams(req.body.grant_apply, {
       type: ['integer', 'required'],
@@ -26,6 +33,9 @@ export default async function (req, param, {response, models}) {
       others: ['string'],
     })
   }
+  console.log(req.user);
+  params.user_id = req.user.id;
+  params.dept_id = req.user.dept;
   const TradeUnionAct = models.TradeUnionAct;
 
   const budgets = req.body.budgets;

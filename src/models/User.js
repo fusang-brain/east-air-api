@@ -1,10 +1,11 @@
 /**
  * Created by alixez on 17-6-6.
  */
-
+import {generateNo} from '../utils/utils';
 export default function (sequelize, DataTypes) {
   const User = sequelize.define('User', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
+    serial_no: {type: DataTypes.STRING, defaultValue: generateNo},
     name: {type: DataTypes.STRING, allowNull: false},
     no: {type: DataTypes.INTEGER, allowNull: false, defaultValue: '0'},  // 卡号
     birthday: {type: DataTypes.STRING, allowNull: false},                // 时间毫秒数

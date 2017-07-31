@@ -17,7 +17,8 @@ async function allDept(children, parent, level) {
     let p = await models.Dept.create({
       tree_level: level,
       parent: parent.id,
-      dept_name: deptItem.name,
+      dept_name:
+      deptItem.name,
     });
     if (level === 4) {
       defaultDept = p.id;

@@ -17,6 +17,7 @@ export default async function(req, params, {models, device}) {
     integrate: 'array',
   });
   const condition = {...args};
+  delete condition.search;
   if (req.query.status === '1') {
     condition.state = {
       $eq: 1,
@@ -32,7 +33,6 @@ export default async function(req, params, {models, device}) {
       name: { $like: `%${args.search}%`},
       mobile: { $like: `%${args.search}%`},
     };
-    delete condition.search;
   }
   if (args.birthday) {
     condition.birthday = {
@@ -47,14 +47,14 @@ export default async function(req, params, {models, device}) {
       $gte: startOfTime,
       $lte: currentTime,
     };
-    delete args.deadline;
+    delete condition.deadline;
   }
   if (args.integrate) {
     condition.integration = {
       $gte: +args.integrate[0],
       $lte: +args.integrate[1],
     };
-    delete args.integrate;
+    delete condition.integrate;
   }
   const UserModel = models.User;
   const total = await UserModel.count({

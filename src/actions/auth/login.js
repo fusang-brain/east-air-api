@@ -13,7 +13,18 @@ export default async function (req) {
   const user = await models.User.scope('with_password').findOne({
     where: {
       mobile,
-    }
+    },
+    include: [
+      {
+        model: models.Dept,
+        as: 'department',
+        required: false,
+      },{
+        model: models.Role,
+        as: 'user_role',
+        required: false,
+      }
+    ]
   });
 
   if (!user) {

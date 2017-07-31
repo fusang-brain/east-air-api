@@ -11,6 +11,7 @@ const config = require(path.join(__dirname, '..', 'config', 'sequelize.json'));
 const DBConfig = config[env];
 
 function log(...message) {
+  return;
   if (process.env.NODE_ACTION === 'install') return;
   if (env === 'development') {
     console.log(message);

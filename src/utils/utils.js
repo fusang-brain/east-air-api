@@ -3,6 +3,8 @@
  * Filename:
  * Author  : alixez
  */
+import moment from 'moment';
+let generateNoTime = 0;
 
 export function randomString() {
   let time = new Date().getTime();
@@ -16,4 +18,20 @@ export function getIPAddress(req) {
     req.socket.remoteAddress ||
     req.connection.socket.remoteAddress;
   return ip;
+}
+
+export function generateNo(req) {
+  const now = moment().format('YYYYMMDDHHmmss');
+  generateNoTime += 1;
+  let no = '';
+  if (generateNoTime < 10) {
+    no = `${now}0${generateNoTime}`
+  } else {
+    no = `${now}${generateNoTime}`
+  }
+  if (generateNoTime === 99) {
+    generateNoTime = 0;
+  }
+
+  return no;
 }
