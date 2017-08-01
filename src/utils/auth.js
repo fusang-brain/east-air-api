@@ -52,7 +52,7 @@ class Auth {
     // found userinfo through decodedToken;
     const user = await models.User.findOne({
       attributes: {
-        exclude: ['password'],
+        exclude: ['password', 'dept', 'role', 'deleted', 'create_at', 'update_at'],
       },
       where: {
         id: decodedToken.iss

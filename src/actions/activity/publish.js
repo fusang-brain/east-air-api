@@ -33,7 +33,6 @@ export default async function (req, param, {response, models}) {
       others: ['string'],
     })
   }
-  console.log(req.user);
   params.user_id = req.user.id;
   params.dept_id = req.user.dept;
   const TradeUnionAct = models.TradeUnionAct;

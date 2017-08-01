@@ -65,9 +65,6 @@ setHeaders('EA-DEVICE', 'app')
 
 ## 接口索引
 
-#### 用户模块
-* [修改密码](./user/reset_password.md)
-
 #### 认证模块
 
 * [登录接口](./auth/login.md)
@@ -98,9 +95,16 @@ setHeaders('EA-DEVICE', 'app')
 
 * [文件上传](./file/upload.md)
 
+#### 用户（我的）APP
+
+* [获取我的信息](./user/info.md)
+* [更新我的信息](./user/update.md)
+* [修改密码](./user/reset_password.md)
+
 #### 活动
 
 * [发起活动](./activity/publish.md)
 * [修改活动](./activity/update.md)
 * [删除活动](./activity/remove.md)
 * [查看活动列表](./activity/list.md)
+

@@ -3,3 +3,6 @@
  */
 
 export reset_password from './reset_password';
+export info from './info';
+export update from './update';
+
