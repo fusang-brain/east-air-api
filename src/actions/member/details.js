@@ -21,10 +21,6 @@ export default async function (req, params, {response, models}) {
       {
         model: models.Dept,
         as: 'data_access',
-        through: {
-          model: models.DataAccess,
-          as: 'user_data_access',
-        }
       },
     ],
     attributes: {

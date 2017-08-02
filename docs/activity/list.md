@@ -15,7 +15,7 @@ __请求方式 :__ GET
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
 |search|string|搜索|是|通过活动主题左右搜索|
-|state|string|活动状态筛选|是|-|
+|state|string|活动状态筛选|是|0:草稿 1:待审批 2:已通过 3:未通过|
 
 #### 返回值
 
@@ -41,7 +41,7 @@ __请求方式 :__ GET
                 "subject": "主题asdfasdfasdfasdf",
                 "act_type": 1,
                 "create_date": "1501312978832",
-                "state": 0,
+                "state": 0, // 0:草稿 1:待审批 2:已通过 3:未通过
                 "publisher": {
                     "id": "4d8c87b4-9d76-44c6-a09a-62a66a9d7150",
                     "name": "root",
