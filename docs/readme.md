@@ -107,4 +107,6 @@ setHeaders('EA-DEVICE', 'app')
 * [修改活动](./activity/update.md)
 * [删除活动](./activity/remove.md)
 * [查看活动列表](./activity/list.md)
+* [活动详情](./activity/details.md)
+* [活动评价](./activity/evaluation.md)
 

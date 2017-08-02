@@ -7,7 +7,7 @@ export default function (sequelize, DataTypes) {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     role_name: {type: DataTypes.STRING, defaultValue: ''},
     role_description: {type: DataTypes.STRING, defaultValue: '无'},
-
+    role_slug: {type: DataTypes.STRING, defaultValue: '', unique: true},
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
     create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
     update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
