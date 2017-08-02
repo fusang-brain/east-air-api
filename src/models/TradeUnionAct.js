@@ -56,6 +56,11 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'act_id',
           sourceKey: 'id',
         });
+        this.hasMany(models.ActEvaluation, {
+          as: 'act_evaluation',
+          foreignKey: 'act_id',
+          sourceKey: 'id',
+        });
       }
     }
   })

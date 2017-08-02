@@ -2,6 +2,7 @@
  * Created by alixez on 17-7-29.
  */
 import {filterParams} from '../../utils/filters';
+import moment from 'moment';
 
 export default async function (req, param, {response, models, device}) {
   const params = filterParams(req.query, {
@@ -12,7 +13,7 @@ export default async function (req, param, {response, models, device}) {
   const limit = parseInt(req.query.limit) || 20;
   const condition = {};
   const ActModel = models.TradeUnionAct;
-  let attributes = ['no', 'id', 'subject', 'act_type', 'create_date', 'state'];
+  let attributes = ['no', 'id', 'subject', 'act_type', 'create_date', 'state', 'start_date', 'end_date'];
   if (device === 'app') {
     attributes.push('process');
   }
@@ -48,6 +49,16 @@ export default async function (req, param, {response, models, device}) {
     offset,
     limit,
   });
+  const todayStart = moment().startOf('day');
+  for (let i = 0; i < list.length; i ++) {
+    let item = list[i];
+    let endDateStart = moment(item.end_date).add('day', 1).startOf('day');
+    let isEnd = false;
+    if (endDateStart.toDate().getTime() < todayStart.toDate().getTime()) {
+      isEnd = true;
+    }
+    item.setDataValue('is_end', isEnd);
+  }
 
   return {
     code: response.getSuccessCode(),
