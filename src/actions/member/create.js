@@ -9,7 +9,7 @@ export default async function (req, params, {models, response}) {
 
   const args = filterParams(req.body, {
     name: ['required', 'string'],
-    gender: ['number', 'required'],
+    gender: ['integer', 'required'],
     birthday: ['string', 'required'],
     card_num: ['string', 'required'],
     mobile: ['string', 'required'],
@@ -17,12 +17,12 @@ export default async function (req, params, {models, response}) {
     dept: ['string', 'required'],
     role: ['string', 'required'],
     data_access: ['array'],
-    state: ['number', 'required'],
-    no: ['number', 'required'],
-    type: ['number', 'required'],
+    state: ['integer', 'required'],
+    no: ['integer', 'required'],
+    type: ['integer', 'required'],
     qq: ['string'],
     wechat: ['string'],
-    degree: ['number'],
+    degree: ['integer'],
     duties: ['string'],
     jobs: ['string'],
     exist_job_level: ['string'],
@@ -51,7 +51,7 @@ export default async function (req, params, {models, response}) {
     }
   }
   const createdUser = await User.create(args);
-  await createdUser.setDataAccess(args.data_access);
+  await createdUser.setData_access(args.data_access);
   return {
     code: response.getSuccessCode('insert'),
     message: '创建成功',
