@@ -18,7 +18,7 @@ export default async function (req, param, {response, models}) {
     integration: ['integer'],
   });
 
-  if (req.body.isDraft && req.body.isDraft === true) {
+  if (req.body.is_draft && req.body.is_draft === true) {
     params.state = 0;
   } else {
     params.state = 1;

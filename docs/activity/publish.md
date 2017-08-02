@@ -17,6 +17,7 @@ __请求方式 :__ POST
 |act_type|integer|活动类型|是|0: 职工教育 1:文体活动 2:宣传活动 3:其他活动 4:送温暖 5:培训 6:会议 7:专项会议 8:其他业务|
 |subject|string|活动主题|是|-|
 |purpose|string|活动目的|是|-|
+|is_draft|bool|是否保存草稿|否|当此值为true时，为将活动保存为草稿。|
 |target|string|活动对象|是|-|
 |address|string|活动地址|是|-|
 |start_date|string|开始时间|是|时间毫秒数|
