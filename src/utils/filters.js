@@ -8,6 +8,7 @@ const validate = {
   required: value => typeof value !== 'undefined',
   array: Array.isArray,
   integer: Number.isInteger,
+  boolean: value => typeof value === 'boolean',
   number: value => typeof value === 'number',
   string: value => typeof value === 'string',
 };
@@ -18,6 +19,7 @@ const validateMessage = (key) => ({
   integer: `${key} 参数必须是int类型`,
   number: `${key} 参数必须是数字类型`,
   string: `${key} 参数必须是一个字符串`,
+  boolean: `${key} 参数必须是一个布尔值`,
 });
 
 function judgeAndFilter(rule, value, key) {
