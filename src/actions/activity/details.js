@@ -21,6 +21,26 @@ export default async function (req, params, {response, models}) {
         as: 'department',
         required: false,
         attributes: ['id', 'dept_name'],
+      },
+      {
+        model: models.GrantApplication,
+        as: 'grant_apply',
+        include: [
+          {
+            model: models.GrantItem,
+            as: 'items'
+          }
+        ]
+      },
+      {
+        model: models.TradeUnionActBudget,
+        as: 'budgets',
+      },{
+        model: models.TradeUnionActAttach,
+        as: 'attach',
+      },{
+        model: models.TradeUnionActImage,
+        as: 'images',
       }
     ]
   });
