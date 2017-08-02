@@ -30,8 +30,20 @@ export default async function (req, param, {response, models}) {
       cost: ['number'],
       purpose: ['string'],
       people_count: ['integer'],
+      items: ['array'],
       others: ['string'],
-    })
+    });
+    if (params.grant_apply.items) {
+      let items = params.grant_apply.items;
+      let cost = 0;
+      for (let i = 0; i < items.length; i ++) {
+        let item = items[i];
+        let total = Decimal.mul(item.price, item.count).toNumber();
+        item.total = total;
+        cost = Decimal.add(cost, total).toNumber();
+      }
+      params.grant_apply.cost = cost;
+    }
   }
   params.user_id = req.user.id;
   params.dept_id = req.user.dept;
@@ -66,12 +78,18 @@ export default async function (req, param, {response, models}) {
     file_path: loop,
     no: 1,
   }));
-
+  console.log(params);
   const createdAct = await TradeUnionAct.create(params, {
     include: [
       {
         model: models.GrantApplication,
         as: 'grant_apply',
+        include: [
+          {
+            model: models.GrantItem,
+            as: 'items'
+          }
+        ]
       },
       {
         model: models.TradeUnionActBudget,

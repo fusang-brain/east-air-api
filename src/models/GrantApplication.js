@@ -11,5 +11,15 @@ export default function (sequelize, DataTypes) {
     purpose: {type: DataTypes.TEXT},
     people_count: {type: DataTypes.INTEGER},
     others: {type: DataTypes.TEXT},
+  }, {
+    classMethods: {
+      associate(models) {
+        this.hasMany(models.GrantItem, {
+          as: 'items',
+          foreignKey: 'grant_apply_id',
+          sourceKey: 'id',
+        });
+      }
+    }
   })
 }

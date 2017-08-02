@@ -3,7 +3,7 @@
  */
 import {filterParams} from '../../utils/filters';
 
-export default async function (req, param, {response, models}) {
+export default async function (req, param, {response, models, device}) {
   const params = filterParams(req.query, {
     search: 'string',
     state: 'string',
@@ -12,6 +12,10 @@ export default async function (req, param, {response, models}) {
   const limit = parseInt(req.query.limit) || 20;
   const condition = {};
   const ActModel = models.TradeUnionAct;
+  let attributes = ['no', 'id', 'subject', 'act_type', 'create_date', 'state'];
+  if (device === 'app') {
+    attributes.push('process');
+  }
   if (params.search) {
     condition.subject = {
       $like: `%${params.search}%`,
@@ -23,7 +27,7 @@ export default async function (req, param, {response, models}) {
 
   const list = await ActModel.all({
     where: condition,
-    attributes: ['no', 'id', 'subject', 'act_type', 'create_date', 'state'],
+    attributes: attributes,
     include: [
       {
         model: models.User,

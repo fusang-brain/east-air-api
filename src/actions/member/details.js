@@ -17,7 +17,8 @@ export default async function (req, params, {response, models}) {
     },
     include: [
       {model: models.Role, as: 'user_role'},
-      {model: models.Dept, as: 'department'}
+      {model: models.Dept, as: 'department'},
+      {model: models.DataAccess, as: 'data_access'},
     ],
     attributes: {
       exclude: [ 'dept', 'role', 'password', 'deleted']

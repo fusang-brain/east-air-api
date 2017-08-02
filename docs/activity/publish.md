@@ -34,6 +34,7 @@ __活动经费申请__
 |-|-|-|-|-|
 |type|Integer|经费类型|否|-|
 |dept_id|String|部门ID|否|-|
+|items|Array<details>|经费明细|否|当经费类型为　7:固定资产时　存在本字段, 详情见下表(经费明细)|
 |cost|Float|申请经费|否|金额,精确到分。Decimal(10,2)|
 |purpose|String|目标|否|-|
 |people_count|Integer|活动人数|-|
@@ -45,7 +46,13 @@ __活动预算__
 |project|String|项目|是|-|
 |cost|String|预算金额|是|-|
 
+__经费明细__
 
+|字段名|类型|描述|是否必要|备注|
+|-|-|-|-|-|
+|name|String|资产名称|是｜－｜
+|price|Number|单价|是|－|
+|count|Integer|数量|是|－|
 
 
 #### 返回值
@@ -59,6 +66,8 @@ __活动预算__
 #### 请求示例
 
 ```json
+
+// 普通类型
 {
 	"act_type": 1,
 	"subject": "主题",
@@ -93,6 +102,54 @@ __活动预算__
 	    "/file/1501232271380-cp4j9tfuzc03g3u7kfbt9.png"
 	]
 }
+
+// 固定资产
+{
+	"act_type": 1,
+	"subject": "主题",
+	"purpose": "目的",
+	"target": "活动对象",
+	"address": "活动地点",
+	"start_date": "1231313123123",
+	"end_date": "1231313123",
+	"process": "活动明细流程",
+	"integration": 1,
+	"grant_apply": {
+		"type": 1,
+		"dept_id": "5a7b9ec2-0352-4588-ae64-a610efd583b3",
+		"cost": 123.23,
+		"items": [
+		  {
+        "name": "固定资产明细",
+        "price": 123.88,
+        "count": 2
+      },{
+        "name": "固定资产明细2",
+        "price": 123.89,
+        "count": 2
+      }
+		],
+		"purpose": "123123123",
+		"people_count": 2
+	},
+	"budgets": [
+		{
+			"project": "asdfasfasdf",
+			"cost": 123.99
+		},{
+			"project": "sadfasfdasf",
+			"cost": 32.54
+		}
+	],
+	"images": [
+		"/file/1501232252297-dvv7g9iuw597f6hy15x9a4i.png",
+		"/file/1501232271380-cp4j9tfuzc03g3u7kfbt9.png"
+	],
+	"attach": [
+	    "/file/1501232271380-cp4j9tfuzc03g3u7kfbt9.png"
+	]
+}
+
 ```
 
 #### 返回示例

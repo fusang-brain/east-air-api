@@ -28,6 +28,8 @@ __请求方式 :__ GET
 #### 返回示例
 
 ```json
+
+// for pc
 {
     "code": 1000,
     "message": "查询成功",
@@ -40,6 +42,31 @@ __请求方式 :__ GET
                 "act_type": 1,
                 "create_date": "1501312978832",
                 "state": 0,
+                "publisher": {
+                    "id": "4d8c87b4-9d76-44c6-a09a-62a66a9d7150",
+                    "name": "root",
+                    "avatar": ""
+                },
+                "department": null
+            }
+        ]
+    }
+}
+
+// for app
+{
+    "code": 1000,
+    "message": "查询成功",
+    "data": {
+        "list": [
+            {
+                "no": "2017072915225801",
+                "id": "cb517c90-7fbc-4982-b363-8b8b19a55838",
+                "subject": "主题asdfasdfasdfasdf",
+                "act_type": 1,
+                "create_date": "1501312978832",
+                "state": 0,
+                "process": "这是活动的详情",
                 "publisher": {
                     "id": "4d8c87b4-9d76-44c6-a09a-62a66a9d7150",
                     "name": "root",
