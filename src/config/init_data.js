@@ -290,11 +290,6 @@ const roles = [
     role_name: '主席',
     role_slug: 'dept_master',
     role_description: '工会主席描述',
-  },
-  {
-    role_name: '财务',
-    role_slug: 'dept_master',
-    role_description: '工会主席描述',
   }
 ];
 

@@ -82,6 +82,7 @@ async function start() {
   for (let i = 0; i < roles.length; i ++) {
     defaultRole = await models.Role.create({
       role_name: roles[i].role_name,
+      role_slug: roles[i].role_slug,
       role_description: roles[i].role_description,
     });
   }
