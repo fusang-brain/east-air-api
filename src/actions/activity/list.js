@@ -24,6 +24,9 @@ export default async function (req, param, {response, models, device}) {
   if (params.state) {
     condition.state = params.state
   }
+  const total = await ActModel.count({
+    where: condition,
+  });
 
   const list = await ActModel.all({
     where: condition,
@@ -50,6 +53,7 @@ export default async function (req, param, {response, models, device}) {
     code: response.getSuccessCode(),
     message: '查询成功',
     data: {
+      total,
       list
     }
   }
