@@ -13,7 +13,8 @@ export default async function (req, params, {response, models}) {
         as: 'flows',
         where: {
           approval_man_id: req.user.id,
-          result: 0,
+          available: 1,
+          result: state,
         },
         required: true,
       }
@@ -25,8 +26,6 @@ export default async function (req, params, {response, models}) {
     message: '查看成功',
     data: {
       approval_list: approvalList,
-      available: 1,
-      result: state,
     }
   }
 }

@@ -109,19 +109,28 @@ export default class ApprovalService extends Service {
     return approval;
   }
 
-  async getActApproval(projectID) {
+  async getActApprovalDetail(approvalID) {
     const Approval = this.getModel();
+    const User = this.getModel('User');
+    const Act = this.getModel('TradeUnionAct');
     const approval = await Approval.findOne({
       where: {
-        id: projectID,
+        id: approvalID,
       },
       include: [
         {
-          model: this.getModel('User'),
+          model: User,
           as: 'publisher',
+          attributes: ['id', 'name', 'avatar'],
         }
       ]
     });
+
+    if (approval) {
+      let act = await Act.findOne({where: {id: approval.project_id}});
+      approval.setDataValue('project', act);
+    }
+
     const publisher = {
       name: approval.publisher.name,
       avatar: approval.publisher.avatar,
@@ -129,12 +138,13 @@ export default class ApprovalService extends Service {
       time: approval.publish_date,
       sort: 0,
     };
-    const flows = await this.approvalFlows(projectID, publisher);
+
+    const flows = await this.approvalFlows(approvalID, publisher);
     approval.setDataValue('flows', flows);
     return approval;
   }
 
-  async approvalFlows(projectID, publisher) {
+  async approvalFlows(approval_id, publisher) {
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
     const approvalFlows = await ApprovalFlows.all({

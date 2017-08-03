@@ -79,7 +79,6 @@ export default async function (req, param, {response, models}) {
     file_path: loop,
     no: 1,
   }));
-  console.log(params);
   const createdAct = await TradeUnionAct.create(params, {
     include: [
       {
@@ -105,8 +104,8 @@ export default async function (req, param, {response, models}) {
     ]
   });
 
-  // const approvalService = new ApprovalService();
-  // await approvalService.generateActApproval(createdAct.id, req.user.id);
+  const approvalService = new ApprovalService();
+  await approvalService.generateActApproval(createdAct.id, req.user.id);
 
   return {
     code: response.getSuccessCode('insert'),
