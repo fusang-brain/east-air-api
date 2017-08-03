@@ -12,7 +12,7 @@ export default function (sequelize, DataTypes) {
     project: {type: DataTypes.STRING},         // 项目表
     project_id: {type: DataTypes.UUID},        // 审批项目ID
     publish_id: {type: DataTypes.UUID},        // 发布人ID
-    publish_date: {type: DataTypes.STRING},     // 发布时间
+    publish_date: {type: DataTypes.STRING, defaultValue: Date.now},     // 发布时间
     result: {type: DataTypes.INTEGER},          // 0: 待审核 1: 已审核
   }, {
     classMethods: {

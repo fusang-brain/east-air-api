@@ -3,10 +3,17 @@
  */
 import {filterParams} from '../../utils/filters';
 import {ApprovalService} from '../../service';
+import {getMasterRole} from '../../config/init_data';
 import Decimal from 'decimal.js';
 
 export default async function (req, param, {response, models}) {
-
+  const roles = getMasterRole();
+  if (roles.includes(req.user.user_role.role_slug)) {
+    return {
+      code: response.getErrorCode(),
+      message: '您不能发起活动',
+    }
+  }
   const params = filterParams(req.body, {
     act_type: ['integer', 'required'],
     subject: ['string', 'required'],

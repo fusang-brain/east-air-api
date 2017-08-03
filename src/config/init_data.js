@@ -349,4 +349,10 @@ const dept = [
   }
 ];
 
-export {permissions, dept, sysuser, roles};
+function getMasterRole() {
+  return roles.filter(loop => {
+    return loop.is_master;
+  })
+}
+
+export {permissions, dept, sysuser, roles, getMasterRole};

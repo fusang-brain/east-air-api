@@ -46,6 +46,9 @@ export default async function (req, param, {response, models, device}) {
         attributes: ['id', 'dept_name'],
       }
     ],
+    order: [
+      ['create_date', 'DESC'],
+    ],
     offset,
     limit,
   });

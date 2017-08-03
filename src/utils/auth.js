@@ -54,6 +54,12 @@ class Auth {
       attributes: {
         exclude: ['password', 'deleted', 'create_at', 'update_at'],
       },
+      include: [
+        {
+          model: models.Role,
+          as: 'user_role',
+        }
+      ],
       where: {
         id: decodedToken.iss
       }

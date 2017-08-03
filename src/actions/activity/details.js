@@ -2,7 +2,7 @@
  * Created by alixez on 17-7-31.
  */
 import {ApprovalService} from '../../service'
-export default async function (req, params, {response, models}) {
+export default async function (req, params, {response, models, device}) {
   const actID = req.query.act_id;
   const ActModel = models.TradeUnionAct;
   const foundAct = await ActModel.findOne({
@@ -48,16 +48,26 @@ export default async function (req, params, {response, models}) {
       }
     ]
   });
-
+  const approval = await models.Approval.findOne({
+    where: {
+      project_id: foundAct.id,
+    }
+  });
   const approvalService = new ApprovalService();
-  const approval_temp = await approvalService.generateApprovalFlowTemp(req.user.id);
-
+  const approvalDetail = await approvalService.getActApprovalDetail(approval.id);
+  let flows = approvalDetail.getDataValue('flows');
+  if (device === 'app') {
+    let f = flows.sort((a, b) => {
+      return b.sort - a.sort;
+    });
+    approval.setDataValue('flows', f);
+  }
   return {
     code: response.getSuccessCode(),
     message: '获取详情成功',
     data: {
       act: foundAct,
-      approval_temp: approval_temp,
+      approval_flow: approvalDetail.getDataValue('flows'),
     }
   }
 }
