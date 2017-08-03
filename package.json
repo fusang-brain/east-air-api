@@ -54,7 +54,7 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
-        "APIPORT": 3050
+        "APIPORT": 3000
       }
     }
   },

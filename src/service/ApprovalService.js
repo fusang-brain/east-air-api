@@ -10,6 +10,106 @@ export default class ApprovalService extends Service {
     this.modelName = 'Approval';
   }
 
+  async generateApprovalFlowTemp(publishID) {
+    const ApprovalFlows = this.getModel('ApprovalFlows');
+    const User = this.getModel('User');
+    const Dept = this.getModel('Dept');
+    const Role = this.getModel('Role');
+
+    // 获取当前活动发起人的部门信息
+    const foundUser = await User.findOne({
+      where: {
+        id: publishID,
+      },
+      include:[
+        {
+          model: Dept,
+          as: 'department',
+          required: true,
+        },
+        {
+          model: Role,
+          as: 'user_role',
+          required: false,
+        }
+      ]
+    });
+    const ApprovalFlow = [];
+    const flowMasterRoles = ['dept_finance', 'dept_director', 'dept_master'];
+
+    if (!foundUser) {
+      return false;
+    }
+    let sortNo = 1;
+
+    if (foundUser.user_role.role_slug !== 'chile_dept_master') {
+      // 找到当前发起人的分工会主管
+      const chileDeptMasterRole = await Role.findOne({
+        where: {
+          role_slug: 'chile_dept_master',
+        }
+      });
+      let master = await User.findOne({
+        where: {
+          dept: foundUser.department.id,
+          role: chileDeptMasterRole.id,
+        },
+        include: [
+          {
+            model: Dept,
+            as: 'department',
+          },
+        ]
+      });
+
+      if (master) {
+        ApprovalFlow.push({
+          name: master.name,
+          avatar: master.avatar,
+          dept: master.department.dept_name,
+          desc: '待审批',
+          sort: sortNo,
+        });
+
+        sortNo += 1;
+      }
+    }
+
+    for (let i = 0; i < flowMasterRoles.length; i ++) {
+      let role = flowMasterRoles[i];
+      // 找到当前发起人的工会主管（财务，主任，主席）
+      let deptHead = await User.findOne({
+        include: [
+          {
+            model: Role,
+            as: 'user_role',
+            where: {
+              role_slug: role,
+            }
+          },
+          {
+            model: Dept,
+            as: 'department',
+          },
+        ]
+      });
+
+      if (!deptHead) {
+        continue;
+      }
+
+      ApprovalFlow.push({
+        name: deptHead.name,
+        avatar: deptHead.avatar,
+        dept: deptHead.department.dept_name,
+        desc: '待审批',
+        sort: sortNo + flowMasterRoles.indexOf(deptHead.user_role.role_slug),
+      });
+    }
+    console.log(ApprovalFlow);
+    return ApprovalFlow;
+  }
+
   async generateActApproval(projectID, publishID) {
     const approvalType = 1;
     const Approval = this.getModel();

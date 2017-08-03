@@ -110,3 +110,8 @@ setHeaders('EA-DEVICE', 'app')
 * [活动详情](./activity/details.md)
 * [活动评价](./activity/evaluation.md)
 
+#### 审批
+
+* [审批详情](./approval/details.md)
+* [审批处理](./approval/execute.md)
+

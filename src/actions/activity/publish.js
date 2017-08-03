@@ -47,6 +47,7 @@ export default async function (req, param, {response, models}) {
     }
   }
   params.user_id = req.user.id;
+  console.log(req.user, '=======');
   params.dept_id = req.user.dept;
   const TradeUnionAct = models.TradeUnionAct;
 

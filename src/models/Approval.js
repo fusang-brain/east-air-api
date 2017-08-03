@@ -9,6 +9,7 @@ export default function (sequelize, DataTypes) {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     approval_no: {type: DataTypes.STRING, defaultValue: generateNo},
     approval_type: {type: DataTypes.INTEGER},  // 审批类型 1:活动
+    project: {type: DataTypes.STRING},         // 项目表
     project_id: {type: DataTypes.UUID},        // 审批项目ID
     publish_id: {type: DataTypes.UUID},        // 发布人ID
     publish_date: {type: DataTypes.STRING},     // 发布时间
@@ -20,6 +21,12 @@ export default function (sequelize, DataTypes) {
           as: 'flows',
           foreignKey: 'approval_id',
           sourceKey: 'id',
+        });
+
+        this.belongsTo(models.TradeUnionAct, {
+          foreignKey: 'project_id',
+          constraints: false,
+          as: 'act',
         });
 
         this.belongsTo(models.User, {

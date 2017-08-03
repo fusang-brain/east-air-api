@@ -21,6 +21,13 @@ export default async function (req, param, {response, models}) {
     process: ['string'],
     integration: ['integer'],
   });
+
+  if (req.body.is_draft && req.body.is_draft === true) {
+    params.state = 0;
+  } else {
+    params.state = 1;
+  }
+
   const foundAct = await models.TradeUnionAct.findOne({where: {id: actID}});
   if (!foundAct) {
     return {
@@ -50,6 +57,7 @@ export default async function (req, param, {response, models}) {
       let cost = 0;
       for (let i = 0; i < items.length; i ++) {
         let item = items[i];
+        delete item.id;
         let total = Decimal.mul(item.price, item.count).toNumber();
         item.total = total;
         item.grant_apply_id = foundAct.grant_apply_id;
@@ -92,8 +100,10 @@ export default async function (req, param, {response, models}) {
     await models.GrantApplication.update(params.grant_apply, {where: {id: foundAct.grant_apply_id}});
 
     if (params.grant_apply.items && params.grant_apply.items.length > 0) {
+
       await models.GrantItem.destroy({where: {grant_apply_id: foundAct.grant_apply_id}});
-      await models.GrantItem.create(params.grant_apply.items);
+
+      await models.GrantItem.bulkCreate(params.grant_apply.items);
     }
   }
 

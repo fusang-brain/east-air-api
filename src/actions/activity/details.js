@@ -1,7 +1,7 @@
 /**
  * Created by alixez on 17-7-31.
  */
-
+import {ApprovalService} from '../../service'
 export default async function (req, params, {response, models}) {
   const actID = req.query.act_id;
   const ActModel = models.TradeUnionAct;
@@ -49,11 +49,15 @@ export default async function (req, params, {response, models}) {
     ]
   });
 
+  const approvalService = new ApprovalService();
+  const approval_temp = await approvalService.generateApprovalFlowTemp(req.user.id);
+
   return {
     code: response.getSuccessCode(),
     message: '获取详情成功',
     data: {
       act: foundAct,
+      approval_temp: approval_temp,
     }
   }
 }

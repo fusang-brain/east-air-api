@@ -30,7 +30,7 @@ export default async function (req, params, {response, models}) {
   foundApprovalFlow.approval_date = Date.now();
   await foundApprovalFlow.save();
 
-  const next = await ApprovalFlows.update({
+  await ApprovalFlows.update({
     available: 1,
   },{
     where: {
