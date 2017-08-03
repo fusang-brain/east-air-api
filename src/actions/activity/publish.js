@@ -2,6 +2,7 @@
  * Created by alixez on 17-7-26.
  */
 import {filterParams} from '../../utils/filters';
+import {ApprovalService} from '../../service';
 import Decimal from 'decimal.js';
 
 export default async function (req, param, {response, models}) {
@@ -33,7 +34,7 @@ export default async function (req, param, {response, models}) {
       items: ['array'],
       others: ['string'],
     });
-    if (params.grant_apply.items) {
+    if (params.grant_apply.items && params.grant_apply.items.length > 0) {
       let items = params.grant_apply.items;
       let cost = 0;
       for (let i = 0; i < items.length; i ++) {
@@ -103,6 +104,9 @@ export default async function (req, param, {response, models}) {
       }
     ]
   });
+
+  // const approvalService = new ApprovalService();
+  // await approvalService.generateActApproval(createdAct.id, req.user.id);
 
   return {
     code: response.getSuccessCode('insert'),

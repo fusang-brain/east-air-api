@@ -11,3 +11,4 @@ export * as role from './role';
 export * as file from './file';
 export * as activity from './activity';
 export * as permission from './permission';
+export * as approval from './approval';

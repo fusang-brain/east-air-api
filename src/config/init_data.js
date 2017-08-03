@@ -287,9 +287,26 @@ const sysuser = {
 
 const roles = [
   {
-    role_name: '主席',
+    role_name: '工会主席',
     role_slug: 'dept_master',
     role_description: '工会主席描述',
+    is_master: true,
+  },
+  {
+    role_name: '分工会主席',
+    role_slug: 'chile_dept_master',
+    role_description: '分工会主席描述',
+    is_master: true,
+  },
+  {
+    role_name: '工会财务',
+    role_slug: 'dept_finance',
+    is_master: true,
+  },
+  {
+    role_name: '工会主任',
+    role_slug: 'dept_director',
+    is_master: true,
   }
 ];
 

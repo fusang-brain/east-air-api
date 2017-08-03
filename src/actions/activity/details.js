@@ -29,6 +29,10 @@ export default async function (req, params, {response, models}) {
           {
             model: models.GrantItem,
             as: 'items'
+          },
+          {
+            model: models.Dept,
+            as: 'dept',
           }
         ]
       },

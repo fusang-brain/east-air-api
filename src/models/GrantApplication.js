@@ -19,6 +19,11 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'grant_apply_id',
           sourceKey: 'id',
         });
+        this.belongsTo(models.Dept, {
+          as: 'dept',
+          foreignKey: 'dept_id',
+          sourceKey: 'id',
+        })
       }
     }
   })
