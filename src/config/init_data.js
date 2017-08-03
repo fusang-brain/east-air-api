@@ -307,6 +307,11 @@ const roles = [
     role_name: '工会主任',
     role_slug: 'dept_director',
     is_master: true,
+  },
+  {
+    role_name: '普通会员',
+    role_slug: 'common_member',
+    is_master: false,
   }
 ];
 
@@ -318,13 +323,10 @@ const dept = [
         name: '飞行部分会',
         children: [
           {
-            name: '飞行部分会1',
-            children: [
-              {name: '三级分类1'}
-            ]
+            name: '部门1',
           },
           {
-            name: '飞行部分会2',
+            name: '部门2',
           }
         ]
       },

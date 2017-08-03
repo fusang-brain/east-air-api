@@ -41,6 +41,17 @@ export default async function (req, params, {models, response}) {
     where: {id: args.user}
   });
 
+  await models.DataAccess.destroy({
+    where: {
+      user_id: args.user,
+    }
+  });
+  const dataAccess = values.data_access.map(loop => ({
+    user_id: args.user,
+    dept_id: loop,
+  }));
+  await models.DataAccess.bulkCreate(dataAccess);
+
   return {
     code: response.getSuccessCode('update'),
     message: '修改成功',

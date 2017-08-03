@@ -41,13 +41,26 @@ export default async function (req, param, {response, models}) {
       cost: ['number'],
       purpose: ['string'],
       people_count: ['integer'],
+      items: ['array'],
       others: ['string'],
-    })
+    });
+
+    if (params.grant_apply.items && params.grant_apply.items.length > 0) {
+      let items = params.grant_apply.items;
+      let cost = 0;
+      for (let i = 0; i < items.length; i ++) {
+        let item = items[i];
+        let total = Decimal.mul(item.price, item.count).toNumber();
+        item.total = total;
+        item.grant_apply_id = foundAct.grant_apply_id;
+        cost = Decimal.add(cost, total).toNumber();
+      }
+      params.grant_apply.cost = cost;
+    }
   }
   params.user_id = req.user.id;
   params.dept_id = req.user.dept;
   const TradeUnionAct = models.TradeUnionAct;
-
   const budgets = req.body.budgets;
   const images = req.body.images || [];
   const attach = req.body.attach || [];
@@ -77,6 +90,11 @@ export default async function (req, param, {response, models}) {
   }
   if (params.grant_apply) {
     await models.GrantApplication.update(params.grant_apply, {where: {id: foundAct.grant_apply_id}});
+
+    if (params.grant_apply.items && params.grant_apply.items.length > 0) {
+      await models.GrantItem.destroy({where: {grant_apply_id: foundAct.grant_apply_id}});
+      await models.GrantItem.create(params.grant_apply.items);
+    }
   }
 
   params.images = images.map(loop => ({

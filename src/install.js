@@ -20,7 +20,7 @@ async function allDept(children, parent, level) {
       dept_name:
       deptItem.name,
     });
-    if (level === 4) {
+    if (level === 3) {
       defaultDept = p.id;
     }
     if (deptItem.children) {
@@ -37,16 +37,6 @@ async function start() {
   await models.sequelize.sync();
   log('== 同步数据库成功 ==');
   log('== 开始创建初始数据 ==');
-  log('>> 创建系统管理员 >>');
-  await models.User.create({
-    name: 'root',
-    mobile: '18627894265',
-    nickname: 'root',
-    birthday: new Date().getTime(),
-    card_num: '--',
-    password: Auth.encodePassword('C1508FB3AA5E9F4E49920A9618AA96F5DC287182'), // 'itspeed'
-  });
-  log('>> 管理员创建成功 >>');
 
   log('>> 开始生成系统初始权限 >>');
   for (let i = 0; i < permissions.length; i ++) {
@@ -77,33 +67,57 @@ async function start() {
     await allDept(deptItem.children, parentDept, 2);
   }
   log('>> 初始工会创建成功 >>');
-  let defaultRole = null;
+  let defaultRoles = {};
   log('>> 创建角色 >>');
   for (let i = 0; i < roles.length; i ++) {
-    defaultRole = await models.Role.create({
+    let role = await models.Role.create({
       role_name: roles[i].role_name,
       role_slug: roles[i].role_slug,
       role_description: roles[i].role_description,
     });
+    defaultRoles[role.role_slug] = role;
   }
   log('>> 角色创建成功');
+
+  log('>> 创建系统管理员 >>');
+  await models.User.create({
+    name: 'root',
+    mobile: '18627894265',
+    nickname: 'root',
+    birthday: new Date().getTime(),
+    dept: defaultDept,
+    role: defaultRoles['common_member'].id,
+    card_num: '--',
+    password: Auth.encodePassword('C1508FB3AA5E9F4E49920A9618AA96F5DC287182'), // 'itspeed'
+  });
+  log('>> 管理员创建成功 >>');
+
+  log('>> 创建公司高层会员 >>');
+  let heads = ['dept_master', 'chile_dept_master', 'dept_finance', 'dept_director'];
+  for (let i = 0; i < heads.length; i ++) {
+    let loop = heads[i];
+    sysuser.mobile = (String) (15600000000 + i);
+    sysuser.dept = defaultDept;
+    sysuser.role = defaultRoles[heads[i]].id;
+    await models.User.create(sysuser);
+  }
+  log('>> 公司高层会员创建成功 >>');
 
   log('>> 批量生成用户 >>');
   for (let i = 0; i < userTotal; i ++) {
     sysuser.mobile = (String) (15500000000 + i);
     sysuser.dept = defaultDept;
-    sysuser.role = defaultRole.id;
-    let user = await models.User.create(sysuser);
+    sysuser.role = defaultRoles['common_member'].id;
+    await models.User.create(sysuser);
   }
   log('>> 批量生成用户成功 >>');
 
   log('== 初始数据创建成功 ==');
-  log('== 系统安装完成 ==');
-  log('== 键入 ctrl + c 退出安装程序 ==');
 }
 
-try {
-  start();
-} catch (error) {
+start().then(res => {
+  log('== 系统安装完成 ==');
+  log('== 键入 ctrl + c 退出安装程序 ==');
+}).catch(err => {
   console.log('======', error);
-}
+});
