@@ -52,9 +52,9 @@ export default async function (req, param, {response, models, device}) {
   const todayStart = moment().startOf('day');
   for (let i = 0; i < list.length; i ++) {
     let item = list[i];
-    let endDateStart = moment(item.end_date).add('day', 1).startOf('day');
+    let endDateStart = moment(+item.end_date).add(1, 'day').startOf('day');
     let isEnd = false;
-    if (endDateStart.toDate().getTime() < todayStart.toDate().getTime()) {
+    if (endDateStart.toDate().getTime() <= todayStart.toDate().getTime()) {
       isEnd = true;
     }
     item.setDataValue('is_end', isEnd);
