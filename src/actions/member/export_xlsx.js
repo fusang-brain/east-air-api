@@ -7,7 +7,31 @@ import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 import xlsx from 'node-xlsx';
 
-export default async function(req, params, {models, device, response}) {
+export default async function(req, params, {models, response}) {
+  const token = req.query.token;
+  const DownloadToken = models.DownloadToken;
+
+  if (!token) {
+    return {
+      code: response.getErrorCode(),
+      message: '参数错误',
+    }
+  }
+
+  const foundCount = await DownloadToken.count({
+    where: {
+      token: token,
+      used: false,
+    }
+  });
+
+  if (foundCount === 0) {
+    return {
+      code: response.getErrorCode(),
+      message: '无效的校验',
+    }
+  }
+
   const args = filterParams(req.query, {
     search: 'string',
     other_status: 'string',
@@ -94,6 +118,7 @@ export default async function(req, params, {models, device, response}) {
   allData = allData.concat(data);
   const buffer = xlsx.build([{name: '用户列表', data: allData}]);
   let filename = moment().format('YYYYMMDDHHmmss');
+  await DownloadToken.destroy({where: {token: token}});
   return res => {
     res.set('Content-Disposition', `attachment; filename=${filename}.xlsx`);
     res.send(buffer);
