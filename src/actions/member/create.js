@@ -4,9 +4,11 @@
 import Auth from '../../utils/auth';
 import sha1 from 'crypto-js/sha1';
 import {filterParams} from '../../utils/filters';
+import {DeptService, RoleService} from '../../service';
 
 export default async function (req, params, {models, response}) {
-
+  const deptService = new DeptService();
+  const roleService = new RoleService();
   const args = filterParams(req.body, {
     name: ['required', 'string'],
     gender: ['integer', 'required'],
@@ -32,7 +34,13 @@ export default async function (req, params, {models, response}) {
     integration: 'number',
     mark: 'string',
   });
-
+  if (!await deptService.checkIsAvailableDept(args.dept)) {
+    return {
+      code: response.getErrorCode(),
+      message: '请选择正确的部门',
+    }
+  }
+  await roleService.checkIsGoodRole(args.role, args.dept);
   const pwd = sha1(args.card_num.substring(args.card_num.length - 6)).toString().toUpperCase();
   args.password = Auth.encodePassword(pwd);
   const User = models.User;

@@ -75,6 +75,7 @@ setHeaders('EA-DEVICE', 'app')
 
 * [获取工会列表接口](./memberManager/dept_list.md)
 * [创建工会](./memberManager/dept.md)
+* [修改工会](./memberManager/dept_update.md)
 * [删除工会](./memberManager/dept_remove.md)
 * [新增会员](./memberManager/create.md)
 * [修改会员信息](./memberManager/update.md)
@@ -95,7 +96,7 @@ setHeaders('EA-DEVICE', 'app')
 
 * [文件上传](./file/upload.md)
 
-#### 用户（我的）APP
+#### 用户(我的)
 
 * [获取我的信息](./user/info.md)
 * [更新我的信息](./user/update.md)

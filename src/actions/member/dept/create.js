@@ -18,7 +18,6 @@ export default async function(req, params, {models}) {
   const createdDept = await DeptModel.create({
     tree_level: treeLevel,
     parent: parentID || '',
-    have_children: false,
     dept_name: name,
   });
 

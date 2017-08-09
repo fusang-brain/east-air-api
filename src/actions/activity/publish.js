@@ -33,8 +33,8 @@ export default async function (req, param, {response, models}) {
   }
   if (req.body.grant_apply) {
     params.grant_apply = filterParams(req.body.grant_apply, {
-      type: ['integer', 'required'],
-      dept_id: ['string', 'required'],
+      type: ['number'],
+      dept_id: ['string'],
       cost: ['number'],
       purpose: ['string'],
       people_count: ['integer'],
@@ -54,7 +54,6 @@ export default async function (req, param, {response, models}) {
     }
   }
   params.user_id = req.user.id;
-  console.log(req.user, '=======');
   params.dept_id = req.user.dept;
   const TradeUnionAct = models.TradeUnionAct;
 
