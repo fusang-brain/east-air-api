@@ -3,12 +3,17 @@
  */
 
 import DeptService from '../../../service/DeptService';
-
+import {filterParams} from '../../../utils/filters';
 export default async function (req, params, {response}) {
-  const {name, parent_id, dept_id} = req.body;
+  const args = filterParams(req.body, {
+    dept_name: 'string',
+    parent: 'string',
+    dept_id: 'string',
+  });
+  const {dept_id, ...values} = args;
   const deptService = new DeptService();
 
-  if (await deptService.updateDept(dept_id, parent_id, name)) {
+  if (await deptService.updateDept(dept_id, values)) {
     return {
       code: response.getSuccessCode('update'),
       message: '更新成功',

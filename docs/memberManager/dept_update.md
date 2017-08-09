@@ -14,9 +14,9 @@ __请求方式 :__ POST
 
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
-|name|String|组织名|是|-|
-|parentID|String|父组织ID|否|-|
-|deptID|String|组织ID|是|-|
+|dept_name|String|组织名|是|-|
+|parent|String|父组织ID|否|-|
+|dept_id|String|组织ID|是|-|
 
 #### 返回值
 

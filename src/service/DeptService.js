@@ -10,21 +10,19 @@ export default class DeptService extends Service {
     this.modelName = 'Dept';
   }
 
-  async updateDept(deptID, parentID, name) {
+  async updateDept(deptID, values) {
     let treeLevel = 1;
     const Dept = this.getModel();
-    if (parentID) {
-      const parentDept = await Dept.findOne({where: {id: parentID}});
+    if (values.parent) {
+      const parentDept = await Dept.findOne({where: {id: values.parent}});
       if (parentDept) {
         treeLevel = parentDept.tree_level + 1;
       }
+
+      values.tree_level = treeLevel;
     }
 
-    await Dept.update({
-      tree_level: treeLevel,
-      parent: parentID || '',
-      dept_name: name,
-    }, {
+    await Dept.update(values, {
       where: {
         id: deptID,
       }

@@ -4,12 +4,28 @@
 import Auth from '../../utils/auth';
 import {filterParams} from '../../utils/filters';
 
-export default async function (req, params, {response, models}) {
+export default async function (req, params, {response, models, device}) {
   const args = filterParams(req.body, {
+    origin_password: 'string',
     password: ['string', 'required'],
     re_password: ['string', 'required'],
   });
   const user = req.user;
+  if (device === 'pc') {
+    if (!args.origin_password) {
+      return {
+        code: response.getErrorCode(),
+        message: '参数异常',
+      }
+    }
+    const foundUser = await models.User.findOne({where: {id: user.id}});
+    if (!Auth.validPassword(args.origin_password, foundUser.password)) {
+      return {
+        code: response.getErrorCode(),
+        message: '请输入正确的原始密码',
+      }
+    }
+  }
   if (args.password !== args.re_password) {
     return {
       code: response.getErrorCode(),
