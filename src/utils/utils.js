@@ -35,3 +35,19 @@ export function generateNo(req) {
 
   return no;
 }
+
+export function generateSlug() {
+  const now = moment().format('YYYYMMDDHHmmss');
+  generateNoTime += 1;
+  let no = '';
+  if (generateNoTime < 10) {
+    no = `${now}0${generateNoTime}`
+  } else {
+    no = `${now}${generateNoTime}`
+  }
+  if (generateNoTime === 99) {
+    generateNoTime = 0;
+  }
+
+  return `SLUG${no}`;
+}
