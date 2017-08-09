@@ -160,6 +160,7 @@ export default class ApprovalService extends Service {
       });
       let master = await User.findOne({
         where: {
+          state: 1,
           dept: foundUser.department.id,
           role: chileDeptMasterRole.id,
         }
@@ -175,10 +176,14 @@ export default class ApprovalService extends Service {
       }
     }
 
+    // 找到当前发起人的工会主管（财务，主任，主席）
     for (let i = 0; i < flowMasterRoles.length; i ++) {
       let role = flowMasterRoles[i];
-      // 找到当前发起人的工会主管（财务，主任，主席）
+
       let deptHead = await User.findOne({
+        where: {
+          state: 1,
+        },
         include: [
           {
             model: Role,

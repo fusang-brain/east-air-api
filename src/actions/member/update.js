@@ -42,7 +42,7 @@ export default async function (req, params, {models, response}) {
       message: '请选择正确的部门',
     }
   }
-  await roleService.checkIsGoodRole(args.role, args.dept);
+  await roleService.checkIsGoodRole(args.role, args.dept, args.user);
   const values = {...args};
   const User = models.User;
   delete values.user;

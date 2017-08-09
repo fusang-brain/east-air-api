@@ -10,7 +10,7 @@ export default class RoleService extends Service {
     this.modelName = 'Role';
   }
 
-  async checkIsGoodRole(id, deptID = null) {
+  async checkIsGoodRole(id, deptID = null, userID = null) {
     const Role = this.getModel();
     const User = this.getModel('User');
     const companyMaster = ['dept_master', 'dept_finance', 'dept_director', 'chile_dept_master'];
@@ -23,9 +23,15 @@ export default class RoleService extends Service {
     }
     const condition = {
       where: {
+        state: 1,
         role: id,
       }
     };
+    if (userID) {
+      condition.where.id = {
+        $ne: userID,
+      }
+    }
     if (!companyMaster.includes(foundRole.role_slug)) {
       return true;
     }
@@ -36,6 +42,7 @@ export default class RoleService extends Service {
 
     const userCount = await User.count(condition);
     if (userCount > 0) {
+      console.log(userID);
       throw {
         code: Response.getErrorCode(),
         message: `本部门已经存在一位${foundRole.role_name}`

@@ -41,6 +41,12 @@ export default async function (req, param, {response, models}) {
       items: ['array'],
       others: ['string'],
     });
+    if (!params.grant_apply.dept_id) {
+      params.grant_apply.dept_id = req.user.dept;
+    }
+    if (!params.grant_apply.type) {
+      params.grant_apply.type = 0;
+    }
     if (params.grant_apply.items && params.grant_apply.items.length > 0) {
       let items = params.grant_apply.items;
       let cost = 0;
