@@ -98,7 +98,6 @@ app.get('/file/:name', (req, res) => {
       'x-sent': true,
     }
   };
-
   res.sendFile(fileName, options, (err) => {
     if (err) {
       console.error(err);

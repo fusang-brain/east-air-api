@@ -8,3 +8,4 @@ export mark_status from './mark_status';
 export update from './update';
 export list_users from './list_users';
 export details from './details';
+export export_xlsx from './export_xlsx';

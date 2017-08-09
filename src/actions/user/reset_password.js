@@ -18,7 +18,8 @@ export default async function (req, params, {response, models, device}) {
         message: '参数异常',
       }
     }
-    const foundUser = await models.User.findOne({where: {id: user.id}});
+
+    const foundUser = await models.User.scope('with_password').findOne({where: {id: user.id}});
     if (!Auth.validPassword(args.origin_password, foundUser.password)) {
       return {
         code: response.getErrorCode(),

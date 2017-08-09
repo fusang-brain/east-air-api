@@ -6,9 +6,9 @@ import DeptService from '../../../service/DeptService';
 import {filterParams} from '../../../utils/filters';
 export default async function (req, params, {response}) {
   const args = filterParams(req.body, {
-    dept_name: 'string',
+    dept_name: ['string', 'required'],
     parent: 'string',
-    dept_id: 'string',
+    dept_id: ['string', 'required'],
   });
   const {dept_id, ...values} = args;
   const deptService = new DeptService();

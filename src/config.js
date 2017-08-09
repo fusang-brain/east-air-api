@@ -46,7 +46,8 @@ module.exports = Object.assign({
     whitelist: [
       '/auth/forget_password',
       '/auth/login',
-      '/auth/reset_password'
+      '/auth/reset_password',
+      '/member/export_xlsx',
     ]
   },
   storage: {
