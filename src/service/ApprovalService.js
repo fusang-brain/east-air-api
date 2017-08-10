@@ -338,4 +338,27 @@ export default class ApprovalService extends Service {
 
     return flows;
   }
+
+  async waitCount(approvalType=1, userID) {
+    const Approval = this.getModel();
+    const ApprovalFlows = this.getModel('ApprovalFlows');
+
+    return await Approval.count({
+      where: {
+        approval_type: approvalType,
+      },
+      include: [
+        {
+          model: ApprovalFlows,
+          as: 'flows',
+          where: {
+            approval_man_id: userID,
+            available: 1,
+            result: 0,
+          },
+          required: true,
+        }
+      ]
+    });
+  }
 }
