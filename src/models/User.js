@@ -7,7 +7,7 @@ export default function (sequelize, DataTypes) {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     serial_no: {type: DataTypes.STRING, defaultValue: generateNo},
     name: {type: DataTypes.STRING, allowNull: false},
-    no: {type: DataTypes.INTEGER, allowNull: false, defaultValue: '0'},  // 卡号
+    no: {type: DataTypes.STRING, allowNull: false, defaultValue: '0'},  // 卡号
     birthday: {type: DataTypes.STRING, allowNull: false},                // 时间毫秒数
     card_num: {type: DataTypes.STRING, allowNull: false},                // 身份证号
     mobile: {type: DataTypes.STRING, length: 11, unique: true},
