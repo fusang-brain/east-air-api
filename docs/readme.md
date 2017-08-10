@@ -115,4 +115,5 @@ setHeaders('EA-DEVICE', 'app')
 
 * [审批详情](./approval/details.md)
 * [审批处理](./approval/execute.md)
-
+* [代办审批数](./approval/wait_count.md)
+* [获取审批流程模板](./approval/get_flow_temp.md)
