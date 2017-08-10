@@ -6,7 +6,6 @@ import {getSuccessCode, getErrorCode} from '../../../config/response';
 export default async function (req, params, {models, device}) {
   const DeptModel = models.Dept.scope('list');
   const deptCount = await DeptModel.count();
-  console.log(deptCount);
   if (deptCount === 0) {
     return {
       code: getSuccessCode(),
