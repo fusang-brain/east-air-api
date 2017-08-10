@@ -22,7 +22,7 @@ export default async function (req, params, {models, response}) {
     role: ['string'],
     data_access: ['array'],
     state: ['number'],
-    no: ['number'],
+    no: ['string'],
     type: ['number'],
     qq: ['string'],
     wechat: ['string'],
