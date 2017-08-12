@@ -24,6 +24,8 @@ export default async function (req, params, {response, device}) {
   if (!args.dept_id) {
     args.dept_id = req.user.dept;
   }
+  console.log(req.user, '====user====');
+  console.log(args.dept_id, '=====');
 
   if (!await deptService.checkIsAvailableDept(args.dept_id)) {
     return {

@@ -30,7 +30,6 @@ export default class RelaxActionService extends Service {
     let people = args.people;
     for (let i = 0; i < people.length; i ++) {
       let item = people[i];
-      people[i].dept_id = deptID;
       peopleNumber = peopleNumber + parseInt(item.people_number);
     }
     args.people_number = peopleNumber;
