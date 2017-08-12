@@ -36,6 +36,7 @@ export default async function (req, params, {response}) {
       isFinished = true;
     }
     return {
+      id: item.id,
       no: item.no,
       title: item.title,
       action_type: mappers.actionType[item.action_type],
