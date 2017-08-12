@@ -5,7 +5,7 @@ import {generateNo} from '../utils/utils';
 // 疗养秀信息表
 export default function (sequelize, DataTypes) {
   return sequelize.define('RelaxAction', {
-    id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true}, // 评价人ID
+    id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     no: {type: DataTypes.STRING, defaultValue: generateNo},
     dept_id: {type: DataTypes.UUID},
     user_id: {type: DataTypes.UUID},

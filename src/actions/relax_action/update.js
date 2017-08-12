@@ -10,6 +10,7 @@ const relaxActionService = new RelaxActionService();
 export default async function (req, params, {response, models}) {
 
   const args = filterParams(req.body, {
+    id: ['string', 'required'],
     title: ['string', 'filter_none'],
     action_type: ['integer'],
     per_capita_budget: ['number'],
@@ -18,8 +19,23 @@ export default async function (req, params, {response, models}) {
     place: ['string', 'filter_none'],
     people: ['array'],
   });
-  if (args.days) {
-    args.days = moment(+args.days).startOf('day').toDate().getTime();
+
+  const saveType = params[0];
+  if (!['submit', 'draft'].includes(saveType)) {
+    return {
+      code: response.getErrorCode(),
+      message: '不存在的保存类型',
+    }
+  }
+
+  if (saveType === 'draft') {
+    args.state = 0;
+  } else {
+    args.state = 1;
+  }
+
+  if (args.date) {
+    args.date = moment(+args.date).startOf('day').toDate().getTime();
   }
   await relaxActionService.update(args);
 

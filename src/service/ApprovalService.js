@@ -110,8 +110,11 @@ export default class ApprovalService extends Service {
     return ApprovalFlow;
   }
 
-  async generateActApproval(projectID, publishID, device) {
-    const approvalType = 1;
+  async generateApproval(projectID, publishID, approvalTyoe = 1) {
+    return await this.generateActApproval(projectID, publishID, approvalTyoe);
+  }
+
+  async generateActApproval(projectID, publishID, approvalType = 1 , device) {
     const Approval = this.getModel();
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
@@ -119,6 +122,7 @@ export default class ApprovalService extends Service {
     const Role = this.getModel('Role');
 
     // 生成审批
+    await Approval.destroy({where: {project_id: projectID}});
     const approval = await Approval.create({
       approval_type: approvalType,
       project_id: projectID,

@@ -51,10 +51,10 @@ export default class RelaxActionService extends Service {
     if (!relaxAction) {
       return;
     }
-    if (relaxAction.state !== 1) {
+    if (relaxAction.state !== 0) {
       throw {
         code: Response.getErrorCode(),
-        message: '只有草稿可以修改!',
+        message: '只有草稿可以删除!',
       }
     }
     await this.RelaxAction.destroy({
@@ -77,7 +77,7 @@ export default class RelaxActionService extends Service {
     if (!relaxAction) {
       return;
     }
-    if (relaxAction.state !== 1) {
+    if (relaxAction.state !== 0) {
       throw {
         code: Response.getErrorCode(),
         message: '只有草稿可以修改!',
@@ -190,6 +190,14 @@ export default class RelaxActionService extends Service {
         }
       ]
     });
+
+    if (!res) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '没有该数据',
+      }
+    }
+
     const endTime = moment(+res.date).add('day', +res.days);
     if (res.state !== 0 && endTime.toDate().getTime() < Date.now()) {
       res.state = 2;
@@ -199,15 +207,73 @@ export default class RelaxActionService extends Service {
     return res;
   }
 
-  async statisticsResult() {
+  async statisticsResultTotal(duration) {
+    let condition = '';
+    if (duration.start || duration.end) {
+      condition = `WHERE `;
+    }
+
+    if (duration && duration.start) {
+      condition += `ra.date > ${duration.start} `;
+    }
+
+    if (duration.start && duration.end) {
+      condition += `AND `
+    }
+
+    if (duration && duration.end) {
+      condition += `ra.date < ${duration.end} `;
+    }
+    const queryStr = "SELECT COUNT(*) as total FROM (SELECT ra.dept_id " +
+      "FROM `" + this.getModel().tableName + "` as ra " +
+      condition +
+      //"LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
+      "GROUP BY ra.dept_id) res";
+    return await this.connect.query(queryStr, {
+      type: this.sequelize.QueryTypes.SELECT,
+    });
+  }
+
+  async statisticsResult(offset=0, limit=20, duration) {
+    let condition = '';
+    if (duration.start || duration.end) {
+      condition = `WHERE `;
+    }
+
+    if (duration && duration.start) {
+      condition += `ra.date > ${duration.start} `;
+    }
+
+    if (duration.start && duration.end) {
+      condition += `AND `
+    }
+
+    if (duration && duration.end) {
+      condition += `ra.date < ${duration.end} `;
+    }
+    // const queryStr = "SELECT " +
+    //   "ra.dept_id as dept_id, dept.dept_name as dept_name, COUNT(ra.id) as all_times, SUM(ra.people_number) as all_people, SUM(ra.total) as total_amount " +
+    //   "FROM `" + this.getModel().tableName + "` as ra " +
+    //   "WHERE ra.date>1502527144417 " +
+    //   "LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
+    //   "GROUP BY ra.dept_id " +
+    //   "LIMIT :offset,:limit ";
+
+    const queryStr = "SELECT " +
+      "ra.dept_id as dept_id, (SELECT dept_name FROM " + this.getModel('Dept').tableName + " WHERE id=dept_id) as dept_name, COUNT(ra.id) as all_times, SUM(ra.people_number) as all_people, SUM(ra.total) as total_amount " +
+      "FROM `" + this.getModel().tableName + "` as ra " +
+      condition +
+      //"LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
+      "GROUP BY ra.dept_id " +
+      "LIMIT :offset,:limit ";
 
     return await this.connect.query(
-      "SELECT " +
-      "ra.dept_id as dept_id, dept.dept_name as dept_name, COUNT(ra.id) as all_times, SUM(ra.people_number) as all_people, SUM(ra.total) as total_amount " +
-      "FROM `" + this.getModel().tableName + "` as ra " +
-      "LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
-      "GROUP BY ra.dept_id",
+      queryStr,
       {
+        replacements: {
+          offset: offset,
+          limit: limit,
+        },
         type: this.sequelize.QueryTypes.SELECT,
       }
     );
