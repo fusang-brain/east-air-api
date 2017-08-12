@@ -6,6 +6,7 @@
  * Created by alixez on 17-7-26.
  */
 import {filterParams} from '../../utils/filters';
+import ApprovalService from '../../service/ApprovalService'
 import Decimal from 'decimal.js';
 
 export default async function (req, param, {response, models}) {
@@ -26,6 +27,8 @@ export default async function (req, param, {response, models}) {
     params.state = 0;
   } else {
     params.state = 1;
+    const approvalService = new ApprovalService();
+    await approvalService.generateActApproval(actID, req.user.id);
   }
 
   const foundAct = await models.TradeUnionAct.findOne({where: {id: actID}});

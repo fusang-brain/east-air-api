@@ -14,6 +14,7 @@ export default async function (req, param, {response, models}) {
       message: '您不能发起活动',
     }
   }
+
   const params = filterParams(req.body, {
     act_type: ['integer', 'required'],
     subject: ['string', 'required'],
