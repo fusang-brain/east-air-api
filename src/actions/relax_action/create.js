@@ -39,9 +39,9 @@ export default async function (req, params, {response, device}) {
   args.days = moment(+args.days).startOf('day').toDate().getTime();
 
   if (saveType === 'draft') {
-    args.state = 1;
-  } else {
     args.state = 0;
+  } else {
+    args.state = 1;
   }
   if (!args.dept_id) {
     args.dept_id = req.user.dept;

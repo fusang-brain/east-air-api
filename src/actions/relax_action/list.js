@@ -24,6 +24,8 @@ export default async function (req, params, {response}) {
     actionType: ['未知', '自行', '委托'],
     state: ['草稿', '已提交'],
   };
+
+  // todo return total, people_num, days
   const resList = list.map(item => {
     const start = moment(+item.date).format('YYYY-MM-DD');
     console.log(start);
@@ -39,6 +41,7 @@ export default async function (req, params, {response}) {
       state: isFinished ? '已完成' : mappers.state[item.state],
       days: item.days,
       total: item.total,
+      people_number: item.people_number,
       duration: `${start} - ${endTime.format('YYYY-MM-DD HH:mm:ss')}`,
       department: item.department.dept_name,
       apply_time: item.apply_time,
