@@ -123,6 +123,8 @@ setHeaders('EA-DEVICE', 'app')
 * [发起疗休养](./relax_action/create.md)
 * [疗休养详情](./relax_action/details.md)
 * [疗休养列表](./relax_action/list.md)
+* [疗休养删除](./relax_action/remove.md)
+* [疗休养修改](./relax_action/update.md)
 
 #### 统计分析
 
