@@ -142,7 +142,7 @@ export default class RelaxActionService extends Service {
     return await this.RelaxAction
       .all({
         where: condition,
-        attributes: ['no', 'title', 'action_type', 'apply_time', 'state'],
+        attributes: ['no', 'title', 'action_type', 'apply_time', 'state', 'date'],
         offset,
         limit,
         include: [

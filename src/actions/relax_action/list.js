@@ -25,6 +25,7 @@ export default async function (req, params, {response}) {
     state: ['草稿', '已提交'],
   };
   const resList = list.map(item => {
+    console.log(item.date);
     const start = moment(+item.date).format('YYYY-MM-DD');
     console.log(start);
     const endTime = moment(+item.date).add('day', +item.days);
@@ -39,7 +40,7 @@ export default async function (req, params, {response}) {
       state: isFinished ? '已完成' : mappers.state[item.state],
       days: item.days,
       total: item.total,
-      duration: `${start} - ${endTime.format('YYYY-MM-DD HH:mm:ss')}`,
+      duration: `${start} - ${endTime.format('YYYY-MM-DD')}`,
       department: item.department.dept_name,
       apply_time: item.apply_time,
     }
