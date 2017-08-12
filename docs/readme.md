@@ -128,3 +128,4 @@ setHeaders('EA-DEVICE', 'app')
 
 #### 统计分析
 
+* [疗休养统计结果](./statistics/relax_action.md)
