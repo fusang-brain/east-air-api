@@ -117,3 +117,12 @@ setHeaders('EA-DEVICE', 'app')
 * [审批处理](./approval/execute.md)
 * [代办审批数](./approval/wait_count.md)
 * [获取审批流程模板](./approval/get_flow_temp.md)
+
+#### 疗休养
+
+* [发起疗休养](./relax_action/create.md)
+* [疗休养详情](./relax_action/details.md)
+* [疗休养列表](./relax_action/list.md)
+
+#### 统计分析
+

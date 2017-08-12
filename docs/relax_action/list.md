@@ -14,7 +14,8 @@ __请求方式 :__ GET
 
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
-|field|type|description|required|remark|
+|search|string|搜索字段|no|-|
+|state|string|根据状态筛选|no|all: 全部 draft: 草稿 has_submit: 已提交的 (app 此字段只需要传 has_submit)|
 
 
 #### 返回值
