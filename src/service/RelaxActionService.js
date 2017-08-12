@@ -4,13 +4,13 @@
 
 import Service from './Service';
 import Decimal from 'decimal.js';
+import moment from 'moment';
 import Response from '../config/response';
 
 export default class RelaxActionService extends Service {
   constructor() {
     super();
     this.modelName = 'RelaxAction';
-    this.dbName = 'RelaxActions';
     this.RelaxAction = this.getModel();
     this.RelaxActionPeople = this.getModel('RelaxActionPeople');
   }
@@ -142,7 +142,7 @@ export default class RelaxActionService extends Service {
     const list =  await this.RelaxAction
       .all({
         where: condition,
-        attributes: ['id', 'no', 'title', 'action_type', 'apply_time', 'state', 'total', 'days', 'people_number'],
+        attributes: ['id', 'no', 'title', 'action_type', 'apply_time', 'state', 'total', 'days', 'people_number', 'date'],
         offset,
         limit,
         include: [
@@ -168,10 +168,13 @@ export default class RelaxActionService extends Service {
 
   async details(id) {
 
-    return await this.RelaxAction.findOne({
+    const res = await this.RelaxAction.findOne({
       where: {
         id: id,
       },
+      order: [
+        [{model: this.RelaxActionPeople, as:'people'}, 'person_category', 'ASC'],
+      ],
       include: [
         {
           model: this.RelaxActionPeople,
@@ -187,6 +190,13 @@ export default class RelaxActionService extends Service {
         }
       ]
     });
+    const endTime = moment(+res.date).add('day', +res.days);
+    if (res.state !== 0 && endTime.toDate().getTime() < Date.now()) {
+      res.state = 2;
+    }
+    res.setDataValue('end_time', endTime.toDate().getTime());
+
+    return res;
   }
 
   async statisticsResult() {
