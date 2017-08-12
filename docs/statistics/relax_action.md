@@ -12,7 +12,12 @@ __请求方式 :__ GET
 
 #### 参数列表
 
-无
+|字段名|类型|描述|是否必要|备注|
+|-|-|-|-|-|
+|offset|integer|-|no|-|
+|limit|integer|-|no|-|
+|start|string|筛选：开始时间|no|-|
+|end|string|筛选：接受时间|no|-|
 
 
 #### 返回值
@@ -27,6 +32,7 @@ _data 说明_
 
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
+|total|integer|数据总量|yes|-|
 |statistic_result|Array<Dict>|统计结果|yes|dict详细字段见下表|
 
 _ result _
@@ -56,6 +62,7 @@ _ details dict _
     "code": 1000,
     "message": "查询成功",
     "data": {
+        "total": 2,
         "statistic_result": [
             {
                 "dept_id": "6b5296f7-21e1-474c-9131-12625cbb32ac",
