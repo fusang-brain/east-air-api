@@ -139,7 +139,7 @@ export default class RelaxActionService extends Service {
       condition.state = 1;
     }
 
-    return await this.RelaxAction
+    const list =  await this.RelaxAction
       .all({
         where: condition,
         attributes: ['id', 'no', 'title', 'action_type', 'apply_time', 'state', 'total', 'days', 'people_number'],
@@ -155,6 +155,14 @@ export default class RelaxActionService extends Service {
           ['apply_time', 'DESC'],
         ],
       });
+
+    const total = await this.RelaxAction.count({
+      where: condition,
+    });
+
+    return {
+      list, total,
+    }
 
   }
 

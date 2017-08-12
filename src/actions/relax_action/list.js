@@ -14,7 +14,9 @@ export default async function (req, params, {response}) {
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
   const state = args.state || 'all';
-  const list = await relaxActionService.generateList({
+
+
+  const listRes = await relaxActionService.generateList({
     subject: args.search,
     status: state,
     offset,
@@ -26,10 +28,8 @@ export default async function (req, params, {response}) {
   };
 
   // todo return total, people_num, days
-  const resList = list.map(item => {
-    console.log(item.date);
+  const resList = listRes.list.map(item => {
     const start = moment(+item.date).format('YYYY-MM-DD');
-    console.log(start);
     const endTime = moment(+item.date).add('day', +item.days);
     let isFinished = false;
     if (item.state !== 0 && endTime.toDate().getTime() < Date.now()) {
@@ -54,6 +54,7 @@ export default async function (req, params, {response}) {
     code: response.getSuccessCode(),
     message: '获取成功',
     data: {
+      total: listRes.total,
       list: resList,
     }
   }
