@@ -21,6 +21,12 @@ export default async function (req, params, {response, device}) {
     people: ['array', 'required'],
   });
 
+  if (!args.dept_id) {
+    args.dept_id = req.user.dept;
+  }
+  console.log(req.user, '====user====');
+  console.log(args.dept_id, '=====');
+
   if (!await deptService.checkIsAvailableDept(args.dept_id)) {
     return {
       code: response.getErrorCode(),
@@ -36,16 +42,14 @@ export default async function (req, params, {response, device}) {
     }
   }
 
-  args.days = moment(+args.days).startOf('day').toDate().getTime();
+  args.date = moment(+args.date).startOf('day').toDate().getTime();
 
   if (saveType === 'draft') {
     args.state = 0;
   } else {
     args.state = 1;
   }
-  if (!args.dept_id) {
-    args.dept_id = req.user.dept;
-  }
+
   args.user_id = req.user.id;
   const relaxAction = await relaxActionService.create(args);
 

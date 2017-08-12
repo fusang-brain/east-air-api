@@ -27,6 +27,7 @@ export default async function (req, params, {response}) {
 
   // todo return total, people_num, days
   const resList = list.map(item => {
+    console.log(item.date);
     const start = moment(+item.date).format('YYYY-MM-DD');
     console.log(start);
     const endTime = moment(+item.date).add('day', +item.days);

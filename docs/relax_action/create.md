@@ -2,7 +2,8 @@
 
 ### 接口调用说明
 
-__请求地址 :__ [/relax_action/create](#)
+__请求地址(发布提交) :__ [/relax_action/create/submit](#)
+__请求地址(发布草稿) :__ [/relax_action/create/draft](#)
 
 __请求方式 :__ POST
 
