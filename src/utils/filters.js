@@ -4,6 +4,7 @@
 import response from '../config/response';
 
 const validate = {
+  filter_none: value => true,
   keep: value => true,
   required: value => typeof value !== 'undefined',
   array: Array.isArray,
@@ -47,6 +48,12 @@ export function filterParams(args, rules) {
       }
       willDeleteKey.push(key);
     }
+    if (rules[key].includes('filter_none')) {
+      if (args[key] === '') {
+        rules[key] = 'keep';
+        willDeleteKey.push(key);
+      }
+    }
 
     if (Array.isArray(rules[key])) {
       // 依次读取规则进行过滤
@@ -55,13 +62,18 @@ export function filterParams(args, rules) {
       return filterHandlers[typeof rules[key]](rules[key], args[key], key);
     }
   });
+  let result = null;
+  if (res.length === 1) {
+    result = Array.isArray(res[0]) ? res[0][0] : res[0];
+  } else {
+    result = res.reduce((lastResult, loop) => {
+      let last = Array.isArray(lastResult) ? lastResult[0] : lastResult;
+      const value = Array.isArray(loop) ? loop[0] : loop;
+      last = Object.assign(last, value);
+      return last;
+    });
+  }
 
-  const result = res.reduce((lastResult, loop) => {
-    const last = Array.isArray(lastResult) ? lastResult[0] : lastResult;
-    const value = Array.isArray(loop) ? loop[0] : loop;
-    Object.assign(last, value);
-    return last;
-  });
 
   for (let i = 0; i < willDeleteKey.length; i ++) {
     delete result[willDeleteKey[i]];

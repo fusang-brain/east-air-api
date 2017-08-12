@@ -13,3 +13,4 @@ export * as activity from './activity';
 export * as permission from './permission';
 export * as approval from './approval';
 export * as relax_action from './relax_action';
+export * as statistics from './statistics';
