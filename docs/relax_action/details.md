@@ -40,17 +40,18 @@ _ relax_action 字段说明 _
 |dept_id|string|疗休养所属部门|是|-|
 |user_id|string|用户ID|是|-|
 |title|string|主题|是|-|
-|action_type|integer|组织形式|-|
-|per_capita_budget|decimal|人均预算|精确到两位|
-|people_number|integer|总人数|-|
-|total|decimal|总金额|-|
-|days|integer|天数|-|
-|date|string|开始时间（时间戳）|-|
-|place|string|地点|-|
-|state|integer|状态|0: 草稿 1: 待处理(已提交) 2: 已完成|
+|action_type|integer|是|组织形式|-|
+|per_capita_budget|decimal|是|人均预算|精确到两位|
+|people_number|integer|是|总人数|-|
+|total|decimal|总金额|是|-|
+|days|integer|天数|是|-|
+|date|string|开始时间（时间戳）|是|-|
+|place|string|地点|是|-|
+|state|integer|状态|是|0: 草稿 1: 待处理(已提交) 2: 已完成|
 |people|array<dict>|人员信息|是|详细字段说明见下表|
 |department|dict|发起部门详情|是|详情见部门表|
 |publisher|dict|发起人|是|详情见用户表|
+|apply_time|string|发起时间|是|-|
 
 _ people 人员信息表 _
 
