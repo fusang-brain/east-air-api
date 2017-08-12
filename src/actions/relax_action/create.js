@@ -21,6 +21,10 @@ export default async function (req, params, {response, device}) {
     people: ['array', 'required'],
   });
 
+  if (!args.dept_id) {
+    args.dept_id = req.user.dept;
+  }
+
   if (!await deptService.checkIsAvailableDept(args.dept_id)) {
     return {
       code: response.getErrorCode(),
@@ -43,9 +47,7 @@ export default async function (req, params, {response, device}) {
   } else {
     args.state = 0;
   }
-  if (!args.dept_id) {
-    args.dept_id = req.user.dept;
-  }
+
   args.user_id = req.user.id;
   const relaxAction = await relaxActionService.create(args);
 
