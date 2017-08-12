@@ -42,7 +42,7 @@ export default async function (req, params, {response, device}) {
     }
   }
 
-  args.days = moment(+args.days).startOf('day').toDate().getTime();
+  args.date = moment(+args.date).startOf('day').toDate().getTime();
 
   if (saveType === 'draft') {
     args.state = 1;
