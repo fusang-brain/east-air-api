@@ -15,3 +15,4 @@ export * as approval from './approval';
 export * as relax_action from './relax_action';
 export * as statistics from './statistics';
 export * as sympathy from './sympathy';
+export * as grant from './grant';

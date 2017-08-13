@@ -67,6 +67,7 @@ export default async function (req, param, {response, models}) {
         cost = Decimal.add(cost, total).toNumber();
       }
       params.grant_apply.cost = cost;
+      params.grant_apply.is_act = true;
     }
   }
   params.user_id = req.user.id;

@@ -58,6 +58,7 @@ export default async function (req, param, {response, models}) {
         cost = Decimal.add(cost, total).toNumber();
       }
       params.grant_apply.cost = cost;
+      params.grant_apply.is_act = true;
     }
   }
   params.user_id = req.user.id;
@@ -87,11 +88,9 @@ export default async function (req, param, {response, models}) {
   params.budgets = budgets;
   params.images = images.map(loop => ({
     file_path: loop,
-    no: 1,
   }));
   params.attach = attach.map(loop => ({
     file_path: loop,
-    no: 1,
   }));
   const createdAct = await TradeUnionAct.create(params, {
     include: [

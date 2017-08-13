@@ -20,7 +20,7 @@ export function getIPAddress(req) {
   return ip;
 }
 
-export function generateNo(req) {
+export function generateNo() {
   const now = moment().format('YYYYMMDDHHmmss');
   generateNoTime += 1;
   let no = '';

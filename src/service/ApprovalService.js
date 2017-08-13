@@ -113,8 +113,8 @@ export default class ApprovalService extends Service {
     return ApprovalFlow;
   }
 
-  async generateApproval(projectID, publishID, approvalTyoe = 1) {
-    return await this.generateActApproval(projectID, publishID, approvalTyoe);
+  async generateApproval(projectID, publishID, approvalType = 1) {
+    return await this.generateActApproval(projectID, publishID, approvalType);
   }
 
   async generateActApproval(projectID, publishID, approvalType = 1 , device) {

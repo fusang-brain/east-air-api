@@ -8,7 +8,7 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('Approval', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     approval_no: {type: DataTypes.STRING, defaultValue: generateNo},
-    approval_type: {type: DataTypes.INTEGER},  // 审批类型 1:活动 2:慰问
+    approval_type: {type: DataTypes.INTEGER},  // 审批类型 1:活动 2:慰问 3:经费
     project: {type: DataTypes.STRING},         // 项目表
     project_id: {type: DataTypes.UUID},        // 审批项目ID
     publish_id: {type: DataTypes.UUID},        // 发布人ID
