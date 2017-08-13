@@ -2,6 +2,9 @@
  * Created by alixez on 17-8-2.
  */
 import Service from './Service';
+import ActivityService from './ActivityService';
+import SympathyService from './SympathyService';
+import Response from '../config/response'
 
 export default class ApprovalService extends Service {
 
@@ -218,16 +221,60 @@ export default class ApprovalService extends Service {
     return approval;
   }
 
-  async getActApprovalDetail(approvalID) {
+  async getApprovalDetail(approvalID) {
     const Approval = this.getModel();
     const User = this.getModel('User');
     const Dept = this.getModel('Dept');
-    const Act = this.getModel('TradeUnionAct');
-    const GrantApplication = this.getModel('GrantApplication');
-    const GrantItem = this.getModel('GrantItem');
-    const TradeUnionActBudget = this.getModel('TradeUnionActBudget');
-    const TradeUnionActAttach = this.getModel('TradeUnionActAttach');
-    const TradeUnionActImage = this.getModel('TradeUnionActImage');
+    const activityService = new ActivityService();
+    const sympathyService = new SympathyService();
+    const approval = await Approval.findOne({
+      where: {project_id: projectID},
+      include: [
+        {
+          model: User,
+          as: 'publisher',
+          attributes: ['id', 'name', 'avatar'],
+        }
+      ]
+    });
+
+    if (!approval) {
+      return {
+        code: Response.getErrorCode(),
+        message: '该审批已被删除',
+      }
+    }
+
+    // TODO get project details
+    let project = {};
+    if (approval.approval_type === 1) {
+      project = await activityService.details(approval.project_id);
+    } else if (approval.approval_type === 2) {
+      project = await sympathyService.details(approval.project_id);
+    }
+
+
+
+    const publisher = {
+      name: approval.publisher.name,
+      avatar: approval.publisher.avatar,
+      desc: '发起申请',
+      time: approval.publish_date,
+      state: 1,
+      sort: 0,
+    };
+
+    const approvalFlows = await this.approvalFlows(approval.id, publisher);
+    approval.setDataValue('flows', approvalFlows);
+    approval.setDataValue('project', project);
+    return approval;
+  }
+
+
+  async getActApprovalDetail(approvalID) {
+    const Approval = this.getModel();
+    const User = this.getModel('User');
+    const activityService = new ActivityService();
 
     const approval = await Approval.findOne({
       where: {
@@ -243,47 +290,7 @@ export default class ApprovalService extends Service {
     });
 
     if (approval) {
-      let act = await Act.findOne({
-        where: {id: approval.project_id},
-        include: [
-          {
-            model: User,
-            as: 'publisher',
-            required: false,
-            attributes: ['id', 'name', 'avatar']
-          },
-          {
-            model: Dept,
-            as: 'department',
-            required: false,
-            attributes: ['id', 'dept_name'],
-          },
-          {
-            model: GrantApplication,
-            as: 'grant_apply',
-            include: [
-              {
-                model: GrantItem,
-                as: 'items'
-              },
-              {
-                model: Dept,
-                as: 'dept',
-              }
-            ]
-          },
-          {
-            model: TradeUnionActBudget,
-            as: 'budgets',
-          },{
-            model: TradeUnionActAttach,
-            as: 'attach',
-          },{
-            model: TradeUnionActImage,
-            as: 'images',
-          }
-        ]
-      });
+      let act = await activityService.details(approval.project_id)
       approval.setDataValue('project', act);
     }
 
@@ -301,7 +308,7 @@ export default class ApprovalService extends Service {
     return approval;
   }
 
-  async approvalFlows(approval_id, publisher) {
+  async approvalFlows(approval_id, publisher=null) {
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
     const approvalFlows = await ApprovalFlows.all({
@@ -319,6 +326,27 @@ export default class ApprovalService extends Service {
       ]
     });
     const sort = [1, 2, 3, 4];
+    if (!publisher) {
+      const Approval = this.getModel('Approval');
+      const approval = await Approval.findOne({
+        where: {id: approval_id},
+        include: [
+          {
+            model: User,
+            as: 'publisher',
+            attributes: ['id', 'name', 'avatar'],
+          }
+        ]
+      });
+      publisher = {
+        name: approval.publisher.name,
+        avatar: approval.publisher.avatar,
+        desc: '发起申请',
+        time: approval.publish_date,
+        state: 1,
+        sort: 0,
+      };
+    }
     const flows = [
       publisher,
     ];
@@ -341,6 +369,18 @@ export default class ApprovalService extends Service {
     }
 
     return flows;
+  }
+
+  async getApprovalIDByProjectID(projectID) {
+    const approval = await this.getModel().findOne({
+      where: {project_id: projectID},
+    });
+
+    if (!approval) {
+      return false;
+    }
+
+    return approval.id;
   }
 
   async waitCount(approvalType=1, userID) {

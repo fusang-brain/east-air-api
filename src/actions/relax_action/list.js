@@ -44,7 +44,7 @@ export default async function (req, params, {response}) {
       days: item.days,
       total: item.total,
       people_number: item.people_number,
-      duration: `${start} - ${endTime.format('YYYY-MM-DD HH:mm:ss')}`,
+      duration: `${start} - ${endTime.format('YYYY-MM-DD')}`,
       department: item.department.dept_name,
       apply_time: item.apply_time,
     }

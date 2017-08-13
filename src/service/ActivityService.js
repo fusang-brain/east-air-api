@@ -36,4 +36,58 @@ export default class ActivityService extends Service {
 
     return true;
   }
+
+  async details(id) {
+    const User = this.getModel('User');
+    const Dept = this.getModel('Dept');
+    const Act = this.getModel('TradeUnionAct');
+    const GrantApplication = this.getModel('GrantApplication');
+    const GrantItem = this.getModel('GrantItem');
+    const TradeUnionActBudget = this.getModel('TradeUnionActBudget');
+    const TradeUnionActAttach = this.getModel('TradeUnionActAttach');
+    const TradeUnionActImage = this.getModel('TradeUnionActImage');
+
+    return await Act.findOne({
+      where: {id},
+      include: [
+        {
+          model: User,
+          as: 'publisher',
+          required: false,
+          attributes: ['id', 'name', 'avatar']
+        },
+        {
+          model: Dept,
+          as: 'department',
+          required: false,
+          attributes: ['id', 'dept_name'],
+        },
+        {
+          model: GrantApplication,
+          as: 'grant_apply',
+          include: [
+            {
+              model: GrantItem,
+              as: 'items'
+            },
+            {
+              model: Dept,
+              as: 'dept',
+            }
+          ]
+        },
+        {
+          model: TradeUnionActBudget,
+          as: 'budgets',
+        },{
+          model: TradeUnionActAttach,
+          as: 'attach',
+        },{
+          model: TradeUnionActImage,
+          as: 'images',
+        }
+      ]
+    });
+
+  }
 }
