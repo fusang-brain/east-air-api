@@ -126,4 +126,83 @@ export default class SympathyService extends Service {
     });
   }
 
+  async statisticsResultTotal(duration) {
+    let condition = '';
+    if (duration.start || duration.end) {
+      condition = `WHERE `;
+    }
+
+    if (duration && duration.start) {
+      condition += `ra.sympathy_date > ${duration.start} `;
+    }
+
+    if (duration.start && duration.end) {
+      condition += `AND `
+    }
+
+    if (duration && duration.end) {
+      condition += `ra.sympathy_date < ${duration.end} `;
+    }
+    const queryStr = "SELECT COUNT(*) as total FROM (SELECT ra.dept_id " +
+      "FROM `" + this.getModel().tableName + "` as ra " +
+      condition +
+      "GROUP BY ra.dept_id) res";
+    const res = await this.connect.query(queryStr, {
+      type: this.sequelize.QueryTypes.SELECT,
+    });
+
+    return res[0].total;
+  }
+
+  async statisticsResult(offset=0, limit=20, duration) {
+
+    let condition = '';
+    if (duration.start || duration.end) {
+      condition = `WHERE `;
+    }
+
+    if (duration && duration.start) {
+      condition += `syp.sympathy_date > ${duration.start} `;
+    }
+
+    if (duration.start && duration.end) {
+      condition += `AND `
+    }
+
+    if (duration && duration.end) {
+      condition += `syp.sympathy_date < ${duration.end} `;
+    }
+
+    const queryStr = "SELECT " +
+      "syp.dept_id as dept_id, (SELECT dept_name FROM " + this.getModel('Dept').tableName + " WHERE id=dept_id) as dept_name, COUNT(syp.id) as all_times, SUM(syp.person_num) as people_total, SUM(syp.sympathy_cost) as total_amount, SUM(syp.sympathy_good_cost) as good_total_amount " +
+      "FROM `" + this.getModel().tableName + "` as syp " +
+      condition +
+      //"LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
+      "GROUP BY syp.dept_id " +
+      "LIMIT :offset,:limit ";
+
+    return await this.connect.query(
+      queryStr,
+      {
+        replacements: {
+          offset: offset,
+          limit: limit,
+        },
+        type: this.sequelize.QueryTypes.SELECT,
+      }
+    );
+  }
+
+  async statisticsDetails() {
+    return await this.connect.query(
+      "SELECT " +
+      "syp.dept_id as dept_id, syp.sympathy_type as sympathy_type, SUM(syp.person_num) as person_num " +
+      "FROM `" + this.getModel().tableName + "` as syp " +
+      "GROUP BY syp.dept_id, sympathy_type",
+      {
+        type: this.sequelize.QueryTypes.SELECT,
+      }
+    )
+  }
+
 }
