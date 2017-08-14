@@ -259,21 +259,26 @@ export default class RelaxActionService extends Service {
     //   "GROUP BY ra.dept_id " +
     //   "LIMIT :offset,:limit ";
 
-    const queryStr = "SELECT " +
+    let queryStr = "SELECT " +
       "ra.dept_id as dept_id, (SELECT dept_name FROM " + this.getModel('Dept').tableName + " WHERE id=dept_id) as dept_name, COUNT(ra.id) as all_times, SUM(ra.people_number) as all_people, SUM(ra.total) as total_amount " +
       "FROM `" + this.getModel().tableName + "` as ra " +
       condition +
       //"LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
-      "GROUP BY ra.dept_id " +
-      "LIMIT :offset,:limit ";
+      "GROUP BY ra.dept_id ";
+
+    let replacements = {};
+    if (offset !== null && limit !== null) {
+      queryStr += 'LIMIT :offset,:limit ';
+      replacements = {
+        offset,
+        limit,
+      }
+    }
 
     return await this.connect.query(
       queryStr,
       {
-        replacements: {
-          offset: offset,
-          limit: limit,
-        },
+        replacements,
         type: this.sequelize.QueryTypes.SELECT,
       }
     );

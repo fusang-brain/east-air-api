@@ -20,6 +20,8 @@ const environment = {
         '/auth/login',
         '/auth/reset_password',
         '/member/export_xlsx',
+        '/export_doc/statistics/relax_action',
+        '/export_doc/statistics/sympathy',
       ]
     },
     storage: {
@@ -49,6 +51,8 @@ module.exports = Object.assign({
       '/auth/login',
       '/auth/reset_password',
       '/member/export_xlsx',
+      '/export_doc/statistics/relax_action',
+      '/export_doc/statistics/sympathy',
     ]
   },
   storage: {

@@ -79,6 +79,7 @@ export default class GrantApplicationService extends Service {
         let item = items[i];
         let total = Decimal.mul(item.price, item.count).toNumber();
         item.total = total;
+        item.grant_apply_id = foundGrant.id;
         cost = Decimal.add(cost, total).toNumber();
       }
 
@@ -89,6 +90,7 @@ export default class GrantApplicationService extends Service {
 
     if (attach && attach.length > 0) {
       let rightAttach = attach.map(loop => ({
+        grant_application_id: foundGrant.id,
         file_path: loop,
       }));
       await GrantAttach.destroy({where: {grant_application_id: foundGrant.id}});

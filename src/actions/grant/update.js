@@ -39,6 +39,7 @@ export default async function  (req, params, {response}) {
   if (args.type === 7) {
     delete args.items;
   }
+
   const grantApplicationService  = new GrantApplicationService();
   const approvalService = new ApprovalService();
   await grantApplicationService.update(args);

@@ -174,21 +174,26 @@ export default class SympathyService extends Service {
       condition += `syp.sympathy_date < ${duration.end} `;
     }
 
-    const queryStr = "SELECT " +
+    let queryStr = "SELECT " +
       "syp.dept_id as dept_id, (SELECT dept_name FROM " + this.getModel('Dept').tableName + " WHERE id=dept_id) as dept_name, COUNT(syp.id) as all_times, SUM(syp.person_num) as people_total, SUM(syp.sympathy_cost) as total_amount, SUM(syp.sympathy_good_cost) as good_total_amount " +
       "FROM `" + this.getModel().tableName + "` as syp " +
       condition +
       //"LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
-      "GROUP BY syp.dept_id " +
-      "LIMIT :offset,:limit ";
+      "GROUP BY syp.dept_id ";
+    let replacements = {};
+
+    if (offset !== null && limit !== null) {
+      queryStr += 'LIMIT :offset,:limit ';
+      replacements = {
+        offset,
+        limit,
+      }
+    }
 
     return await this.connect.query(
       queryStr,
       {
-        replacements: {
-          offset: offset,
-          limit: limit,
-        },
+        replacements,
         type: this.sequelize.QueryTypes.SELECT,
       }
     );
