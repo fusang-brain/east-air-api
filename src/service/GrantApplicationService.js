@@ -181,18 +181,22 @@ export default class GrantApplicationService extends Service {
         {
           model: this.getModel('GrantItem'),
           as: 'items',
+          required: false,
         },
         {
           model: this.getModel('GrantAttach'),
           as: 'attach',
+          required: false,
         },
         {
           model: this.getModel('Dept'),
           as: 'dept',
+          required: false,
         },
         {
           model: this.getModel('User'),
           as: 'publisher',
+          required: false,
           attributes: ['id', 'name', 'avatar']
         }
       ]

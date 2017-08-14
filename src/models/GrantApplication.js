@@ -14,7 +14,7 @@ export default function (sequelize, DataTypes) {
     people_count: {type: DataTypes.INTEGER},
     others: {type: DataTypes.TEXT},
     state: {type: DataTypes.INTEGER, defaultValue: 4}, // 0:草稿 1:待审批 2:已通过 3:未通过 4:未知
-    apply_time: {type: DataTypes.STRING}, // 发起时间
+    apply_time: {type: DataTypes.STRING, defaultValue: Date.now}, // 发起时间
     is_act: {type: DataTypes.BOOLEAN, defaultValue: false}, // 是否属于活动
   }, {
     classMethods: {
