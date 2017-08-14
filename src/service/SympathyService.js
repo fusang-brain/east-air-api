@@ -64,7 +64,7 @@ export default class SympathyService extends Service {
       where: condition,
     });
     const list = await this.Sympathy.all({
-      attributes: ['id', 'reason', 'person', 'sympathy_date', 'apply_time', 'state'],
+      attributes: ['id', 'reason', 'person', 'sympathy_date', 'apply_time', 'state', 'person_num', 'sympathy_cost', 'sympathy_type'],
       where: condition,
       offset,
       limit,

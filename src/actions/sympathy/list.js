@@ -38,6 +38,9 @@ export default async function (req, params, {response}) {
     state: item.state,
     state_show: mappers.state[item.state],
     department_name: item.department.dept_name || '-',
+    person_num: item.person_num,
+    sympathy_cost: item.sympathy_cost,
+    sympathy_type: item.sympathy_type,
   }));
 
 
