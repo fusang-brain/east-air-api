@@ -34,7 +34,7 @@ export default async function (req, params, {response}) {
     reason: item.reason,
     person: item.person,
     sympathy_date: moment(+item.sympathy_date).format('YYYY-MM-DD'),
-    apply_time: moment(+item.apply_time).format('YYYY-MM-DD'),
+    apply_time: moment(+item.apply_time).format('YYYY-MM-DD HH:mm:ss'),
     state: item.state,
     state_show: mappers.state[item.state],
     department_name: item.department.dept_name || '-',

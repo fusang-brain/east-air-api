@@ -126,6 +126,15 @@ setHeaders('EA-DEVICE', 'app')
 * [疗休养删除](./relax_action/remove.md)
 * [疗休养修改](./relax_action/update.md)
 
+#### 慰问
+
+* [发起慰问](./sympathy/create.md)
+* [慰问详情](./sympathy/details.md)
+* [慰问列表](./sympathy/list.md)
+* [慰问删除](./sympathy/remove.md)
+* [慰问更新](./sympathy/update.md)
+
 #### 统计分析
 
 * [疗休养统计结果](./statistics/relax_action.md)
+* [慰问统计结果](./statistics/sympathy.md)

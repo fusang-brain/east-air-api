@@ -117,6 +117,7 @@ export default class SympathyService extends Service {
         {
           model: this.getModel('User'),
           as: 'publisher',
+          attributes: ['id', 'name', 'avatar'],
         },
         {
           model: this.getModel('Dept'),

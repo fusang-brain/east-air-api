@@ -30,7 +30,7 @@ export default async function (req, params, {response}) {
     args.state = 0;
   } else if (state === 'submit') {
     args.state = 1;
-  }
+}
 
   const createdSympathy = await sympathyService.create(args);
 
