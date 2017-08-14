@@ -138,6 +138,8 @@ setHeaders('EA-DEVICE', 'app')
 
 * [疗休养统计结果](./statistics/relax_action.md)
 * [慰问统计结果](./statistics/sympathy.md)
+* [获取导出Token](./export_doc/get_token.md)
+* [疗休养、慰问统计导出](./export_doc/statistics.md)
 
 #### 经审
 
@@ -146,3 +148,4 @@ setHeaders('EA-DEVICE', 'app')
 * [列表](./grant/list.md)
 * [删除](./grant/remove.md)
 * [更新](./grant/update.md)
+
