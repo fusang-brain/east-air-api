@@ -43,7 +43,7 @@ export default async function (req) {
 
   const accessToken = Auth.getToken(user.id);
   console.log(accessToken);
-  //todo 记录已经签发的token to redis
+  //todo record token to redis
 
   user.password = undefined;
   return {
