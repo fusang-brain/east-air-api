@@ -117,8 +117,19 @@ export default async function (req, param, {response, models}) {
     ]
   });
 
+  let hasGrant = false;
+  if (createdAct.grant_apply && createdAct.grant_apply.id) {
+    hasGrant = true;
+  }
+
   const approvalService = new ApprovalService();
-  await approvalService.generateActApproval(createdAct.id, req.user.id);
+  await approvalService.generateActApproval(createdAct.id, req.user.id, 1, {
+    project_subject: createdAct.subject,
+    project_type: createdAct.act_type,
+    dept_id: createdAct.dept_id,
+    total_amount: createdAct.budget_total,
+    has_grant: hasGrant,
+  });
 
   return {
     code: response.getSuccessCode('insert'),

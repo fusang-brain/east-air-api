@@ -4,7 +4,11 @@
 import Service from './Service';
 import ActivityService from './ActivityService';
 import SympathyService from './SympathyService';
+import GrantApplicationService from './GrantApplicationService';
+import NotificationService from './NotificationService';
 import Response from '../config/response'
+
+const notificationService = new NotificationService();
 
 export default class ApprovalService extends Service {
 
@@ -113,11 +117,11 @@ export default class ApprovalService extends Service {
     return ApprovalFlow;
   }
 
-  async generateApproval(projectID, publishID, approvalType = 1) {
-    return await this.generateActApproval(projectID, publishID, approvalType);
+  async generateApproval(projectID, publishID, approvalType, {project_subject, project_type, dept_id, total_amount, has_grant}) {
+    return await this.generateActApproval(projectID, publishID, approvalType, {project_subject, project_type, dept_id, total_amount, has_grant});
   }
 
-  async generateActApproval(projectID, publishID, approvalType = 1 , device) {
+  async generateActApproval(projectID, publishID, approvalType = 1 , {project_subject, project_type, dept_id, total_amount, has_grant}) {
     const Approval = this.getModel();
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
@@ -130,6 +134,10 @@ export default class ApprovalService extends Service {
       approval_type: approvalType,
       project_id: projectID,
       publish_id: publishID,
+      project_subject,
+      project_type,
+      dept_id,
+      total_amount,
     });
 
     // 获取当前活动发起人的部门信息
@@ -150,6 +158,7 @@ export default class ApprovalService extends Service {
         }
       ]
     });
+
     const ApprovalFlow = [];
     const flowMasterRoles = ['dept_finance', 'dept_director', 'dept_master'];
 
@@ -182,41 +191,62 @@ export default class ApprovalService extends Service {
         sortNo += 1;
       }
     }
+    if (has_grant) {
+      // 找到当前发起人的工会主管（财务，主任，主席）
+      for (let i = 0; i < flowMasterRoles.length; i ++) {
+        let role = flowMasterRoles[i];
 
-    // 找到当前发起人的工会主管（财务，主任，主席）
-    for (let i = 0; i < flowMasterRoles.length; i ++) {
-      let role = flowMasterRoles[i];
-
-      let deptHead = await User.findOne({
-        where: {
-          state: 1,
-        },
-        include: [
-          {
-            model: Role,
-            as: 'user_role',
-            where: {
-              role_slug: role,
+        let deptHead = await User.findOne({
+          where: {
+            state: 1,
+          },
+          include: [
+            {
+              model: Role,
+              as: 'user_role',
+              where: {
+                role_slug: role,
+              }
             }
-          }
-        ]
-      });
+          ]
+        });
 
-      if (!deptHead) {
-        continue;
+        if (!deptHead) {
+          continue;
+        }
+        let available = 0;
+        if (i === 0 && foundUser.user_role.role_slug === 'chile_dept_master') {
+          available = 1;
+        }
+
+        ApprovalFlow.push({
+          approval_id: approval.id,
+          available,
+          flow_sort: sortNo + flowMasterRoles.indexOf(deptHead.user_role.role_slug),
+          approval_man_id: deptHead.id,
+        });
+
       }
-
-      ApprovalFlow.push({
-        approval_id: approval.id,
-        flow_sort: sortNo + flowMasterRoles.indexOf(deptHead.user_role.role_slug),
-        approval_man_id: deptHead.id,
-      });
-
     }
 
     // 生成审批流程
     if (ApprovalFlow.length > 0) {
+      console.log(ApprovalFlow);
       await ApprovalFlows.bulkCreate(ApprovalFlow);
+
+      // 发送消息
+      await notificationService.sendToPersonal({
+        title: '您有一条新的审批!',
+        body: project_subject,
+        sender: '',
+        items: [
+          {
+            subject_id: projectID,
+            subject_type: approvalType,
+          }
+        ],
+        receiver: ApprovalFlow[0].approval_man_id,
+      })
     }
     return approval;
   }
@@ -224,11 +254,11 @@ export default class ApprovalService extends Service {
   async getApprovalDetail(approvalID) {
     const Approval = this.getModel();
     const User = this.getModel('User');
-    const Dept = this.getModel('Dept');
     const activityService = new ActivityService();
     const sympathyService = new SympathyService();
+    const grantApplicationService = new GrantApplicationService();
     const approval = await Approval.findOne({
-      where: {project_id: projectID},
+      where: {id: approvalID},
       include: [
         {
           model: User,
@@ -251,9 +281,14 @@ export default class ApprovalService extends Service {
       project = await activityService.details(approval.project_id);
     } else if (approval.approval_type === 2) {
       project = await sympathyService.details(approval.project_id);
+    } else if (approval.approval_type === 3) {
+      project = await grantApplicationService.details(approval.project_id);
+    } else {
+      throw {
+        code: Response.getErrorCode(),
+        message: '不存在的审批类型',
+      }
     }
-
-
 
     const publisher = {
       name: approval.publisher.name,
@@ -269,7 +304,6 @@ export default class ApprovalService extends Service {
     approval.setDataValue('project', project);
     return approval;
   }
-
 
   async getActApprovalDetail(approvalID) {
     const Approval = this.getModel();
@@ -404,5 +438,273 @@ export default class ApprovalService extends Service {
         }
       ]
     });
+  }
+
+  async approvalList({state, search, offset, limit, user_id, type}) {
+    const Approval = this.getModel();
+    const condition = {};
+    let stateCondition = [0, 1, 2];
+    if (state === 'all') {
+      stateCondition = [0, 1, 2];
+    }
+    if (state === 'pending') {
+      stateCondition = [0];
+    }
+    if (state === 'success') {
+      stateCondition = [1];
+    }
+
+    if (state === 'failed') {
+      stateCondition = [2];
+    }
+
+    if (state === 'finished') {
+      stateCondition = [1, 2]
+    }
+    let approval_type = null;
+    if (type === 'all') {
+      approval_type = [1,2,3];
+    } else if (type === 'act') {
+      approval_type = [1,2];
+    } else if (type === 'grant') {
+      approval_type = [3];
+    } else {
+      approval_type = [1,2,3];
+    }
+    condition.approval_type = {
+      $in: approval_type,
+    };
+    if (search) {
+      condition.project_subject = {
+        $like: `%${search}%`,
+      }
+    }
+
+    const undoTotal = await Approval.count({
+      where: {
+        approval_type: {
+          $in: approval_type,
+        }
+      },
+      include: [
+        {
+          model: this.getModel('ApprovalFlows'),
+          as: 'flows',
+          where: {
+            approval_man_id: user_id,
+            available: 1,
+            result: 0,
+          },
+          required: true,
+        }
+      ]
+    });
+
+    const total = await Approval.count({
+      where: condition,
+      include: [
+        {
+          model: this.getModel('ApprovalFlows'),
+          as: 'flows',
+          where: {
+            approval_man_id: user_id,
+            available: 1,
+            result: {
+              $in: stateCondition
+            },
+          },
+          required: true,
+        }
+      ]
+    });
+
+    const approvals = await Approval.all({
+      where: condition,
+      offset,
+      limit,
+      include: [
+        {
+          model: this.getModel('ApprovalFlows'),
+          as: 'flows',
+          where: {
+            approval_man_id: user_id,
+            available: 1,
+            result: {
+              $in: stateCondition
+            },
+          },
+          required: true,
+        },
+        {
+          model: this.getModel('Dept'),
+          as: 'department',
+        }
+      ]
+    });
+
+    return {
+      undo_total: undoTotal,
+      total,
+      approvals,
+    }
+  }
+
+  async executeApproval({approval_id, result, content, user_id}) {
+    const Approval = this.getModel('Approval');
+    const User = this.getModel('User');
+    const Role = this.getModel('Role');
+    const ApprovalFlows = this.getModel('ApprovalFlows');
+
+    const foundApprovalFlow = await ApprovalFlows.findOne({
+      where: {
+        approval_id: args.approval_id,
+        approval_man_id: user_id,
+      },
+      include: [
+        {
+          model: Approval,
+          as: 'approval',
+        },
+        {
+          model: User,
+          as: 'approval_man',
+          include: {
+            model: Role,
+            as: 'user_role',
+          }
+        }
+      ]
+    });
+
+    if (!foundApprovalFlow) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '非法请求!'
+      }
+    }
+
+    foundApprovalFlow.content = content;
+    foundApprovalFlow.result = result;
+    foundApprovalFlow.approval_date = Date.now();
+
+    await foundApprovalFlow.save();
+    const approvalType = foundApprovalFlow.approval.approval_type;
+    let ProjectModel = null;
+    let is_act = false;
+    if (approvalType === 1) {
+      ProjectModel = this.getModel('TradeUnionAct');
+      const act = await ProjectModel.findOne({
+        where: {
+          id: foundApprovalFlow.approval.project_id,
+        }
+      });
+      if (act.grant_apply_id) {
+        is_act = true;
+      }
+    } else if (approvalType === 2) {
+      ProjectModel = this.getModel('Sympathy');
+    } else if (approvalType === 3) {
+      ProjectModel = this.getModel('GrantApplication');
+    } else {
+      throw {
+        code: Response.getErrorCode(),
+        message: '未知的审批项目类型',
+      }
+    }
+    if (result === 1) {
+      // 同意审批
+
+      if (is_act && foundApprovalFlow.approval_man.user_role.role_slug === 'chile_dept_master') {
+        await ProjectModel.update({
+          state: 2,
+        }, {
+          where: {
+            id: foundApprovalFlow.approval.project_id,
+          }
+        });
+
+        return {
+          result: 'success',
+          approval: foundApprovalFlow.approval,
+        };
+      }
+      if (foundApprovalFlow.approval_man.user_role.role_slug === 'dept_master') {
+        await ProjectModel.update({
+          state: 2,
+        }, {
+          where: {
+            id: foundApprovalFlow.approval.project_id
+          }
+        });
+        return {
+          result: 'success',
+          approval: foundApprovalFlow.approval,
+        };
+      } else {
+        const flow = await ApprovalFlows.findOne({
+          where: {
+            approval_id: approval_id,
+            flow_sort: foundApprovalFlow.flow_sort + 1,
+          },
+          include: [
+            {
+              model: Approval,
+              as: 'approval',
+            },
+            {
+              model: User,
+              as: 'approval_man',
+              include: {
+                model: Role,
+                as: 'user_role',
+              }
+            }
+          ]
+        });
+
+        // 通知下个审批人
+        await notificationService.sendToPersonal({
+          title: '您有一条新的审批!',
+          body: flow.approval.project_subject,
+          sender: null,
+          items: [
+            {
+              subject_id: flow.approval.project_id,
+              subject_type: flow.approval.approval_type
+            }
+          ],
+          receiver: flow.approval_man_id,
+        });
+
+        await ApprovalFlows.update({
+          available: 1,
+        },{
+          where: {
+            approval_id: approval_id,
+            flow_sort: foundApprovalFlow.flow_sort + 1,
+          }
+        });
+        return {
+          result: 'next',
+          approval: foundApprovalFlow.approval,
+        };
+      }
+    }
+
+    if (result === 2) {
+      // 拒绝审批
+      await ProjectModel.update({
+        state: 3,
+      }, {
+        where: {
+          id: foundApprovalFlow.approval.project_id
+        }
+      });
+
+      return {
+        result: 'refused',
+        approval: foundApprovalFlow.approval,
+      };
+    }
   }
 }

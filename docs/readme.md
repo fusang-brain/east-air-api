@@ -63,6 +63,10 @@ setHeaders('EA-DEVICE', 'pc')
 setHeaders('EA-DEVICE', 'app')
 ```
 
+消息跳转协议
+
+ea://[module]/[id]
+
 ## 接口索引
 
 #### 认证模块
@@ -113,6 +117,7 @@ setHeaders('EA-DEVICE', 'app')
 
 #### 审批
 
+* [审批列表](./approval/list.md)
 * [审批详情](./approval/details.md)
 * [审批处理](./approval/execute.md)
 * [代办审批数](./approval/wait_count.md)
@@ -148,4 +153,9 @@ setHeaders('EA-DEVICE', 'app')
 * [列表](./grant/list.md)
 * [删除](./grant/remove.md)
 * [更新](./grant/update.md)
+
+#### 消息
+
+* [消息列表](./notification/list.md)
+* [消息详情](./notification/details.md)
 

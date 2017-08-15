@@ -36,7 +36,13 @@ export default async function (req, params, {response}) {
 
   if (args.state === 1) {
     const approvalService = new ApprovalService();
-    await approvalService.generateActApproval(createdSympathy.id, req.user.id);
+    await approvalService.generateApproval(createdSympathy.id, req.user.id, 2, {
+      project_subject: createdSympathy.reason,
+      project_type: 9,
+      dept_id: createdSympathy.dept_id,
+      total_amount: createdSympathy.sympathy_cost,
+      has_grant: true,
+    });
   }
 
   return {
