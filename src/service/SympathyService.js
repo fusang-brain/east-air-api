@@ -200,11 +200,30 @@ export default class SympathyService extends Service {
   }
 
   async statisticsDetails() {
+
+    let condition = '';
+    if (duration.start || duration.end) {
+      condition = `WHERE `;
+    }
+
+    if (duration && duration.start) {
+      condition += `syp.sympathy_date > ${duration.start} `;
+    }
+
+    if (duration.start && duration.end) {
+      condition += `AND `
+    }
+
+    if (duration && duration.end) {
+      condition += `syp.sympathy_date < ${duration.end} `;
+    }
+
     return await this.connect.query(
       "SELECT " +
       "syp.dept_id as dept_id, syp.sympathy_type as sympathy_type, SUM(syp.person_num) as person_num " +
       "FROM `" + this.getModel().tableName + "` as syp " +
-      "GROUP BY syp.dept_id, sympathy_type",
+      condition +
+      "GROUP BY syp.dept_id, sympathy_type ",
       {
         type: this.sequelize.QueryTypes.SELECT,
       }

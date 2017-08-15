@@ -29,21 +29,29 @@ export default async function (req, param, {response, models, device}) {
     where: condition,
   });
 
-  const list = await ActModel.all({
+  const acts = await ActModel.all({
     where: condition,
     attributes: attributes,
     include: [
       {
         model: models.User,
         as: 'publisher',
-        required: false,
+        required: true,
         attributes: ['id', 'name', 'avatar']
       },
       {
         model: models.Dept,
         as: 'department',
-        required: false,
+        required: true,
         attributes: ['id', 'dept_name'],
+      },
+      {
+        model: models.ActEvaluation,
+        as: 'evaluations',
+        where: {
+          user_id: req.user.id,
+        },
+        required: false,
       }
     ],
     order: [
@@ -53,15 +61,36 @@ export default async function (req, param, {response, models, device}) {
     limit,
   });
   const todayStart = moment().startOf('day');
-  for (let i = 0; i < list.length; i ++) {
-    let item = list[i];
-    let endDateStart = moment(+item.end_date).add(1, 'day').startOf('day');
+
+  const list = acts.map(act => {
+    let endDateStart = moment(+act.end_date).add(1, 'day').startOf('day');
     let isEnd = false;
     if (endDateStart.toDate().getTime() <= todayStart.toDate().getTime()) {
       isEnd = true;
     }
-    item.setDataValue('is_end', isEnd);
-  }
+
+    let has_evaluation = false;
+
+    if (Array.isArray(act.evaluations) && act.evaluations.length > 0) {
+      has_evaluation = true;
+    }
+    return {
+      no: act.no,
+      id: act.id,
+      subject: act.subject,
+      act_type: act.act_type,
+      create_date: act.create_date,
+      state: act.state,
+      start_date: act.start_date,
+      end_date: act.end_date,
+      process: act.process,
+      publisher: act.publisher,
+      department: act.department,
+      is_end: isEnd,
+      has_evaluation,
+    }
+
+  });
 
   return {
     code: response.getSuccessCode(),

@@ -58,22 +58,31 @@ __请求方式 :__ GET
     "code": 1000,
     "message": "查询成功",
     "data": {
+        "total": 4,
         "list": [
             {
-                "no": "2017072915225801",
-                "id": "cb517c90-7fbc-4982-b363-8b8b19a55838",
-                "subject": "主题asdfasdfasdfasdf",
+                "no": "2017081522121201",
+                "id": "99a77ea2-30be-4e0d-bfcd-f4152897f7dc",
+                "subject": "主题",
                 "act_type": 1,
-                "create_date": "1501312978832",
-                "state": 0,
-                "process": "这是活动的详情",
+                "create_date": "1502806332486",
+                "state": 1,
+                "start_date": "1231313123123",
+                "end_date": "1231313123",
+                "process": "sadfasfasfasdf",
                 "publisher": {
-                    "id": "4d8c87b4-9d76-44c6-a09a-62a66a9d7150",
-                    "name": "root",
+                    "id": "39532551-19b2-4343-b56d-735f14f7c765",
+                    "name": "用户_5462",
                     "avatar": ""
                 },
-                "department": null
-            }
+                "department": {
+                    "id": "590cd5cc-f9e4-4dbb-8ad1-36aa39e15fea",
+                    "dept_name": "部门2"
+                },
+                "is_end": true,            // 是否已结束
+                "has_evaluation": false    // 是否已评价
+            },
+            ...
         ]
     }
 }
