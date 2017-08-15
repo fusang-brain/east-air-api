@@ -56,7 +56,53 @@ __请求方式 :__ GET
                 "avatar": ""
             },
             "department": null
-        }
+        }，
+        "approval_flow": [
+           {
+               "name": "用户_5462",
+               "avatar": "",
+               "desc": "发起申请",
+               "time": "1502806332662",
+               "state": 1,
+               "sort": 0
+           },
+           {
+               "name": "用户_5462",
+               "avatar": "",
+               "desc": "待审批",
+               "time": null,
+               "state": 0,
+               "sort": 1
+           },
+           {
+               "name": "用户_5462",
+               "avatar": "",
+               "desc": "待审批",
+               "time": null,
+               "state": 0,
+               "sort": 2
+           },
+           {
+               "name": "用户_5462",
+               "avatar": "",
+               "desc": "待审批",
+               "time": null,
+               "state": 0,
+               "sort": 3
+           }
+       ],
+       "evaluations": [
+           {
+             "result": false,
+             "content": "评价结果",
+             "publisher": {
+                 "name": "姓名",
+                 "id": "...",
+                 "avatar": "",
+             }
+           },
+           ...
+       ] // 评价
     }
 }
 ```

@@ -1,7 +1,7 @@
 /**
  * Created by alixez on 17-7-31.
  */
-import {ApprovalService} from '../../service'
+import {ApprovalService, ActivityService} from '../../service';
 export default async function (req, params, {response, models, device}) {
   const actID = req.query.act_id;
   const ActModel = models.TradeUnionAct;
@@ -54,6 +54,7 @@ export default async function (req, params, {response, models, device}) {
     }
   });
   const approvalService = new ApprovalService();
+  const activityService = new ActivityService();
   const approvalDetail = await approvalService.getActApprovalDetail(approval.id);
   let flows = approvalDetail.getDataValue('flows');
   if (device === 'app') {
@@ -62,12 +63,14 @@ export default async function (req, params, {response, models, device}) {
     });
     approval.setDataValue('flows', f);
   }
+  const evaluations = await activityService.getEvaluations(foundAct.id);
   return {
     code: response.getSuccessCode(),
     message: '获取详情成功',
     data: {
       act: foundAct,
       approval_flow: approvalDetail.getDataValue('flows'),
+      evaluations,
     }
   }
 }

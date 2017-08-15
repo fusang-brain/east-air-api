@@ -90,4 +90,21 @@ export default class ActivityService extends Service {
     });
 
   }
+
+  async getEvaluations(act_id) {
+    const ActEvaluation = this.getModel('ActEvaluation');
+
+    return await ActEvaluation.all({
+      where: {
+        act_id: act_id,
+      },
+      include: [
+        {
+          model: this.getModel('User'),
+          as: 'publisher',
+          attributes: ['id', 'name', 'avatar']
+        }
+      ]
+    })
+  }
 }
