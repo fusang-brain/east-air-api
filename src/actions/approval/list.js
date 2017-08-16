@@ -27,6 +27,8 @@ export default async function (req, params, {response, models}) {
       approval_type: loop.approval_type,
       approval_state: loop.flows[0].result,
       publish_date: loop.publish_date,
+      project_purpose: loop.project_purpose,
+      project_content: loop.project_content,
       id: loop.id,
     }
   });
