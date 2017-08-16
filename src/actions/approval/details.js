@@ -8,6 +8,9 @@ export default async function (req, params, {response, device}) {
   const approval_id = req.query.approval_id;
   const approvalService = new ApprovalService();
   const approval = await approvalService.getApprovalDetail(approval_id);
+
+  console.log(approval, '=====')
+
   const flows = approval.getDataValue('flows');
   const currentUserFlow = flows.find(item => {
     return item.user_id === req.user.id;

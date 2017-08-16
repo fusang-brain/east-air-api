@@ -243,7 +243,7 @@ export default class ApprovalService extends Service {
         sender: '',
         items: [
           {
-            subject_id: projectID,
+            subject_id: approval.id,
             subject_type: approvalType,
             is_approval: true,
           }
@@ -272,7 +272,7 @@ export default class ApprovalService extends Service {
     });
 
     if (!approval) {
-      return {
+      throw {
         code: Response.getErrorCode(),
         message: '该审批已被删除',
       }
@@ -307,6 +307,7 @@ export default class ApprovalService extends Service {
 
     approval.setDataValue('flows', approvalFlows);
     approval.setDataValue('project', project);
+    console.log(approval, '====');
     return approval;
   }
 
@@ -638,7 +639,7 @@ export default class ApprovalService extends Service {
           sender: null,
           items: [
             {
-              subject_id: foundApprovalFlow.approval.id,
+              subject_id: foundApprovalFlow.approval.project_id,
               subject_type: foundApprovalFlow.approval.approval_type,
               is_approval: false,
             }
@@ -666,7 +667,7 @@ export default class ApprovalService extends Service {
           sender: null,
           items: [
             {
-              subject_id: foundApprovalFlow.approval.id,
+              subject_id: foundApprovalFlow.approval.project_id,
               subject_type: foundApprovalFlow.approval.approval_type,
               is_approval: false,
             }
