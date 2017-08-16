@@ -566,7 +566,7 @@ export default class ApprovalService extends Service {
 
     const foundApprovalFlow = await ApprovalFlows.findOne({
       where: {
-        approval_id: args.approval_id,
+        approval_id: approval_id,
         approval_man_id: user_id,
       },
       include: [

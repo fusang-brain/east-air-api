@@ -8,8 +8,19 @@
 export default function (sequelize, DataTypes) {
   return sequelize.define('DocAttach', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
-    doc_id: {type: DataTypes.STRING},
+    doc_id: {type: DataTypes.UUID},
+    file_id: {type: DataTypes.UUID},
     file_path: {type: DataTypes.STRING},
     file_size: {type: DataTypes.STRING},
+  }, {
+    classMethods: {
+      associate(models) {
+        this.belongsTo(models.Docs, {
+          as: 'docs',
+          foreignKey: 'doc_id',
+          sourceKey: 'id',
+        });
+      }
+    }
   });
 }
