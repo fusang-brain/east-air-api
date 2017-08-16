@@ -187,8 +187,9 @@ export default class NotificationService extends Service {
       };
 
       item.has_read = false;
+      console.log(notification.readers, '=====读者');
 
-      if (Array.isArray(notification.readers) && notification.readers.length >= 0) {
+      if (Array.isArray(notification.readers) && notification.readers.length > 0) {
         item.has_read = true;
       }
 

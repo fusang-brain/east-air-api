@@ -307,7 +307,6 @@ export default class ApprovalService extends Service {
 
     approval.setDataValue('flows', approvalFlows);
     approval.setDataValue('project', project);
-    console.log(approval, '====');
     return approval;
   }
 
@@ -408,6 +407,7 @@ export default class ApprovalService extends Service {
         state: item.result,
         sort: i + 1,
         result: item.result,
+        available: item.available,
       });
     }
 
@@ -607,7 +607,7 @@ export default class ApprovalService extends Service {
           id: foundApprovalFlow.approval.project_id,
         }
       });
-      if (act.grant_apply_id) {
+      if (act.budget_total === 0) {
         is_act = true;
       }
     } else if (approvalType === 2) {

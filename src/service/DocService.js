@@ -38,7 +38,8 @@ export default class DocService extends Service {
         receiver_type: 'personal',
       }));
     }
-    return await Doc.create(args, {
+
+    return await Doc.create(params, {
       include: [
         {
           model: this.getModel('DocAttach'),

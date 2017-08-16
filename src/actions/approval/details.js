@@ -9,12 +9,19 @@ export default async function (req, params, {response, device}) {
   const approvalService = new ApprovalService();
   const approval = await approvalService.getApprovalDetail(approval_id);
 
-  console.log(approval, '=====')
 
   const flows = approval.getDataValue('flows');
   const currentUserFlow = flows.find(item => {
-    return item.user_id === req.user.id;
+    return (item.user_id === req.user.id && item.available === 1);
   });
+  // console.log(currentUserFlow);
+  if (!currentUserFlow) {
+    throw {
+      code: response.getErrorCode(),
+      message: '您没有查看该审批的权限'
+    }
+  }
+  console.log(currentUserFlow);
   approval.setDataValue('approval_state', currentUserFlow.result);
   if (device === 'app') {
     let f = flows.sort((a, b) => {
