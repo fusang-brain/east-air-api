@@ -47,6 +47,8 @@ export default async function  (req, params, {response}) {
     await approvalService.generateApproval(createdGrant.id, req.user.id, 3, {
       project_subject: createdGrant.type_string,
       project_type: 10,
+      project_purpose: createdGrant.purpose,
+      project_content: createdGrant.others,
       dept_id: createdGrant.dept_id,
       total_amount: createdGrant.cost,
       has_grant: true,

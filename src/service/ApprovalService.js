@@ -117,11 +117,11 @@ export default class ApprovalService extends Service {
     return ApprovalFlow;
   }
 
-  async generateApproval(projectID, publishID, approvalType, {project_subject, project_type, dept_id, total_amount, has_grant}) {
-    return await this.generateActApproval(projectID, publishID, approvalType, {project_subject, project_type, dept_id, total_amount, has_grant});
+  async generateApproval(projectID, publishID, approvalType, {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant}) {
+    return await this.generateActApproval(projectID, publishID, approvalType, {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant});
   }
 
-  async generateActApproval(projectID, publishID, approvalType = 1 , {project_subject, project_type, dept_id, total_amount, has_grant}) {
+  async generateActApproval(projectID, publishID, approvalType = 1 , {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant}) {
     const Approval = this.getModel();
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
@@ -136,6 +136,8 @@ export default class ApprovalService extends Service {
       publish_id: publishID,
       project_subject,
       project_type,
+      project_content,
+      project_purpose,
       dept_id,
       total_amount,
     });

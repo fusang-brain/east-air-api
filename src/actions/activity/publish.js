@@ -126,6 +126,8 @@ export default async function (req, param, {response, models}) {
   await approvalService.generateActApproval(createdAct.id, req.user.id, 1, {
     project_subject: createdAct.subject,
     project_type: createdAct.act_type,
+    project_purpose: createdAct.purpose,
+    project_content: createdAct.process,
     dept_id: createdAct.dept_id,
     total_amount: createdAct.budget_total,
     has_grant: hasGrant,
