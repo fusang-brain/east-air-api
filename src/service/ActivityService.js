@@ -14,7 +14,7 @@ export default class ActivityService extends Service {
     const TradeUnionAct = this.getModel();
     const Approval = this.getModel('Approval');
     const ApprovalFlows = this.getModel('ApprovalFlows');
-    const foundAct = await TradeUnionAct.findOne({where: {id: actID}});
+    const foundAct = await TradeUnionAct.findOne({where: {id: id}});
     const foundApproval = await Approval.findOne({where: {project_id: id}});
     if (!foundAct) {
       return {
