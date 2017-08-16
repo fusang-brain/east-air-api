@@ -112,6 +112,11 @@ export default class NotificationService extends Service {
       }
     }
 
+    for (let i = 0; i < notification.items.length; i ++) {
+      let item = notification.items[i];
+
+    }
+
     const reader = await NotificationReaders.findOne({
       where: {
         notify_id: notification.id,

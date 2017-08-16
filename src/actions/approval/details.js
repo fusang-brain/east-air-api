@@ -9,6 +9,10 @@ export default async function (req, params, {response, device}) {
   const approvalService = new ApprovalService();
   const approval = await approvalService.getApprovalDetail(approval_id);
   const flows = approval.getDataValue('flows');
+  const currentUserFlow = flows.find(item => {
+    return item.user_id === req.user.id;
+  });
+  approval.setDataValue('approval_state', currentUserFlow.result);
   if (device === 'app') {
     let f = flows.sort((a, b) => {
       return b.sort - a.sort;

@@ -67,11 +67,11 @@ export default class GrantApplicationService extends Service {
       }
     }
 
-    if (!args.type) {
-      args.type = 0;
+    if (args.type) {
+      args.type_string = this.typeMapper[+args.type];
+      foundGrant.type_string = args.type_string;
     }
 
-    args.type_string = this.typeMapper[+args.type];
 
     if (items && items.length > 0) {
       let cost = 0;
@@ -101,7 +101,7 @@ export default class GrantApplicationService extends Service {
       where: {id},
     });
 
-    return true;
+    return foundGrant;
   }
 
   async create(args) {

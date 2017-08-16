@@ -245,6 +245,7 @@ export default class ApprovalService extends Service {
           {
             subject_id: projectID,
             subject_type: approvalType,
+            is_approval: true,
           }
         ],
         receiver: ApprovalFlow[0].approval_man_id,
@@ -293,6 +294,7 @@ export default class ApprovalService extends Service {
     }
 
     const publisher = {
+      user_id: approval.publisher.id,
       name: approval.publisher.name,
       avatar: approval.publisher.avatar,
       desc: '发起申请',
@@ -302,6 +304,7 @@ export default class ApprovalService extends Service {
     };
 
     const approvalFlows = await this.approvalFlows(approval.id, publisher);
+
     approval.setDataValue('flows', approvalFlows);
     approval.setDataValue('project', project);
     return approval;
@@ -375,6 +378,7 @@ export default class ApprovalService extends Service {
         ]
       });
       publisher = {
+        user_id: approval.publisher.id,
         name: approval.publisher.name,
         avatar: approval.publisher.avatar,
         desc: '发起申请',
@@ -395,12 +399,14 @@ export default class ApprovalService extends Service {
       }
 
       flows.push({
+        user_id: item.approval_man.id,
         name: item.approval_man.name,
         avatar: item.approval_man.avatar,
         desc: item.result === 0 ? '待审批' : item.content,
         time: item.approval_date,
         state: item.result,
         sort: i + 1,
+        result: item.result,
       });
     }
 
@@ -672,7 +678,8 @@ export default class ApprovalService extends Service {
           items: [
             {
               subject_id: flow.approval.project_id,
-              subject_type: flow.approval.approval_type
+              subject_type: flow.approval.approval_type,
+              is_approval: true,
             }
           ],
           receiver: flow.approval_man_id,
@@ -701,6 +708,21 @@ export default class ApprovalService extends Service {
         where: {
           id: foundApprovalFlow.approval.project_id
         }
+      });
+
+      // 通知下个审批人
+      await notificationService.sendToPersonal({
+        title: '您的审批被拒绝了!',
+        body: foundApprovalFlow.approval.project_subject,
+        sender: null,
+        items: [
+          {
+            subject_id: foundApprovalFlow.approval.project_id,
+            subject_type: foundApprovalFlow.approval.approval_type,
+            is_approval: true,
+          }
+        ],
+        receiver: foundApprovalFlow.approval.publish_id,
       });
 
       return {

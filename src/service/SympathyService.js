@@ -32,9 +32,11 @@ export default class SympathyService extends Service {
 
     args.sympathy_cost = new Decimal(+args.sympathy_cost).toNumber();
     args.sympathy_good_cost = new Decimal(+args.sympathy_good_cost).toNumber();
-    return await this.Sympathy.update(args, {
+    const updatedSympathy = await this.Sympathy.update(args, {
       where: {id},
     });
+
+    return foundSympathy
   }
 
   async generateList({offset, limit, state, reason}) {

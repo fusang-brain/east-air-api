@@ -42,9 +42,17 @@ export default async function  (req, params, {response}) {
 
   const grantApplicationService  = new GrantApplicationService();
   const approvalService = new ApprovalService();
-  await grantApplicationService.update(args);
+  const foundGrant = await grantApplicationService.update(args);
   if (saveType === 'submit') {
-    await approvalService.generateApproval(args.id, req.user.id, 3);
+    await approvalService.generateApproval(args.id, req.user.id, 3, {
+      project_subject: foundGrant.type_string,
+      project_type: 10,
+      project_purpose: args.purpose || foundGrant.purpose,
+      project_content: args.others || foundGrant.others,
+      dept_id: args.dept_id || foundGrant.dept_id,
+      total_amount: args.cost || foundGrant.cost,
+      has_grant: true,
+    });
   }
 
   return {

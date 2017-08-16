@@ -23,14 +23,6 @@ export default async function (req, param, {response, models}) {
     integration: ['integer'],
   });
 
-  if (req.body.is_draft && req.body.is_draft === true) {
-    params.state = 0;
-  } else {
-    params.state = 1;
-    const approvalService = new ApprovalService();
-    await approvalService.generateActApproval(actID, req.user.id);
-  }
-
   const foundAct = await models.TradeUnionAct.findOne({where: {id: actID}});
   if (!foundAct) {
     return {
@@ -44,6 +36,14 @@ export default async function (req, param, {response, models}) {
       message: '此活动无法修改',
     }
   }
+
+  if (req.body.is_draft && req.body.is_draft === true) {
+    params.state = 0;
+  } else {
+    params.state = 1;
+  }
+
+
   if (req.body.grant_apply) {
     params.grant_apply = filterParams(req.body.grant_apply, {
       type: ['integer', 'required'],
@@ -135,6 +135,30 @@ export default async function (req, param, {response, models}) {
       id: actID,
     }
   });
+
+  const updatedAct = await TradeUnionAct.findOne({
+    where: {
+      id: actID,
+    }
+  })
+
+  let hasGrant = false;
+  if (updatedAct.grant_apply && updatedAct.grant_apply.id) {
+    hasGrant = true;
+  }
+
+  if (params.state = 1) {
+    const approvalService = new ApprovalService();
+    await approvalService.generateActApproval(actID, req.user.id, 1, {
+      project_subject: updatedAct.subject,
+      project_type: updatedAct.act_type,
+      project_purpose: updatedAct.purpose,
+      project_content: updatedAct.process,
+      dept_id: updatedAct.dept_id,
+      total_amount: updatedAct.budget_total,
+      has_grant: hasGrant,
+    });
+  }
 
   return {
     code: response.getSuccessCode('update'),

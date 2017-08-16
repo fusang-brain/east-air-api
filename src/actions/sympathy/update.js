@@ -28,8 +28,6 @@ export default async function (req, params, {response}) {
 
   if (saveType === 'submit') {
     args.state = 1;
-    const approvalService = new ApprovalService();
-    await approvalService.generateApproval(args.id, req.user.id, 2);
   } else if (saveType === 'draft') {
     args.state = 0;
   } else {
@@ -39,7 +37,20 @@ export default async function (req, params, {response}) {
     }
   }
 
-  await sympathyService.update(args);
+  const foundSympathy = await sympathyService.update(args);
+
+  if (args.state === 1) {
+    const approvalService = new ApprovalService();
+    await approvalService.generateApproval(args.id, req.user.id, 2, {
+      project_subject: args.reason || foundSympathy.reason,
+      project_type: 9,
+      project_content: '无',
+      project_purpose: '无',
+      dept_id: args.dept_id || foundSympathy.dept_id,
+      total_amount: args.sympathy_cost || foundSympathy.sympathy_cost,
+      has_grant: true,
+    });
+  }
 
   return {
     code: response.getSuccessCode('update'),
