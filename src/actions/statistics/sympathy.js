@@ -16,7 +16,7 @@ export default async function (req, params, {response}) {
   const sympathyService = new SympathyService();
   const total = await sympathyService.statisticsResultTotal({start, end});
   const list = await sympathyService.statisticsResult(offset, limit, {start, end});
-  const details = await sympathyService.statisticsDetails();
+  const details = await sympathyService.statisticsDetails({start, end});
 
   list.map(row => {
     row.details = [];

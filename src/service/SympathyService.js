@@ -201,7 +201,7 @@ export default class SympathyService extends Service {
     );
   }
 
-  async statisticsDetails() {
+  async statisticsDetails(duration) {
 
     let condition = '';
     if (duration.start || duration.end) {
