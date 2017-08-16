@@ -31,6 +31,7 @@ const environment = {
       supportFile: {
         'act_image': ['jpg', 'png', 'jpeg'],
         'act_attach': ['pdf'],
+        'doc_attach': ['pdf'],
       }
     }
   },
