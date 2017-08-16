@@ -33,6 +33,7 @@ export default async function (req, param, {response, models}) {
     params.state = 1;
   }
   if (req.body.grant_apply) {
+
     params.grant_apply = filterParams(req.body.grant_apply, {
       type: ['number'],
       dept_id: ['string'],
@@ -42,6 +43,7 @@ export default async function (req, param, {response, models}) {
       items: ['array'],
       others: ['string'],
     });
+    params.grant_apply.is_act = true;
     if (!params.grant_apply.dept_id) {
       params.grant_apply.dept_id = req.user.dept;
     }
@@ -58,7 +60,6 @@ export default async function (req, param, {response, models}) {
         cost = Decimal.add(cost, total).toNumber();
       }
       params.grant_apply.cost = cost;
-      params.grant_apply.is_act = true;
     }
   }
   params.user_id = req.user.id;
@@ -118,7 +119,7 @@ export default async function (req, param, {response, models}) {
   });
 
   let hasGrant = false;
-  if (createdAct.grant_apply && createdAct.grant_apply.id) {
+  if (createdAct.budget_total !== 0) {
     hasGrant = true;
   }
 

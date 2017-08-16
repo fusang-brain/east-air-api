@@ -101,6 +101,7 @@ export default async function (req, param, {response, models}) {
     await models.TradeUnionActBudget.bulkCreate(budgets);
   }
   if (params.grant_apply) {
+    params.grant_apply.is_act = true;
     await models.GrantApplication.update(params.grant_apply, {where: {id: foundAct.grant_apply_id}});
 
     if (params.grant_apply.items && params.grant_apply.items.length > 0) {
@@ -143,7 +144,7 @@ export default async function (req, param, {response, models}) {
   })
 
   let hasGrant = false;
-  if (updatedAct.grant_apply && updatedAct.grant_apply.id) {
+  if (updatedAct.budget_total !== 0) {
     hasGrant = true;
   }
 

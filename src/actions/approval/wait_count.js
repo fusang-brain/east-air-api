@@ -7,7 +7,7 @@ export default async function (req, params, {response}) {
 
   const activityWaitCount = await approvalService.waitCount(1, req.user.id);
   const sympathyWaitCount = await approvalService.waitCount(2, req.user.id);
-  const grantWaitCount = await approvalService.waitCount(2, req.user.id);
+  const grantWaitCount = await approvalService.waitCount(3, req.user.id);
 
   return {
     code: response.getSuccessCode(),
