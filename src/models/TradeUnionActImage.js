@@ -7,7 +7,7 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('TradeUnionActImage', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     act_id: {type: DataTypes.UUID},
-    no: {type: DataTypes.INTEGER, defaultValue: generateNo},
+    no: {type: DataTypes.STRING, defaultValue: generateNo},
     file_path: {type: DataTypes.STRING, length: 255},
   }, {
     classMethods: {

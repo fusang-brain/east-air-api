@@ -66,7 +66,7 @@ export default async function(req, params, {models, response}) {
 
 async function getSympathyExportBuffer (start, end) {
   const list = await sympathyService.statisticsResult(null, null, {start, end});
-  const details = await sympathyService.statisticsDetails();
+  const details = await sympathyService.statisticsDetails({start, end});
   let excelData = [['部门', '发起慰问次数', '慰问人数', '困难员工', '生病员工', '一线员工', '其他', '慰问总金额', '慰问品金额']];
   for (let i = 0; i < list.length; i ++) {
     let item = list[i];
