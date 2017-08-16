@@ -631,6 +631,21 @@ export default class ApprovalService extends Service {
           }
         });
 
+        // 通知发起人
+        await notificationService.sendToPersonal({
+          title: '您的审批已经通过!',
+          body: foundApprovalFlow.approval.project_subject,
+          sender: null,
+          items: [
+            {
+              subject_id: foundApprovalFlow.approval.id,
+              subject_type: foundApprovalFlow.approval.approval_type,
+              is_approval: false,
+            }
+          ],
+          receiver: foundApprovalFlow.approval_man_id,
+        });
+
         return {
           result: 'success',
           approval: foundApprovalFlow.approval,
@@ -643,6 +658,20 @@ export default class ApprovalService extends Service {
           where: {
             id: foundApprovalFlow.approval.project_id
           }
+        });
+        // 通知发起人
+        await notificationService.sendToPersonal({
+          title: '您的审批已经通过!',
+          body: foundApprovalFlow.approval.project_subject,
+          sender: null,
+          items: [
+            {
+              subject_id: foundApprovalFlow.approval.id,
+              subject_type: foundApprovalFlow.approval.approval_type,
+              is_approval: false,
+            }
+          ],
+          receiver: foundApprovalFlow.approval_man_id,
         });
         return {
           result: 'success',
@@ -677,7 +706,7 @@ export default class ApprovalService extends Service {
           sender: null,
           items: [
             {
-              subject_id: flow.approval.project_id,
+              subject_id: flow.approval.id,
               subject_type: flow.approval.approval_type,
               is_approval: true,
             }
@@ -710,7 +739,7 @@ export default class ApprovalService extends Service {
         }
       });
 
-      // 通知下个审批人
+      // 通知审批发起人
       await notificationService.sendToPersonal({
         title: '您的审批被拒绝了!',
         body: foundApprovalFlow.approval.project_subject,
@@ -719,7 +748,7 @@ export default class ApprovalService extends Service {
           {
             subject_id: foundApprovalFlow.approval.project_id,
             subject_type: foundApprovalFlow.approval.approval_type,
-            is_approval: true,
+            is_approval: false,
           }
         ],
         receiver: foundApprovalFlow.approval.publish_id,
