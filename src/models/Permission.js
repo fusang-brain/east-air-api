@@ -6,6 +6,7 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('Permission', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     module_id: {type: DataTypes.UUID},
+    module_slug: {type: DataTypes.STRING},
     name: {type: DataTypes.STRING},
     slug: {type: DataTypes.STRING},
   }, {

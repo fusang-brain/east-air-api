@@ -4,7 +4,8 @@
 
 import ActivityService from '../../service/ActivityService';
 
-export default async function (req, params, {response, models}) {
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('activity', 'remove');
   const actID = req.body.act_id;
   const activityService = new ActivityService();
   await activityService.remove(actID);

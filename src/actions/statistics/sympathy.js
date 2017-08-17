@@ -6,8 +6,8 @@
 
 import SympathyService from '../../service/SympathyService';
 
-export default async function (req, params, {response}) {
-
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('sympathy', 'statistics');
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
   const start = req.query.start || null;

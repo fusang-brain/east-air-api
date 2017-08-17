@@ -8,7 +8,7 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('Module', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     name: {type: DataTypes.STRING},
-    slug: {type: DataTypes.STRING},
+    slug: {type: DataTypes.STRING, unique: true},
   }, {
     classMethods: {
       associate(models) {

@@ -16,7 +16,7 @@ export default function (sequelize, DataTypes) {
     classMethods: {
       associate(models) {
         this.belongsTo(models.Docs, {
-          as: 'docs',
+          as: 'doc',
           foreignKey: 'doc_id',
           sourceKey: 'id',
         });

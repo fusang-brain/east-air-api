@@ -6,7 +6,8 @@
 
 import GrantApplicationService from '../../service/GrantApplicationService';
 import {filterParams} from '../../utils/filters'
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('grant_application', 'view');
   const args = filterParams(req.query, {
     search: 'string',
     state: 'string',

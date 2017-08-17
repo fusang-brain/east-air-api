@@ -82,6 +82,8 @@ export function getErrorCode(action='') {
       return 2004;
     case 'auth':
       return 2005;
+    case 'access':
+      return 2006;
     default:
       return 2000;
   }

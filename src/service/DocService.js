@@ -12,6 +12,38 @@ export default class DocService extends Service {
     this.modelName = "Docs";
   }
 
+  async generateList({offset, limit, filter}) {
+    const Doc = this.getModel();
+    const condition = {};
+    if (filter.search) {
+      condition.doc_title = {
+        $like: `%${filter.search}%`,
+      }
+    }
+
+    if (filter.doc_type) {
+      condition.doc_type = filter.doc_type;
+    }
+    if (filter.level) {
+      condition.doc_level = filter.level;
+    }
+    const originList = await Doc.all({
+      offset,
+      limit,
+      where: condition,
+      include: [
+        {
+          model: this.getModel('DocAttach'),
+          as: 'attach',
+        }
+      ]
+    });
+
+    // todo execute origin list
+
+    return originList;
+  }
+
   async create(args) {
     const {attach, receivers, ...params} = args;
     const Doc = this.getModel();
@@ -51,6 +83,25 @@ export default class DocService extends Service {
         }
       ]
     });
+  }
+
+  async markedRead(docID, userID) {
+    const DocReadReceipts = this.getModel('DocReadReceipts');
+    let docReadReceipts = await DocReadReceipts.findOne({
+      where: {
+        user_id: userID,
+        doc_id: docID,
+      }
+    });
+    if (!docReadReceipts) {
+      docReadReceipts = await DocReadReceipts.create({
+        user_id: userID,
+        doc_id: docID,
+        read_time: Date.now(),
+      })
+    }
+
+    return docReadReceipts;
   }
 
   async update(id, args) {

@@ -4,7 +4,8 @@
 
 import DeptService from '../../../service/DeptService';
 import {filterParams} from '../../../utils/filters';
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('dept', 'edit');
   const args = filterParams(req.body, {
     dept_name: ['string', 'required'],
     parent: 'string',

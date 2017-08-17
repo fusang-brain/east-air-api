@@ -23,6 +23,7 @@ export default async function(req, params, {models, response}) {
       message: '不存在的导出类型',
     }
   }
+
   const token = req.query.token;
   const DownloadToken = models.DownloadToken;
 

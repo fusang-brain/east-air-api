@@ -8,7 +8,9 @@ import NotificationService from '../../service/NotificationService';
 
 const approvalService = new ApprovalService();
 const notificationService = new NotificationService();
-export default async function (req, params, {response, models}) {
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('grant_approval', 'activity_funding');
+  await checkAccess('grant_approval', 'apply_funding');
   const args = filterParams(req.body, {
     approval_id: 'string',
     result: 'integer',

@@ -58,6 +58,12 @@ class Auth {
         {
           model: models.Role,
           as: 'user_role',
+          include: [
+            {
+              model: models.Permission,
+              as: 'permissions',
+            }
+          ]
         }
       ],
       where: {
@@ -72,9 +78,49 @@ class Auth {
       }
     }
 
+    const originPermissions = user.user_role.permissions;
+    const permissions = originPermissions.map(permission => ({
+      permission_id: permission.id,
+      module: permission.module_slug,
+      action: permission.slug,
+      action_name: permission.name,
+      platform: permission.RolePermission.platform,
+    }))
     req.user = user;
+    req.permissions = permissions;
 
     return true;
+  }
+
+  static async checkAccess(req, module, action, platform='pc', throwError=true) {
+    const originPermissions = req.permissions;
+    if (platform === 'pc') {
+      platform = 'web';
+    }
+
+
+    const foundPermission = originPermissions.find((permission) => {
+      return permission.module === module && permission.action === action && permission.platform === platform;
+    });
+
+    if (!foundPermission) {
+      if (!throwError) {
+        return false;
+      }
+      throw {
+        code: getErrorCode('access'),
+        message: '您没有此操作的权限',
+      }
+    }
+
+    return foundPermission;
+    // const permissions = originPermissions.map(permission => ({
+    //   module_slug: permission.module_slug,
+    //   action_name: permission.name,
+    //   action_slug: permission.slug,
+    //
+    // }));
+
   }
 
   static encodePassword(plainPassword) {

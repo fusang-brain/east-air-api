@@ -6,7 +6,7 @@ import Auth from '../utils/auth';
 const permissions = [
   {
     name: '活动列表',
-    slug: 'activity_list',
+    slug: 'activity',
     permission: [
       {
         name: '发起活动',
@@ -94,7 +94,7 @@ const permissions = [
   },
   {
     name: '疗养休',
-    slug: 'recuperation',
+    slug: 'relax_action',
     permission: [
       {
         name: '发起/组织',
@@ -116,7 +116,7 @@ const permissions = [
   },
   {
     name: '慰问',
-    slug: 'condolences',
+    slug: 'sympathy',
     permission: [
       {
         name: '发起慰问',
@@ -143,7 +143,7 @@ const permissions = [
   },
   {
     name: '组织架构',
-    slug: 'organization_structure',
+    slug: 'dept',
     permission: [
       {
         name: '新增部门',
@@ -179,7 +179,7 @@ const permissions = [
   },
   {
     name: '经费申请',
-    slug: 'funding_applications',
+    slug: 'grant_application',
     permission: [
       {
         name: '填写申请',
@@ -201,7 +201,7 @@ const permissions = [
   },
   {
     name: '经费审批',
-    slug: 'funding_approval',
+    slug: 'grant_approval',
     permission: [
       {
         name: '活动经费',
@@ -235,49 +235,54 @@ const permissions = [
       },
     ]
   },
-  {
-    name: '积分兑换',
-    slug: 'redeem_integration',
-    permission: [
-      {
-        name: '兑换商品',
-        slug: 'redeem_goods',
-      },
-      {
-        name: '查看积分详情',
-        slug: 'view_integration_detail',
-      },
-      {
-        name: '上架积分商品',
-        slug: 'publish_goods',
-      },
-      {
-        name: '移除积分商品',
-        slug: 'remove_goods',
-      },
-      {
-        name: '下架积分商品',
-        slug: 'stop_goods',
-      },
-      {
-        name: '新增积分商品',
-        slug: 'create_goods',
-      },
-      {
-        name: '查看兑换明细',
-        slug: 'view_redeem_detail',
-      },
-      {
-        name: '确认商品兑换',
-        slug: 'confirm_redeem',
-      },
-    ]
-  },
+  // {
+  //   name: '积分兑换',
+  //   slug: 'redeem_integration',
+  //   permission: [
+  //     {
+  //       name: '兑换商品',
+  //       slug: 'redeem_goods',
+  //     },
+  //     {
+  //       name: '查看积分详情',
+  //       slug: 'view_integration_detail',
+  //     },
+  //     {
+  //       name: '上架积分商品',
+  //       slug: 'publish_goods',
+  //     },
+  //     {
+  //       name: '移除积分商品',
+  //       slug: 'remove_goods',
+  //     },
+  //     {
+  //       name: '下架积分商品',
+  //       slug: 'stop_goods',
+  //     },
+  //     {
+  //       name: '新增积分商品',
+  //       slug: 'create_goods',
+  //     },
+  //     {
+  //       name: '查看兑换明细',
+  //       slug: 'view_redeem_detail',
+  //     },
+  //     {
+  //       name: '确认商品兑换',
+  //       slug: 'confirm_redeem',
+  //     },
+  //   ]
+  // },
 ];
 
+function generateRandomString() {
+  return Math.round(Math.random() * 10000);
+}
+
 const sysuser = {
-  name: '用户_'+ Math.round(Math.random() * 10000),
+  name: '用户_'+ generateRandomString(),
   mobile: '15500000000',
+  gender: 1,
   state: 1,
   nickname: '隔壁老王',
   birthday: new Date().getTime(),

@@ -8,7 +8,8 @@ import SympathyService from '../../service/SympathyService';
 import {filterParams} from '../../utils/filters'
 import moment from 'moment';
 
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('sympathy', 'view');
   const args = filterParams(req.query, {
     search: 'string',
     state: 'string',

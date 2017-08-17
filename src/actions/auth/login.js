@@ -42,7 +42,6 @@ export default async function (req) {
   }
 
   const accessToken = Auth.getToken(user.id);
-  console.log(accessToken);
   //todo record token to redis
 
   user.password = undefined;

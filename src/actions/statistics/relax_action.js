@@ -4,7 +4,8 @@
 import RelaxActionService from '../../service/RelaxActionService';
 
 const relaxActonService = new RelaxActionService();
-export default async function (req, params, {response, models}) {
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('relax_action', 'statistics');
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
   const start = req.query.start || null;

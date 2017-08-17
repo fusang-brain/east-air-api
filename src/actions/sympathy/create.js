@@ -6,8 +6,8 @@ import Decimal from 'decimal.js';
 
 const sympathyService = new SympathyService();
 
-export default async function (req, params, {response}) {
-
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('sympathy', 'start');
   const args = filterParams(req.body, {
     reason: ['string', 'required'],
     person: ['string', 'required'],

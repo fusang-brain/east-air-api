@@ -6,7 +6,8 @@
 import {filterParams} from '../../utils/filters';
 import SympathyService from '../../service/SympathyService';
 
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('sympathy', 'remove')
   const args = filterParams(req.body, {
     id: ['string', 'required'],
   });

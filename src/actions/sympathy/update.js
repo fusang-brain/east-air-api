@@ -7,8 +7,8 @@ import {filterParams} from '../../utils/filters';
 import ApprovalService from '../../service/ApprovalService';
 import SympathyService from '../../service/SympathyService';
 
-export default async function (req, params, {response}) {
-
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('sympathy', 'edit');
   const args = filterParams(req.body, {
     id: ['string', 'required'],
     reason: 'string',

@@ -9,7 +9,9 @@ import {filterParams} from '../../utils/filters';
 import ApprovalService from '../../service/ApprovalService';
 import Decimal from 'decimal.js';
 
-export default async function (req, param, {response, models}) {
+export default async function (req, param, {response, models, checkAccess}) {
+  await checkAccess('activity', 'edit');
+
   const actID = req.body.act_id;
   const params = filterParams(req.body, {
     act_type: ['integer'],

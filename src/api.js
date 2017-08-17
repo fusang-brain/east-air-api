@@ -128,7 +128,8 @@ app.use((req, res) => {
   const {action, params} = mapUrl(actions, splittedUrlPath);
   if (action) {
     const device = req.header('EA-DEVICE');
-    action(req, params, {models, device, response})
+    const checkAccessAlias = async (moduleName, action, throwError=true) => await Auth.checkAccess(req, moduleName, action, device, throwError);
+    action(req, params, {models, device, response, checkAccess: checkAccessAlias})
       .then((result) => {
         if (result instanceof Function) {
           result(res);

@@ -4,9 +4,9 @@
 import Auth from '../../utils/auth';
 import sha1 from 'crypto-js/sha1';
 
-export default async function (req, params, {response, models}) {
+export default async function (req, params, {response, models, checkAccess}) {
   const id = req.body.id;
-
+  await checkAccess('member', 'edit');
   const user = await models.User.scope('with_password').findOne({
     where: {
       id: id,

@@ -7,7 +7,8 @@ import {filterParams} from '../../utils/filters';
 import GrantApplicationService from '../../service/GrantApplicationService';
 import ApprovalService from '../../service/ApprovalService';
 
-export default async function  (req, params, {response}) {
+export default async function  (req, params, {response, checkAccess}) {
+  await checkAccess('grant_application', 'create');
   const args = filterParams(req.body, {
     type: ['integer', 'required'],
     dept_id: ['string'],

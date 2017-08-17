@@ -6,7 +6,8 @@ import sha1 from 'crypto-js/sha1';
 import {filterParams} from '../../utils/filters';
 import {DeptService, RoleService} from '../../service';
 
-export default async function (req, params, {models, response}) {
+export default async function (req, params, {models, response, checkAccess}) {
+  await checkAccess('member', 'create');
   const deptService = new DeptService();
   const roleService = new RoleService();
   const args = filterParams(req.body, {

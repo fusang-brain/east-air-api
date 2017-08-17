@@ -2,7 +2,8 @@
  * Created by alixez on 17-6-22.
  */
 
-export default async function (req, params, {models, response}) {
+export default async function (req, params, {models, response, checkAccess}) {
+  await checkAccess('role_permission', 'edit');
   const {id, role_name, role_description, web_permissions, app_permissions} = req.body;
   const RoleModel = models.Role;
   const RolePermissionModel = models.RolePermission;

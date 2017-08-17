@@ -50,6 +50,7 @@ async function start() {
       let perm = item.permission[j];
       await models.Permission.create({
         module_id: module.id,
+        module_slug: module.slug,
         name: perm.name,
         slug: perm.slug,
       });
@@ -96,6 +97,7 @@ async function start() {
   let heads = ['dept_master', 'chile_dept_master', 'dept_finance', 'dept_director'];
   for (let i = 0; i < heads.length; i ++) {
     let loop = heads[i];
+    sysuser.name = '用户' + Math.round(Math.random() * 10000);
     sysuser.mobile = (String) (15600000000 + i);
     sysuser.dept = defaultDept;
     sysuser.role = defaultRoles[heads[i]].id;
@@ -105,6 +107,7 @@ async function start() {
 
   log('>> 批量生成用户 >>');
   for (let i = 0; i < userTotal; i ++) {
+    sysuser.name = '用户' + Math.round(Math.random() * 10000);
     sysuser.mobile = (String) (15500000000 + i);
     sysuser.dept = defaultDept;
     sysuser.role = defaultRoles['common_member'].id;

@@ -4,7 +4,8 @@
 import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
-export default async function (req, param, {response, models, device}) {
+export default async function (req, param, {response, models, device, checkAccess}) {
+  await checkAccess('activity', 'view');
   const params = filterParams(req.query, {
     search: 'string',
     state: 'string',

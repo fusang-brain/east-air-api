@@ -6,7 +6,8 @@ import {ApprovalService} from '../../service';
 import {getMasterRole} from '../../config/init_data';
 import Decimal from 'decimal.js';
 
-export default async function (req, param, {response, models}) {
+export default async function (req, param, {response, models, checkAccess}) {
+  await checkAccess('activity', 'create');
   const roles = getMasterRole();
   if (roles.includes(req.user.user_role.role_slug)) {
     return {
