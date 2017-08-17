@@ -7,3 +7,7 @@
 * Node.js >= 7.9 & npm >= 4.2
 * Express >= 4.0
 
+# release
+
+* v0.2
+
