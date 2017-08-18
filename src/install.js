@@ -75,6 +75,7 @@ async function start() {
       role_name: roles[i].role_name,
       role_slug: roles[i].role_slug,
       role_description: roles[i].role_description,
+      available: roles[i].available,
     });
     defaultRoles[role.role_slug] = role;
   }
@@ -83,12 +84,12 @@ async function start() {
   log('>> 创建系统管理员 >>');
   await models.User.create({
     name: 'root',
-    mobile: '18627894265',
+    mobile: '13100000000',
     nickname: 'root',
     birthday: new Date().getTime(),
     dept: defaultDept,
-    role: defaultRoles['common_member'].id,
-    card_num: '--',
+    role: defaultRoles['root'].id,
+    card_num: '100000000000100000',
     password: Auth.encodePassword('C1508FB3AA5E9F4E49920A9618AA96F5DC287182'), // 'itspeed'
   });
   log('>> 管理员创建成功 >>');

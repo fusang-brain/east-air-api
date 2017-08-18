@@ -22,7 +22,7 @@ export default class SympathyService extends Service {
   async update(params) {
     const {id, ...args} = params;
 
-    const foundSympathy = await this.Sympathy.findOne({where: {id}});
+    const foundSympathy = await this.Sympathy.findOne({where: {id, dept_id: {$in: this.dataAccess}}});
     if (![0, 3].includes(foundSympathy.state)) {
       throw {
         code: Response.getErrorCode(),
@@ -40,7 +40,11 @@ export default class SympathyService extends Service {
   }
 
   async generateList({offset, limit, state, reason}) {
-    let condition = {};
+    let condition = {
+      dept_id: {
+        $in: this.dataAccess,
+      }
+    };
     switch (state) {
       case 'draft':
         condition.state = 0;
@@ -62,6 +66,7 @@ export default class SympathyService extends Service {
         $like: `%${reason}%`
       }
     }
+
     const total = await this.Sympathy.count({
       where: condition,
     });
@@ -83,7 +88,12 @@ export default class SympathyService extends Service {
   }
 
   async remove(id) {
-    const foundTheSympathy = await this.Sympathy.findOne({where: {id: id}});
+    const foundTheSympathy = await this.Sympathy.findOne({
+      where: {
+        id: id,
+        dept_id: {$in: this.dataAccess}
+      }
+    });
     const Approval = this.getModel('Approval');
     const ApprovalFlows = this.getModel('ApprovalFlows');
 
@@ -114,7 +124,12 @@ export default class SympathyService extends Service {
 
   async details(id) {
     return await this.Sympathy.findOne({
-      where: {id},
+      where: {
+        id,
+        dept_id: {
+          $in: this.dataAccess,
+        }
+      },
       include: [
         {
           model: this.getModel('User'),
@@ -130,26 +145,26 @@ export default class SympathyService extends Service {
   }
 
   async statisticsResultTotal(duration) {
-    let condition = '';
-    if (duration.start || duration.end) {
-      condition = `WHERE `;
-    }
+    const dataAccessStr = this.dataAccess.join("','");
+    const conditionArr = [];
+    let condition = `WHERE `;
+    conditionArr.push(`syp.dept_id IN ('${dataAccessStr}')`);
 
     if (duration && duration.start) {
-      condition += `ra.sympathy_date > ${duration.start} `;
-    }
-
-    if (duration.start && duration.end) {
-      condition += `AND `
+      conditionArr.push(`syp.sympathy_date >= '${duration.start}'`);
     }
 
     if (duration && duration.end) {
-      condition += `ra.sympathy_date < ${duration.end} `;
+      conditionArr.push(`syp.sympathy_date <= '${duration.end}'`);
     }
-    const queryStr = "SELECT COUNT(*) as total FROM (SELECT ra.dept_id " +
-      "FROM `" + this.getModel().tableName + "` as ra " +
+
+    condition += conditionArr.join(' AND ');
+    condition += ' ';
+
+    const queryStr = "SELECT COUNT(*) as total FROM (SELECT syp.dept_id " +
+      "FROM `" + this.getModel().tableName + "` as syp " +
       condition +
-      "GROUP BY ra.dept_id) res";
+      "GROUP BY syp.dept_id) res";
     const res = await this.connect.query(queryStr, {
       type: this.sequelize.QueryTypes.SELECT,
     });
@@ -159,22 +174,21 @@ export default class SympathyService extends Service {
 
   async statisticsResult(offset=0, limit=20, duration) {
 
-    let condition = '';
-    if (duration.start || duration.end) {
-      condition = `WHERE `;
-    }
+    const dataAccessStr = this.dataAccess.join("','");
+    const conditionArr = [];
+    let condition = `WHERE `;
+    conditionArr.push(`syp.dept_id IN ('${dataAccessStr}')`);
 
     if (duration && duration.start) {
-      condition += `syp.sympathy_date > ${duration.start} `;
-    }
-
-    if (duration.start && duration.end) {
-      condition += `AND `
+      conditionArr.push(`syp.sympathy_date >= '${duration.start}'`);
     }
 
     if (duration && duration.end) {
-      condition += `syp.sympathy_date < ${duration.end} `;
+      conditionArr.push(`syp.sympathy_date <= '${duration.end}'`);
     }
+
+    condition += conditionArr.join(' AND ');
+    condition += ' ';
 
     let queryStr = "SELECT " +
       "syp.dept_id as dept_id, (SELECT dept_name FROM " + this.getModel('Dept').tableName + " WHERE id=dept_id) as dept_name, COUNT(syp.id) as all_times, SUM(syp.person_num) as people_total, SUM(syp.sympathy_cost) as total_amount, SUM(syp.sympathy_good_cost) as good_total_amount " +
@@ -203,22 +217,21 @@ export default class SympathyService extends Service {
 
   async statisticsDetails(duration) {
 
-    let condition = '';
-    if (duration.start || duration.end) {
-      condition = `WHERE `;
-    }
+    const dataAccessStr = this.dataAccess.join("','");
+    const conditionArr = [];
+    let condition = `WHERE `;
+    conditionArr.push(`syp.dept_id IN ('${dataAccessStr}')`);
 
     if (duration && duration.start) {
-      condition += `syp.sympathy_date > ${duration.start} `;
-    }
-
-    if (duration.start && duration.end) {
-      condition += `AND `
+      conditionArr.push(`syp.sympathy_date >= '${duration.start}'`);
     }
 
     if (duration && duration.end) {
-      condition += `syp.sympathy_date < ${duration.end} `;
+      conditionArr.push(`syp.sympathy_date <= '${duration.end}'`);
     }
+
+    condition += conditionArr.join(' AND ');
+    condition += ' ';
 
     return await this.connect.query(
       "SELECT " +

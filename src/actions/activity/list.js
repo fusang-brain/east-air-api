@@ -10,6 +10,8 @@ export default async function (req, param, {response, models, device, checkAcces
     search: 'string',
     state: 'string',
   });
+
+  console.log(req.dataAccess);
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
   const condition = {};
@@ -25,6 +27,9 @@ export default async function (req, param, {response, models, device, checkAcces
   }
   if (params.state) {
     condition.state = params.state
+  }
+  condition.dept_id = {
+    $in: req.dataAccess,
   }
   const total = await ActModel.count({
     where: condition,

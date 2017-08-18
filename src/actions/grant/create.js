@@ -7,7 +7,7 @@ import {filterParams} from '../../utils/filters';
 import GrantApplicationService from '../../service/GrantApplicationService';
 import ApprovalService from '../../service/ApprovalService';
 
-export default async function  (req, params, {response, checkAccess}) {
+export default async function  (req, params, {response, checkAccess, services}) {
   await checkAccess('grant_application', 'create');
   const args = filterParams(req.body, {
     type: ['integer', 'required'],
@@ -32,8 +32,8 @@ export default async function  (req, params, {response, checkAccess}) {
       message: '不存在的保存类型！',
     }
   }
-  const grantApplicationService = new GrantApplicationService();
-  const approvalService = new ApprovalService();
+  const grantApplicationService = services.grantApplication;
+  const approvalService = services.approval;
   if (!args.dept_id) {
     args.dept_id = req.user.dept;
   }

@@ -1,18 +1,16 @@
 /**
  * Created by alixez on 17-8-11.
  */
-import RelaxActionService from '../../service/RelaxActionService';
-
-const relaxActonService = new RelaxActionService();
-export default async function (req, params, {response, checkAccess}) {
+export default async function (req, params, {response, checkAccess, services}) {
   await checkAccess('relax_action', 'statistics');
+  const relaxActionService = services.relaxAction;
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
   const start = req.query.start || null;
   const end = req.query.end || null;
-  const total = await relaxActonService.statisticsResultTotal({start, end});
-  const list = await relaxActonService.statisticsResult(offset, limit, {start, end});
-  const details = await relaxActonService.statisticsDetails();
+  const total = await relaxActionService.statisticsResultTotal({start, end});
+  const list = await relaxActionService.statisticsResult(offset, limit, {start, end});
+  const details = await relaxActionService.statisticsDetails({start, end});
 
   list.map(row => {
     row.details = [];

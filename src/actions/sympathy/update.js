@@ -7,7 +7,7 @@ import {filterParams} from '../../utils/filters';
 import ApprovalService from '../../service/ApprovalService';
 import SympathyService from '../../service/SympathyService';
 
-export default async function (req, params, {response, checkAccess}) {
+export default async function (req, params, {response, checkAccess, services}) {
   await checkAccess('sympathy', 'edit');
   const args = filterParams(req.body, {
     id: ['string', 'required'],
@@ -24,7 +24,7 @@ export default async function (req, params, {response, checkAccess}) {
     delete args.dept_id;
   }
   const saveType = params[0];
-  const sympathyService = new SympathyService();
+  const sympathyService = services.sympathy;
 
   if (saveType === 'submit') {
     args.state = 1;
@@ -40,7 +40,7 @@ export default async function (req, params, {response, checkAccess}) {
   const foundSympathy = await sympathyService.update(args);
 
   if (args.state === 1) {
-    const approvalService = new ApprovalService();
+    const approvalService = services.approval;
     await approvalService.generateApproval(args.id, req.user.id, 2, {
       project_subject: args.reason || foundSympathy.reason,
       project_type: 9,

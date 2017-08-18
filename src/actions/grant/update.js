@@ -6,7 +6,7 @@
 import {filterParams} from '../../utils/filters';
 import GrantApplicationService from '../../service/GrantApplicationService';
 import ApprovalService from '../../service/ApprovalService';
-export default async function  (req, params, {response, checkAccess}) {
+export default async function  (req, params, {response, checkAccess, services}) {
   await checkAccess('grant_application', 'edit');
   const args = filterParams(req.body, {
     id: ['string', 'required'],
@@ -41,8 +41,8 @@ export default async function  (req, params, {response, checkAccess}) {
     delete args.items;
   }
 
-  const grantApplicationService  = new GrantApplicationService();
-  const approvalService = new ApprovalService();
+  const grantApplicationService  = services.grantApplication;
+  const approvalService = services.approval;
   const foundGrant = await grantApplicationService.update(args);
   if (saveType === 'submit') {
     await approvalService.generateApproval(args.id, req.user.id, 3, {

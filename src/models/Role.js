@@ -11,6 +11,7 @@ export default function (sequelize, DataTypes) {
     role_description: {type: DataTypes.STRING, defaultValue: '无'},
     role_slug: {type: DataTypes.STRING, defaultValue: generateSlug, unique: true},
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
+    available: {type: DataTypes.BOOLEAN, defaultValue: true},
     create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
     update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
   }, {

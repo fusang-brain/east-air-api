@@ -3,10 +3,11 @@
  * Author: alixez <alixe.z@foxmail.com>
  * Date: 2017/8/15
  */
-import NotificationService from '../../service/NotificationService';
-import {filterParams} from '../../utils/filters'
-const notificationService = new NotificationService();
-export default async function (req, params, {response}) {
+
+import {filterParams} from '../../utils/filters';
+
+export default async function (req, params, {response, services}) {
+  const notificationService = services.notification;
   const args = filterParams(req.query, {
     id: 'string',
   });

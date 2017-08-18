@@ -62,7 +62,7 @@ export default class RoleService extends Service {
         message: '非法操作',
       }
     }
-    if (['chile_dept_master', 'common_member', 'dept_finance', 'dept_master', 'dept_director'].includes(foundRole.role_slug)) {
+    if (['root', 'chile_dept_master', 'common_member', 'dept_finance', 'dept_master', 'dept_director'].includes(foundRole.role_slug)) {
       throw {
         code: Response.getErrorCode('remove'),
         message: '系统内置角色，无法删除!',

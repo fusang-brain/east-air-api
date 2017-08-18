@@ -25,7 +25,7 @@ export default async function (req, param, {response, models, checkAccess}) {
     integration: ['integer'],
   });
 
-  const foundAct = await models.TradeUnionAct.findOne({where: {id: actID}});
+  const foundAct = await models.TradeUnionAct.findOne({where: {id: actID, dept_id: {$in: req.dataAccess}}});
   if (!foundAct) {
     return {
       code: response.getErrorCode(),

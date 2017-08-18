@@ -10,6 +10,7 @@ export default class Service {
     this.modelName = '';
     this.connect = sequelize;
     this.sequelize = Sequelize;
+    this.dataAccess = [];
   }
 
   getModel(modelName=null) {

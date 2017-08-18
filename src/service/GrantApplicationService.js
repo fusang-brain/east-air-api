@@ -18,7 +18,14 @@ export default class GrantApplicationService extends Service {
   }
 
   async remove(id) {
-    const foundTheGrantApply = await this.GrantApplication.findOne({where: {id}});
+    const foundTheGrantApply = await this.GrantApplication.findOne({
+      where: {
+        id,
+        dept_id: {
+          $in: this.dataAccess,
+        },
+      }
+    });
 
     const Approval = this.getModel('Approval');
     const ApprovalFlows = this.getModel('ApprovalFlows');
@@ -53,7 +60,14 @@ export default class GrantApplicationService extends Service {
     const {id, items, attach, ...args} = params;
     const GrantAttach = this.getModel('GrantAttach');
     const GrantItem = this.getModel('GrantItem');
-    const foundGrant = await this.GrantApplication.findOne({where: {id}});
+    const foundGrant = await this.GrantApplication.findOne({
+      where: {
+        id,
+        dept_id: {
+          $in: this.dataAccess,
+        }
+      }
+    });
     if (!foundGrant) {
       throw {
         code: Response.getErrorCode(),
@@ -150,6 +164,9 @@ export default class GrantApplicationService extends Service {
   async generateList({offset, limit, state, search}) {
     let condition = {
       is_act: false,
+      dept_id: {
+        $in: this.dataAccess,
+      }
     };
     switch (state) {
       case 'draft':
@@ -212,7 +229,12 @@ export default class GrantApplicationService extends Service {
 
   async details(id) {
     return await this.GrantApplication.findOne({
-      where: {id},
+      where: {
+        id,
+        dept_id: {
+          $in: this.dataAccess,
+        }
+      },
       include: [
         {
           model: this.getModel('GrantItem'),

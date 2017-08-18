@@ -27,6 +27,9 @@ export default async function(req, params, {models, device}) {
       $ne: 1,
     }
   }
+  condition.name = {
+    $ne: 'root',
+  }
   if (args.search) {
     condition.$or = {
       ehr: { $like: `%${args.search}%`},

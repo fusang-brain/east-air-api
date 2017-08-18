@@ -13,6 +13,7 @@ import { mapUrl } from './utils/url';
 import { randomString } from './utils/utils';
 import Auth from './utils/auth';
 import response from './config/response';
+import {registerService, setDataAccessToService} from './service';
 
 // mongoose.connect(apiConfig.mongoose.db);
 // mongoose.Promise = Promise;
@@ -21,6 +22,7 @@ const log = log4js.getLogger("app");
 const pretty = new PrettyError();
 const app = express();
 const server = new http.Server(app);
+const services = registerService();
 
 const storage = multer.diskStorage({
   destination: (req, filter, cb) => {
@@ -128,8 +130,10 @@ app.use((req, res) => {
   const {action, params} = mapUrl(actions, splittedUrlPath);
   if (action) {
     const device = req.header('EA-DEVICE');
+    const dataAccess = req.dataAccess || [];
+    setDataAccessToService(services, dataAccess);
     const checkAccessAlias = async (moduleName, action, throwError=true) => await Auth.checkAccess(req, moduleName, action, device, throwError);
-    action(req, params, {models, device, response, checkAccess: checkAccessAlias})
+    action(req, params, {models, device, response, checkAccess: checkAccessAlias, services})
       .then((result) => {
         if (result instanceof Function) {
           result(res);

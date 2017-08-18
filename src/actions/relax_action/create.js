@@ -1,15 +1,14 @@
 /**
  * Created by alixez on 17-8-10.
  */
-import RelaxActionService from '../../service/RelaxActionService';
-import DeptService from '../../service/DeptService';
+
 import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
-const relaxActionService = new RelaxActionService();
-const deptService = new DeptService();
 
-export default async function (req, params, {response, device}) {
+export default async function (req, params, {response, device, services}) {
+  const deptService = services.dept;
+  const relaxActionService = services.relaxAction;
   const args = filterParams(req.body, {
     title: ['string', 'required'],
     action_type: ['integer', 'required'],

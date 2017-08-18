@@ -56,15 +56,21 @@ class Auth {
       },
       include: [
         {
+          model: models.Dept,
+          as: 'data_access',
+        },
+        {
           model: models.Role,
           as: 'user_role',
           include: [
             {
               model: models.Permission,
               as: 'permissions',
-            }
+            },
+
           ]
-        }
+        },
+
       ],
       where: {
         id: decodedToken.iss
@@ -77,18 +83,30 @@ class Auth {
         message: '认证失败, 没有找到该用户',
       }
     }
-
+    const originDataAccess = user.data_access;
     const originPermissions = user.user_role.permissions;
-    const permissions = originPermissions.map(permission => ({
+    let permissions = originPermissions.map(permission => ({
       permission_id: permission.id,
       module: permission.module_slug,
       action: permission.slug,
       action_name: permission.name,
       platform: permission.RolePermission.platform,
-    }))
+    }));
+    let dataAccess = originDataAccess.map(dataAccess => dataAccess.id);
+    user.user_role.setDataValue('permissions', undefined);
+    user.setDataValue('data_access', undefined);
+    if (user.user_role.role_slug === 'root') {
+      const depts = await models.Dept.all({
+        where: {
+          tree_level: 3,
+        }
+      });
+
+      dataAccess = depts.map(value => value.id);
+    }
     req.user = user;
     req.permissions = permissions;
-
+    req.dataAccess = dataAccess;
     return true;
   }
 
@@ -98,6 +116,9 @@ class Auth {
       platform = 'web';
     }
 
+    if (req.user.user_role.role_slug === 'root') {
+      return true;
+    }
 
     const foundPermission = originPermissions.find((permission) => {
       return permission.module === module && permission.action === action && permission.platform === platform;
@@ -114,13 +135,6 @@ class Auth {
     }
 
     return foundPermission;
-    // const permissions = originPermissions.map(permission => ({
-    //   module_slug: permission.module_slug,
-    //   action_name: permission.name,
-    //   action_slug: permission.slug,
-    //
-    // }));
-
   }
 
   static encodePassword(plainPassword) {

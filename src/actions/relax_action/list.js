@@ -5,8 +5,8 @@ import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 import RelaxActionService from '../../service/RelaxActionService';
 
-const relaxActionService = new RelaxActionService();
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, services}) {
+  const relaxActionService = services.relaxAction;
   const args = filterParams(req.query, {
     search: 'string',
     state: 'string',

@@ -1,7 +1,47 @@
 
+import ApprovalService from './ApprovalService';
+import DeptService from './DeptService';
+import DocService from './DocService';
+import GrantApplicationService from './GrantApplicationService';
+import NotificationService from './NotificationService';
+import RelaxActionService from './RelaxActionService';
+import RoleService from './RoleService';
+import SympathyService from './SympathyService';
+import ActivityService from './ActivityService';
+
+
 export Service from './Service';
-export ApprovalService from './ApprovalService';
-export DeptService from './DeptService';
-export ActivityService from './ActivityService';
-export GrantApplicationService from './GrantApplicationService';
-export RoleService from './RoleService';
+
+export {
+  ActivityService,
+  ApprovalService,
+  DeptService,
+  DocService,
+  GrantApplicationService,
+  NotificationService,
+  RelaxActionService,
+  RoleService,
+  SympathyService
+}
+
+export const registerService = () => {
+  console.log('register ...');
+  return {
+    activity: new ActivityService(),
+    approval: new ApprovalService(),
+    dept: new DeptService(),
+    doc: new DocService(),
+    grantApplication: new GrantApplicationService(),
+    notification: new NotificationService(),
+    relaxAction: new RelaxActionService(),
+    role: new RoleService(),
+    sympathy: new SympathyService(),
+  }
+};
+
+export const setDataAccessToService = (services, dataAccess) => {
+  const keys = Object.keys(services);
+  keys.forEach(key => {
+    services[key].dataAccess = dataAccess;
+  });
+}

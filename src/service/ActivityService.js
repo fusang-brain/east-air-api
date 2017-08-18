@@ -8,13 +8,14 @@ export default class ActivityService extends Service {
   constructor() {
     super();
     this.modelName = 'TradeUnionAct';
+    this.dataAccess = [];
   }
 
   async remove(id) {
     const TradeUnionAct = this.getModel();
     const Approval = this.getModel('Approval');
     const ApprovalFlows = this.getModel('ApprovalFlows');
-    const foundAct = await TradeUnionAct.findOne({where: {id: id}});
+    const foundAct = await TradeUnionAct.findOne({where: {id: id, dept_id: {$in: this.dataAccess}}});
     const foundApproval = await Approval.findOne({where: {project_id: id}});
     if (!foundAct) {
       return {
@@ -48,7 +49,12 @@ export default class ActivityService extends Service {
     const TradeUnionActImage = this.getModel('TradeUnionActImage');
 
     return await Act.findOne({
-      where: {id},
+      where: {
+        id,
+        dept_id: {
+          $in: this.dataAccess,
+        }
+      },
       include: [
         {
           model: User,

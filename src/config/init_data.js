@@ -292,31 +292,43 @@ const sysuser = {
 
 const roles = [
   {
+    role_name: '超级管理员',
+    role_slug: 'root',
+    role_description: '超级管理员',
+    is_master: false,
+    available: false,
+  },
+  {
     role_name: '工会主席',
     role_slug: 'dept_master',
     role_description: '工会主席描述',
     is_master: true,
+    available: true,
   },
   {
     role_name: '分工会主席',
     role_slug: 'chile_dept_master',
     role_description: '分工会主席描述',
     is_master: true,
+    available: true,
   },
   {
     role_name: '工会财务',
     role_slug: 'dept_finance',
     is_master: true,
+    available: true,
   },
   {
     role_name: '工会主任',
     role_slug: 'dept_director',
     is_master: true,
+    available: true,
   },
   {
     role_name: '普通会员',
     role_slug: 'common_member',
     is_master: false,
+    available: true,
   }
 ];
 

@@ -4,9 +4,9 @@
 
 import {ApprovalService} from '../../service';
 
-export default async function (req, params, {response, device}) {
+export default async function (req, params, {response, device, services}) {
   const approval_id = req.query.approval_id;
-  const approvalService = new ApprovalService();
+  const approvalService = services.approval;
   const approval = await approvalService.getApprovalDetail(approval_id);
 
   const flows = approval.getDataValue('flows');

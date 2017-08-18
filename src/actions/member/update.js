@@ -48,7 +48,12 @@ export default async function (req, params, {models, response, checkAccess}) {
   const User = models.User;
   delete values.user;
   await User.update(values, {
-    where: {id: args.user}
+    where: {
+      id: args.user,
+      name: {
+        $nq: 'root',
+      }
+    }
   });
 
   await models.DataAccess.destroy({

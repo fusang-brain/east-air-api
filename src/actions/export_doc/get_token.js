@@ -30,6 +30,7 @@ export default async function (req, params, {response, models, checkAccess}) {
   const DownloadToken = models.DownloadToken;
 
   const token = await DownloadToken.create({
+    user_id: req.user.id,
     expired_at: Date.now() + 60 * 3,
   });
 

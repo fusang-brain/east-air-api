@@ -3,12 +3,8 @@
  */
 
 import {filterParams} from '../../utils/filters';
-import ApprovalService from '../../service/ApprovalService';
-import NotificationService from '../../service/NotificationService';
 
-const approvalService = new ApprovalService();
-const notificationService = new NotificationService();
-export default async function (req, params, {response, checkAccess}) {
+export default async function (req, params, {response, checkAccess, services}) {
   await checkAccess('grant_approval', 'activity_funding');
   await checkAccess('grant_approval', 'apply_funding');
   const args = filterParams(req.body, {
@@ -17,7 +13,7 @@ export default async function (req, params, {response, checkAccess}) {
     content: 'string',
   });
 
-  const executeResult = await approvalService.executeApproval({
+  const executeResult = await services.approval.executeApproval({
     approval_id: args.approval_id,
     result: args.result,
     content: args.content,
@@ -26,7 +22,7 @@ export default async function (req, params, {response, checkAccess}) {
 
   switch (executeResult.result) {
     case 'success':
-      await notificationService.sendToPersonal({
+      await services.notification.sendToPersonal({
         title: '您的申请已被同意!',
         body: args.content,
         sender: null,
@@ -40,7 +36,7 @@ export default async function (req, params, {response, checkAccess}) {
       })
       break;
     case 'refused':
-      await notificationService.sendToPersonal({
+      await services.notification.sendToPersonal({
         title: '您的申请已被拒绝!',
         body: args.content,
         sender: null,

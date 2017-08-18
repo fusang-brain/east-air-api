@@ -9,7 +9,10 @@ export default async function (req, params, {models, device}) {
   const limit = parseInt(req.query.limit) || 20;
   const RoleModel = models.Role;
   const total = await RoleModel.count();
-  const list = await RoleModel.findAll({
+  const list = await RoleModel.all({
+    where: {
+      available: true,
+    },
     offset,
     limit,
   });

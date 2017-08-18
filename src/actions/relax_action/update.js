@@ -5,10 +5,9 @@ import RelaxActionService from '../../service/RelaxActionService';
 import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
-const relaxActionService = new RelaxActionService();
 
-export default async function (req, params, {response, models}) {
-
+export default async function (req, params, {response, services}) {
+  const relaxActionService = services.relaxAction;
   const args = filterParams(req.body, {
     id: ['string', 'required'],
     title: ['string', 'filter_none'],

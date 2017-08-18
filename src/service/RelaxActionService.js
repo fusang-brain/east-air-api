@@ -47,7 +47,14 @@ export default class RelaxActionService extends Service {
   }
 
   async remove(id) {
-    const relaxAction = await this.RelaxAction.findOne({where:{id: id}});
+    const relaxAction = await this.RelaxAction.findOne({
+      where:{
+        id,
+        dept_id: {
+          $in: this.dataAccess,
+        }
+      }
+    });
     if (!relaxAction) {
       return;
     }
@@ -73,7 +80,12 @@ export default class RelaxActionService extends Service {
 
   async update(args) {
     const {id, people, ...params} = args;
-    const relaxAction = await this.RelaxAction.findOne({where:{id: id}});
+    const relaxAction = await this.RelaxAction.findOne({
+      where:{
+        id,
+        dept_id: this.dataAccess,
+      }
+    });
     if (!relaxAction) {
       return;
     }
@@ -115,7 +127,11 @@ export default class RelaxActionService extends Service {
   }
 
   async generateList({subject, status, offset, limit}) {
-    let condition = {};
+    let condition = {
+      dept_id: {
+        $in: this.dataAccess,
+      }
+    };
     if (subject) {
       condition.title = {
         $like: `%${subject}%`,
@@ -171,6 +187,9 @@ export default class RelaxActionService extends Service {
     const res = await this.RelaxAction.findOne({
       where: {
         id: id,
+        dept_id: {
+          $in: this.dataAccess,
+        }
       },
       order: [
         [{model: this.RelaxActionPeople, as:'people'}, 'person_category', 'ASC'],
@@ -208,49 +227,43 @@ export default class RelaxActionService extends Service {
   }
 
   async statisticsResultTotal(duration) {
-    let condition = '';
-    if (duration.start || duration.end) {
-      condition = `WHERE `;
-    }
-
+    const dataAccessStr = this.dataAccess.join("','");
+    const conditionArr = [];
+    let condition = `WHERE `;
+    conditionArr.push(`ra.dept_id IN ('${dataAccessStr}')`)
     if (duration && duration.start) {
-      condition += `ra.date > ${duration.start} `;
+      conditionArr.push(`ra.date >= ${duration.start}`);
     }
-
-    if (duration.start && duration.end) {
-      condition += `AND `
-    }
-
     if (duration && duration.end) {
-      condition += `ra.date < ${duration.end} `;
+      conditionArr.push(`ra.date <= '${duration.end}'`);
     }
+    condition += conditionArr.join(' AND ');
+    condition += ' ';
     const queryStr = "SELECT COUNT(*) as total FROM (SELECT ra.dept_id " +
       "FROM `" + this.getModel().tableName + "` as ra " +
       condition +
       //"LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
       "GROUP BY ra.dept_id) res";
+
+    console.log(queryStr, '-=-=-=-=')
     return await this.connect.query(queryStr, {
       type: this.sequelize.QueryTypes.SELECT,
     });
   }
 
   async statisticsResult(offset=0, limit=20, duration) {
-    let condition = '';
-    if (duration.start || duration.end) {
-      condition = `WHERE `;
-    }
-
+    const dataAccessStr = this.dataAccess.join("','");
+    const conditionArr = [];
+    let condition = `WHERE `;
+    conditionArr.push(`ra.dept_id IN ('${dataAccessStr}')`)
     if (duration && duration.start) {
-      condition += `ra.date > ${duration.start} `;
+      conditionArr.push(`ra.date >= ${duration.start}`);
     }
-
-    if (duration.start && duration.end) {
-      condition += `AND `
-    }
-
     if (duration && duration.end) {
-      condition += `ra.date < ${duration.end} `;
+      conditionArr.push(`ra.date <= '${duration.end}'`);
     }
+    condition += conditionArr.join(' AND ');
+    condition += ' ';
     // const queryStr = "SELECT " +
     //   "ra.dept_id as dept_id, dept.dept_name as dept_name, COUNT(ra.id) as all_times, SUM(ra.people_number) as all_people, SUM(ra.total) as total_amount " +
     //   "FROM `" + this.getModel().tableName + "` as ra " +
@@ -284,12 +297,27 @@ export default class RelaxActionService extends Service {
     );
   }
 
-  async statisticsDetails() {
+  async statisticsDetails(duration) {
+
+    const dataAccessStr = this.dataAccess.join("','");
+    const conditionArr = [];
+    let condition = `WHERE `;
+    conditionArr.push(`ra.dept_id IN ('${dataAccessStr}')`)
+    if (duration && duration.start) {
+      conditionArr.push(`ra.date >= ${duration.start}`);
+    }
+    if (duration && duration.end) {
+      conditionArr.push(`ra.date <= ${duration.end}`);
+    }
+    condition += conditionArr.join(' AND ');
+    condition += ' ';
+
     return await this.connect.query(
       "SELECT " +
       "ra.dept_id as dept_id, rap.person_category as person_category, SUM(rap.people_number) as people_number " +
       "FROM `" + this.getModel('RelaxActionPeople').tableName + "` as rap " +
       "LEFT JOIN `" + this.getModel().tableName + "` as ra ON ra.id = rap.relax_action_id " +
+      condition +
       "GROUP BY rap.person_category, ra.dept_id",
       {
         type: this.sequelize.QueryTypes.SELECT,

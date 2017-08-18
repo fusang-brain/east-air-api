@@ -8,6 +8,7 @@ export default class DeptService extends Service {
   constructor() {
     super();
     this.modelName = 'Dept';
+    this.dataAccess = [];
   }
 
   async updateDept(deptID, values) {

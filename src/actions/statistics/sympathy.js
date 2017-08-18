@@ -6,17 +6,17 @@
 
 import SympathyService from '../../service/SympathyService';
 
-export default async function (req, params, {response, checkAccess}) {
+export default async function (req, params, {response, checkAccess, services}) {
   await checkAccess('sympathy', 'statistics');
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
   const start = req.query.start || null;
   const end = req.query.end || null;
 
-  const sympathyService = new SympathyService();
-  const total = await sympathyService.statisticsResultTotal({start, end});
-  const list = await sympathyService.statisticsResult(offset, limit, {start, end});
-  const details = await sympathyService.statisticsDetails({start, end});
+  const sympathyService = services.sympathy;
+  const total = await sympathyService.statisticsResultTotal({start, end}, req.dataAccess);
+  const list = await sympathyService.statisticsResult(offset, limit, {start, end}, req.dataAccess);
+  const details = await sympathyService.statisticsDetails({start, end}, req.dataAccess);
 
   list.map(row => {
     row.details = [];

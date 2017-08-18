@@ -15,6 +15,7 @@ export default class ApprovalService extends Service {
   constructor() {
     super();
     this.modelName = 'Approval';
+    this.dataAccess = [];
   }
 
   async generateApprovalFlowTemp(publishID) {
@@ -254,14 +255,16 @@ export default class ApprovalService extends Service {
     return approval;
   }
 
-  async getApprovalDetail(approvalID) {
+  async getApprovalDetail(approvalID, dataAccess) {
     const Approval = this.getModel();
     const User = this.getModel('User');
     const activityService = new ActivityService();
     const sympathyService = new SympathyService();
     const grantApplicationService = new GrantApplicationService();
     const approval = await Approval.findOne({
-      where: {id: approvalID},
+      where: {id: approvalID, dept_id: {
+        $in: dataAccess,
+      }},
       include: [
         {
           model: User,
@@ -318,6 +321,9 @@ export default class ApprovalService extends Service {
     const approval = await Approval.findOne({
       where: {
         id: approvalID,
+        dept_id: {
+          $in: this.dataAccess,
+        }
       },
       include: [
         {
@@ -433,6 +439,9 @@ export default class ApprovalService extends Service {
     return await Approval.count({
       where: {
         approval_type: approvalType,
+        dept_id: {
+          $in: this.dataAccess,
+        }
       },
       include: [
         {
@@ -487,6 +496,9 @@ export default class ApprovalService extends Service {
       condition.project_subject = {
         $like: `%${search}%`,
       }
+    }
+    condition.dept_id = {
+      $in: this.dataAccess,
     }
 
     const undoTotal = await Approval.count({
