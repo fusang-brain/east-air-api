@@ -159,3 +159,10 @@ ea://[module]/[id]
 * [消息列表](./notification/list.md)
 * [消息详情](./notification/details.md)
 
+#### 公文管理
+
+* [新增公文](./doc/create.md)
+* [公文详情](./doc/details.md)
+* [公文列表](./doc/list.md)
+* [公文接收者详情](./doc/receivers.md)
+
