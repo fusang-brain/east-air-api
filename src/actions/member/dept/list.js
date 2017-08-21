@@ -15,6 +15,9 @@ export default async function (req, params, {models, device}) {
       }
     }
   }
+
+  let renderType = params[0];
+
   const deepDeptLevel = await DeptModel.findOne({
       attributes: [[models.sequelize.fn('MAX', models.sequelize.col('tree_level')), 'max_tree_level']],
     });
@@ -22,7 +25,7 @@ export default async function (req, params, {models, device}) {
 
   const getIncludeArgs = (times) => {
     let includeArgs = [];
-    if (device === 'app') {
+    if (device === 'app' || renderType === 'with_member') {
       includeArgs = [
         {model: models.Dept, as: 'children'},
         {model: models.User, as: 'members', required: false, attributes: ['id', 'name', 'avatar']}
