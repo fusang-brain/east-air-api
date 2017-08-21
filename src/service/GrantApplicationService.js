@@ -102,7 +102,7 @@ export default class GrantApplicationService extends Service {
       args.cost = cost;
     }
 
-    if (attach && attach.length > 0) {
+    if (attach && attach.length >= 0) {
       let rightAttach = attach.map(loop => ({
         grant_application_id: foundGrant.id,
         file_path: loop,
@@ -196,6 +196,9 @@ export default class GrantApplicationService extends Service {
       where: condition,
       offset,
       limit,
+      order: [
+        ['apply_time', 'DESC']
+      ],
       include: [
         {
           model: this.getModel('GrantItem'),

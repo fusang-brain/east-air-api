@@ -47,11 +47,12 @@ export default async function (req, params, {models, response, checkAccess}) {
   const values = {...args};
   const User = models.User;
   delete values.user;
+
   await User.update(values, {
     where: {
       id: args.user,
       name: {
-        $nq: 'root',
+        $ne: 'root',
       }
     }
   });
@@ -61,7 +62,7 @@ export default async function (req, params, {models, response, checkAccess}) {
       user_id: args.user,
     }
   });
-  const dataAccess = values.data_access.map(loop => ({
+  const dataAccess = args.data_access.map(loop => ({
     user_id: args.user,
     dept_id: loop,
   }));

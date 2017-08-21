@@ -10,38 +10,36 @@ export default class DocService extends Service {
   constructor() {
     super();
     this.modelName = "Docs";
+
   }
 
   async generateList({offset, limit, filter}) {
     const Doc = this.getModel();
     const condition = {};
-    if (filter.search) {
+    if (filter && filter.search) {
       condition.doc_title = {
         $like: `%${filter.search}%`,
       }
     }
 
-    if (filter.doc_type) {
+    if (filter && filter.doc_type) {
       condition.doc_type = filter.doc_type;
     }
-    if (filter.level) {
+    if (filter && filter.level) {
       condition.doc_level = filter.level;
     }
     const originList = await Doc.all({
       offset,
       limit,
-      where: condition,
-      include: [
-        {
-          model: this.getModel('DocAttach'),
-          as: 'attach',
-        }
-      ]
+      where: condition
     });
 
-    // todo execute origin list
-
-    return originList;
+    return originList.map(item => ({
+      doc_title: item.doc_title,
+      doc_type: item.doc_type,
+      doc_level: item.doc_level,
+      create_time: item.create_time,
+    }));
   }
 
   async create(args) {
@@ -57,11 +55,13 @@ export default class DocService extends Service {
           }
         }
       });
+
       params.attach = attachObjs.map(item => ({
-        file_id: item.file_id,
-        file_path: item.file_path,
-        file_size: item.file_size,
+        file_id: item.id,
+        file_path: item.path,
+        file_size: item.size,
       }));
+
     }
 
     if (receivers) {
@@ -104,15 +104,129 @@ export default class DocService extends Service {
     return docReadReceipts;
   }
 
-  async update(id, args) {
-
-  }
-
   async remove(id) {
 
   }
 
   async details(id) {
+    const Doc = this.getModel();
+    const doc = await Doc.findOne({
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          model: this.getModel('User'),
+          as: 'publisher',
+          attributes: ['name', 'id', 'avatar']
+        },
+        {
+          model: this.getModel('DocAttach'),
+          as: 'attach',
+        }
+      ]
+    });
 
+    const receiverTotal = await this.receiverTotal(id);
+    const hasReadTotal = await this.hasReadTotal(id);
+    const unReadTotal = receiverTotal - hasReadTotal;
+
+    doc.setDataValue('un_read_total', unReadTotal);
+    doc.setDataValue('has_read_total', hasReadTotal);
+    doc.setDataValue('receiver_total', receiverTotal);
+
+    return doc;
+  }
+
+  async receiverTotal(id) {
+    const DocReceivers = this.getModel('DocReceivers');
+    return await DocReceivers.count({
+      where: {
+        doc_id: id,
+      }
+    });
+  }
+
+  async hasReadTotal(id) {
+    const DocReadReceipts = this.getModel('DocReadReceipts');
+    return await DocReadReceipts.count({
+      where: {
+        doc_id: id,
+      }
+    })
+  }
+
+  async getUnreadDetails(id) {
+    const DocReceivers = this.getModel('DocReceivers');
+    const DocReadReceipts = this.getModel('DocReadReceipts');
+
+    const allReaders = await DocReadReceipts.all({
+      where: {
+        doc_id: id,
+      }
+    });
+
+    const allReaderIDs = allReaders.map(reader => {
+      return reader.user_id;
+    });
+
+    console.log(allReaderIDs, '----');
+
+    let condition = {
+      doc_id: id,
+    }
+
+    if (allReaderIDs.length > 0) {
+      condition.receiver_id = {
+        $nin: allReaderIDs,
+      }
+    }
+
+    const allUnreadReceivers = await DocReceivers.all({
+      where: condition,
+      include: [
+        {
+          model: this.getModel('User'),
+          as: 'receiver',
+          attributes: ['id', 'name', 'avatar'],
+          include: [
+            {
+              model: this.getModel('Dept'),
+              as: 'department',
+            }
+          ]
+        }
+      ]
+    });
+    const executedUnreadReceivers = {};
+    allUnreadReceivers.forEach(item => {
+      let dept = item.receiver.department;
+      if (!executedUnreadReceivers[dept.id]) {
+
+        executedUnreadReceivers[dept.id] = {
+          receipts_id: item.id,
+          dept_id: dept.id,
+          dept_name: dept.dept_name,
+          people: [],
+          people_total: 0,
+        };
+      }
+
+      executedUnreadReceivers[dept.id].people.push({
+        id: item.receiver.id,
+        name: item.receiver.name,
+        avatar: item.receiver.avatar,
+      });
+
+      executedUnreadReceivers[dept.id].people_total += 1;
+    });
+
+    const result = [];
+
+    for (let key in executedUnreadReceivers) {
+      result.push(executedUnreadReceivers[key]);
+    }
+
+    return result;
   }
 }

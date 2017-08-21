@@ -27,8 +27,8 @@ export default async function (req, params, {response, checkAccess, services}) {
           person_num: detail.person_num,
         });
       }
-    })
-  })
+    });
+  });
 
   return {
     code: response.getSuccessCode(),

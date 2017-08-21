@@ -33,7 +33,8 @@ export default class RelaxActionService extends Service {
       peopleNumber = peopleNumber + parseInt(item.people_number);
     }
     args.people_number = peopleNumber;
-    args.total = Decimal.mul(args.per_capita_budget, args.people_number).toNumber();
+    const dailyTotal = Decimal.mul(args.per_capita_budget, args.people_number).toNumber();
+    args.total = Decimal.mul(dailyTotal, args.days).toNumber();
     args.apply_time = Date.now();
     return await RelaxAction.create(args, {
       include: [
@@ -112,7 +113,9 @@ export default class RelaxActionService extends Service {
       }
       params.people_number = peopleNumber;
       let perCapitaBudget = params.per_capita_budget || relaxAction.per_capita_budget;
-      params.total = Decimal.mul(perCapitaBudget, params.people_number).toNumber();
+      const dailyTotal = Decimal.mul(args.per_capita_budget, args.people_number).toNumber();
+      params.total = Decimal.mul(dailyTotal, args.days).toNumber();
+      // params.total = Decimal.mul(perCapitaBudget, params.people_number).toNumber();
       await this.RelaxActionPeople.destroy({where: {relax_action_id: id}});
       await this.RelaxActionPeople.bulkCreate(peopleArgs);
     }

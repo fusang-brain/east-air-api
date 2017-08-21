@@ -73,6 +73,9 @@ export default async function(req, params, {models, device}) {
     ],
     offset,
     limit,
+    order: [
+      ['create_at', 'DESC'],
+    ]
   });
 
 

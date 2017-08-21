@@ -518,7 +518,7 @@ export default class ApprovalService extends Service {
           },
           required: true,
         }
-      ]
+      ],
     });
 
     const total = await Approval.count({
@@ -560,6 +560,9 @@ export default class ApprovalService extends Service {
           model: this.getModel('Dept'),
           as: 'department',
         }
+      ],
+      order: [
+        ['publish_date', 'DESC'],
       ]
     });
 

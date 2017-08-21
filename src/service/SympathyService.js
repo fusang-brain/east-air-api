@@ -80,6 +80,9 @@ export default class SympathyService extends Service {
           model: this.getModel('Dept'),
           as: 'department',
         }
+      ],
+      order: [
+        ['apply_time', 'DESC'],
       ]
     });
 
@@ -149,6 +152,7 @@ export default class SympathyService extends Service {
     const conditionArr = [];
     let condition = `WHERE `;
     conditionArr.push(`syp.dept_id IN ('${dataAccessStr}')`);
+    conditionArr.push(`syp.state = 2`)
 
     if (duration && duration.start) {
       conditionArr.push(`syp.sympathy_date >= '${duration.start}'`);
@@ -178,6 +182,7 @@ export default class SympathyService extends Service {
     const conditionArr = [];
     let condition = `WHERE `;
     conditionArr.push(`syp.dept_id IN ('${dataAccessStr}')`);
+    conditionArr.push(`syp.state = 2`)
 
     if (duration && duration.start) {
       conditionArr.push(`syp.sympathy_date >= '${duration.start}'`);
@@ -221,6 +226,7 @@ export default class SympathyService extends Service {
     const conditionArr = [];
     let condition = `WHERE `;
     conditionArr.push(`syp.dept_id IN ('${dataAccessStr}')`);
+    conditionArr.push(`syp.state = 2`)
 
     if (duration && duration.start) {
       conditionArr.push(`syp.sympathy_date >= '${duration.start}'`);

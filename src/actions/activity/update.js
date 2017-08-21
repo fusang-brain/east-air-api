@@ -124,14 +124,22 @@ export default async function (req, param, {response, models, checkAccess}) {
     file_path: loop,
     no: 1,
   }));
-  if (params.images.length > 0) {
+  if (params.images.length >= 0) {
     models.TradeUnionActImage.destroy({where:{act_id: actID}});
     models.TradeUnionActImage.bulkCreate(params.images);
   }
-  if (params.attach.length > 0) {
+  if (params.attach.length >= 0) {
     models.TradeUnionActAttach.destroy({where:{act_id: actID}});
     models.TradeUnionActAttach.bulkCreate(params.attach);
   }
+
+  // if (params.attach.length === 0) {
+  //   models.TradeUnionAttach.destroy({where: {act_id: actID}});
+  // }
+  //
+  // if (params.images.length === 0) {
+  //   models.TradeUnionActImage.destroy({where:{act_id: actID}});
+  // }
 
   const act = await TradeUnionAct.update(params, {
     where: {

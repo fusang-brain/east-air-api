@@ -19,6 +19,12 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'doc_id',
           sourceKey: 'id',
         });
+
+        this.belongsTo(models.User, {
+          as: 'receiver',
+          foreignKey: 'receiver_id',
+          sourceKey: 'id',
+        });
       }
     }
   });
