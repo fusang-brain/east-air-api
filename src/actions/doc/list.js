@@ -15,14 +15,21 @@ export default async (req, params, {response, models, services}) => {
     doc_level: 'string',
   });
 
+  if (params[0] === 'unread') {
+    args.unread = true;
+  } else {
+    args.unread = false;
+  }
+
   const DocService = services.doc;
 
-  const list = await DocService.generateList({offset, limit, filter: args});
+  const {total,list} = await DocService.generateList({offset, limit, filter: args, userID: req.user.id});
 
   return {
     code: response.getSuccessCode(),
     message: '查询成功',
     data: {
+      total,
       list,
     }
   }

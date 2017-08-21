@@ -13,7 +13,7 @@ export default class DocService extends Service {
 
   }
 
-  async generateList({offset, limit, filter}) {
+  async generateList({offset, limit, filter, userID}) {
     const Doc = this.getModel();
     const condition = {};
     if (filter && filter.search) {
@@ -28,18 +28,93 @@ export default class DocService extends Service {
     if (filter && filter.level) {
       condition.doc_level = filter.level;
     }
+
+    if (filter && filter.unread) {
+      const readReceipts = await this.getModel('DocReadReceipts').all({
+        where: {
+          user_id: userID,
+        }
+      });
+
+      const readedDocIDs = readReceipts.map(item => {
+        return item.doc_id;
+      });
+
+      if (readedDocIDs.length > 0) {
+        condition.id = {
+          $nin: readedDocIDs,
+        }
+      }
+    }
+
+    const total = await Doc.count({
+      where: condition,
+      include: [
+        {
+          model: this.getModel('DocReceivers'),
+          as: 'receivers',
+          required: true,
+          where: {
+            receiver_id: userID,
+          }
+        }
+      ]
+    })
+
     const originList = await Doc.all({
       offset,
       limit,
-      where: condition
+      where: condition,
+      include: [
+        {
+          model: this.getModel('DocReceivers'),
+          as: 'receivers',
+          required: true,
+          where: {
+            receiver_id: userID,
+          }
+        }
+      ]
     });
 
-    return originList.map(item => ({
+    const list = originList.map(item => ({
+      id: item.id,
+      doc_note: item.doc_note,
       doc_title: item.doc_title,
       doc_type: item.doc_type,
       doc_level: item.doc_level,
       create_time: item.create_time,
     }));
+
+    return {
+      total,
+      list,
+    }
+  }
+
+  async unreadTotal(userID) {
+    const total = await this.getModel('Docs').count({
+      include: [
+        {
+          model: this.getModel('DocReceivers'),
+          as: 'receivers',
+          required: true,
+          where: {
+            receiver_id: userID,
+          }
+        }
+      ]
+    });
+
+    console.log(total);
+
+    const hasReadTotalByUser = await this.getModel('DocReadReceipts').count({
+      where: {
+        user_id: userID,
+      }
+    });
+
+    return parseInt(total) - parseInt(hasReadTotalByUser);
   }
 
   async create(args) {
@@ -127,8 +202,8 @@ export default class DocService extends Service {
       ]
     });
 
-    const receiverTotal = await this.receiverTotal(id);
-    const hasReadTotal = await this.hasReadTotal(id);
+    const receiverTotal = await this.docReceiverTotal(id);
+    const hasReadTotal = await this.docHasReadTotal(id);
     const unReadTotal = receiverTotal - hasReadTotal;
 
     doc.setDataValue('un_read_total', unReadTotal);
@@ -138,7 +213,7 @@ export default class DocService extends Service {
     return doc;
   }
 
-  async receiverTotal(id) {
+  async docReceiverTotal(id) {
     const DocReceivers = this.getModel('DocReceivers');
     return await DocReceivers.count({
       where: {
@@ -147,7 +222,7 @@ export default class DocService extends Service {
     });
   }
 
-  async hasReadTotal(id) {
+  async docHasReadTotal(id) {
     const DocReadReceipts = this.getModel('DocReadReceipts');
     return await DocReadReceipts.count({
       where: {

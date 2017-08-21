@@ -66,6 +66,16 @@ export default async function (req, params, {models, device}) {
     }
   }
 
+  if (renderType === 'with_member') {
+    return {
+      code: getSuccessCode(),
+      message: '查看成功',
+      data: {
+        depts: recursiveRenderDept(list[0].children)
+      }
+    }
+  }
+
   return {
     code: getSuccessCode(),
     message: '查看成功',
@@ -75,7 +85,31 @@ export default async function (req, params, {models, device}) {
   }
 }
 
+function recursiveRenderDept(children) {
 
+  return children.map(looper => {
+    let children = [];
+    if (looper.children.length > 0) {
+      children = recursiveRenderDept(looper.children);
+    }
+
+    if (looper.tree_level === 3) {
+      children = looper.members.map(item => ({
+        id: item.id,
+        name: item.name,
+        tree_level: looper.tree_level + 1,
+        avatar: item.avatar,
+      }));
+    }
+
+    return {
+      id: looper.id,
+      name: looper.dept_name,
+      tree_level: looper.tree_level,
+      children: children,
+    }
+  })
+}
 
 function recursiveMemberCount(children) {
   let count = 0;
