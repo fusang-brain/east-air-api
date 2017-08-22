@@ -15,6 +15,7 @@ export default async (req, params, {response, services}) => {
   }
 
   const details = await services.doc.details(id);
+  await services.doc.markedRead(id, req.user.id);
 
   return {
     code: response.getSuccessCode(),

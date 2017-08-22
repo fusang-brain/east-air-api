@@ -166,3 +166,10 @@ ea://[module]/[id]
 * [公文列表](./doc/list.md)
 * [公文接收者详情](./doc/receivers.md)
 
+#### 意向征集
+
+* [新增](./intention/create.md)
+* [详情](./intention/details.md)
+* [列表](./intention/list.md)
+* [投票](./intention/vote.md)
+

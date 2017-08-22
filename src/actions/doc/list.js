@@ -11,9 +11,11 @@ export default async (req, params, {response, models, services}) => {
 
   const args = filterParams(req.query, {
     search: 'string',
-    doc_type: 'integer',
+    doc_type: 'string',
     doc_level: 'string',
   });
+
+  args.doc_type = +args.doc_type;
 
   if (params[0] === 'unread') {
     args.unread = true;
@@ -24,6 +26,9 @@ export default async (req, params, {response, models, services}) => {
   const DocService = services.doc;
 
   const {total,list} = await DocService.generateList({offset, limit, filter: args, userID: req.user.id});
+
+
+
 
   return {
     code: response.getSuccessCode(),

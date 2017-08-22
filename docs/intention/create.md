@@ -1,12 +1,12 @@
-## 新增公文接口
+## 新增意向征集接口
 
 ### 接口调用说明
 
-__请求地址 :__ [/doc/create](#)
+__请求地址 :__ [/intention/create](#)
 
 __请求方式 :__ POST
 
-> 提交一个公文
+> 接口描述...
 
 --------------------------------------
 
@@ -14,12 +14,9 @@ __请求方式 :__ POST
 
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
-|doc_title|string|公文标题|yes|-|
-|doc_type|integer|公文类型|yes|-|
-|doc_level|string|等级|yes|general:一般 important:重要 crash:紧急 top_secret:绝密|
-|doc_note|string|公文备注说明|yes|-|
-|receivers|array<string>|接受者ID|yes|-|
-|attach|array<string>|附件id|yes|-|
+|title|string|标题|yes|-|
+|content|string|内容|yes|-|
+
 
 #### 返回值
 
@@ -33,13 +30,11 @@ _data 说明_
 
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
-|doc|dict|创建成功的文档|-|
+
 
 #### 请求示例
 
 ```json
-
-
 
 ```
 

@@ -18,6 +18,8 @@ export default async (req, params, {response}) => {
     attach: ['array']
   });
 
+  args.user_id = req.user.id;
+
   const createdDoc = await docService.create(args);
 
   return {

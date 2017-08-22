@@ -5,6 +5,7 @@
  */
 
 import Service from './Service';
+import Response from '../config/response'
 export default class DocService extends Service {
 
   constructor() {
@@ -25,8 +26,9 @@ export default class DocService extends Service {
     if (filter && filter.doc_type) {
       condition.doc_type = filter.doc_type;
     }
-    if (filter && filter.level) {
-      condition.doc_level = filter.level;
+
+    if (filter && filter.doc_level) {
+      condition.doc_level = filter.doc_level;
     }
 
     if (filter && filter.unread) {
@@ -36,16 +38,22 @@ export default class DocService extends Service {
         }
       });
 
+      console.log(readReceipts, '---===');
+
       const readedDocIDs = readReceipts.map(item => {
         return item.doc_id;
       });
 
+      console.log(readedDocIDs, '---====----');
+
       if (readedDocIDs.length > 0) {
         condition.id = {
-          $nin: readedDocIDs,
+          $notIn: readedDocIDs,
         }
       }
     }
+
+    console.log(condition);
 
     const total = await Doc.count({
       where: condition,
@@ -193,14 +201,23 @@ export default class DocService extends Service {
         {
           model: this.getModel('User'),
           as: 'publisher',
+          required: false,
           attributes: ['name', 'id', 'avatar']
         },
         {
           model: this.getModel('DocAttach'),
+          required: false,
           as: 'attach',
         }
       ]
     });
+
+    if (!doc) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '没有该公文',
+      }
+    }
 
     const receiverTotal = await this.docReceiverTotal(id);
     const hasReadTotal = await this.docHasReadTotal(id);
@@ -245,15 +262,13 @@ export default class DocService extends Service {
       return reader.user_id;
     });
 
-    console.log(allReaderIDs, '----');
-
     let condition = {
       doc_id: id,
     }
 
     if (allReaderIDs.length > 0) {
       condition.receiver_id = {
-        $nin: allReaderIDs,
+        $notIn: allReaderIDs,
       }
     }
 
@@ -273,6 +288,7 @@ export default class DocService extends Service {
         }
       ]
     });
+
     const executedUnreadReceivers = {};
     allUnreadReceivers.forEach(item => {
       let dept = item.receiver.department;
@@ -302,6 +318,9 @@ export default class DocService extends Service {
       result.push(executedUnreadReceivers[key]);
     }
 
-    return result;
+    return {
+      result,
+      resultMapper: executedUnreadReceivers,
+    };
   }
 }

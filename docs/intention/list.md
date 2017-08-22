@@ -1,12 +1,12 @@
-## 新增公文接口
+## 获取意向征集列表接口
 
 ### 接口调用说明
 
-__请求地址 :__ [/doc/create](#)
+__请求地址 :__ [/intention/list](#)
 
-__请求方式 :__ POST
+__请求方式 :__ GET
 
-> 提交一个公文
+> 接口描述...
 
 --------------------------------------
 
@@ -14,12 +14,11 @@ __请求方式 :__ POST
 
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
-|doc_title|string|公文标题|yes|-|
-|doc_type|integer|公文类型|yes|-|
-|doc_level|string|等级|yes|general:一般 important:重要 crash:紧急 top_secret:绝密|
-|doc_note|string|公文备注说明|yes|-|
-|receivers|array<string>|接受者ID|yes|-|
-|attach|array<string>|附件id|yes|-|
+|offset|integer|偏移量|no|缺省值：0|
+|limit|integer|数据量|no|缺省值: 10|
+|search|string|搜索字段|no|-|
+|sort|integer|排序|no|默认为投票值倒序， 1为投票值倒序 2为投票值正序|
+
 
 #### 返回值
 
@@ -33,13 +32,11 @@ _data 说明_
 
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
-|doc|dict|创建成功的文档|-|
+
 
 #### 请求示例
 
 ```json
-
-
 
 ```
 
