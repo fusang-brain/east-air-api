@@ -13,7 +13,7 @@ export default function (sequelize, DataTypes) {
     vote_result: {type: DataTypes.INTEGER}, // 1 同意 2 反对
   }, {
     classMethods: {
-      associates(models) {
+      associate(models) {
         this.belongsTo(models.Intention, {
           foreignKey: 'intention_id',
           sourceKey: 'id',

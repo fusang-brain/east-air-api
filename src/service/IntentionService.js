@@ -19,7 +19,7 @@ export default class IntentionService extends Service {
     return await Intention.create(args);
   }
 
-  async generateList({limit, offset, search, sortType}) {
+  async generateList({limit, offset, search, sort}) {
 
     const condition = {};
     if (search) {
@@ -27,9 +27,9 @@ export default class IntentionService extends Service {
         $like: `%${search}%`
       }
     }
-    sortType = sortType || 1;
     let sortCondition = [['vote_count', 'DESC']];
-    if (sortType === 2) {
+    console.log(sort);
+    if (sort === 2) {
       sortCondition = [['vote_count', 'ASC']];
     }
 

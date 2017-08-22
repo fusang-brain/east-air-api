@@ -45,4 +45,49 @@ export default class DeptService extends Service {
     return department.tree_level === 3;
   }
 
+  async deptStruct() {
+
+    const DeptModel = this.getModel('Dept');
+    const UserModel = this.getModel('User');
+    const deepDeptLevel = await DeptModel.findOne({
+      attributes: [[this.connect.fn('MAX', this.connect.col('tree_level')), 'max_tree_level']],
+    });
+
+
+    const getIncludeArgs = (times) => {
+      let includeArgs = [];
+      //if (device === 'app' || renderType === 'with_member') {
+        includeArgs = [
+          {model: DeptModel, as: 'children'},
+          // {model: UserModel, as: 'members', required: false, attributes: ['id', 'name', 'avatar']}
+        ];
+      // } else {
+      //   includeArgs = [
+      //     {model: models.Dept, as: 'children'},
+      //   ]
+      // }
+
+      times -= 1;
+      if (times !== 0) {
+        includeArgs[0].include = getIncludeArgs(times);
+      }
+
+      return includeArgs;
+    };
+
+    const includeArgs = getIncludeArgs(deepDeptLevel.dataValues.max_tree_level);
+
+    const list =  await DeptModel.all({
+      where: {tree_level: 1},
+      include: includeArgs,
+    });
+
+    for (let i = 0; i < list.length; i ++) {
+      let item = list[i];
+      item.dataValues.member_total = 0;
+    }
+
+    return list;
+  }
+
 }

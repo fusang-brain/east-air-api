@@ -1,7 +1,7 @@
 /**
  * Created by alixez on 17-8-2.
  */
-import {sequelize, Sequelize} from '../models'
+import {sequelize, Sequelize} from '../models';
 import models from '../models';
 
 export default class Service {

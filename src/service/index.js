@@ -8,6 +8,7 @@ import RelaxActionService from './RelaxActionService';
 import RoleService from './RoleService';
 import SympathyService from './SympathyService';
 import ActivityService from './ActivityService';
+import IntentionService from './IntentionService';
 
 
 export Service from './Service';
@@ -21,7 +22,8 @@ export {
   NotificationService,
   RelaxActionService,
   RoleService,
-  SympathyService
+  SympathyService,
+  IntentionService,
 }
 
 export const registerService = () => {
@@ -36,6 +38,7 @@ export const registerService = () => {
     relaxAction: new RelaxActionService(),
     role: new RoleService(),
     sympathy: new SympathyService(),
+    intention: new IntentionService(),
   }
 };
 
