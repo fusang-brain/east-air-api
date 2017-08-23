@@ -44,8 +44,8 @@ export default async function (req, params, {response, checkAccess, services}) {
     await approvalService.generateApproval(args.id, req.user.id, 2, {
       project_subject: args.reason || foundSympathy.reason,
       project_type: 9,
-      project_content: '无',
-      project_purpose: '无',
+      project_content: args.reason || foundSympathy.reason,
+      project_purpose: args.reason || foundSympathy.reason,
       dept_id: args.dept_id || foundSympathy.dept_id,
       total_amount: args.sympathy_cost || foundSympathy.sympathy_cost,
       has_grant: true,

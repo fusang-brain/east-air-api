@@ -14,6 +14,14 @@ export default class DocService extends Service {
 
   }
 
+  async one(id) {
+    return await this.getModel().findOne({
+      where: {
+        id,
+      }
+    });
+  }
+
   async generateList({offset, limit, filter, userID}) {
     const Doc = this.getModel();
     const condition = {};
@@ -322,5 +330,75 @@ export default class DocService extends Service {
       result,
       resultMapper: executedUnreadReceivers,
     };
+  }
+
+  async getUnreadReceivers(id) {
+    const DocReceivers = this.getModel('DocReceivers');
+    const DocReadReceipts = this.getModel('DocReadReceipts');
+
+    const allReaders = await DocReadReceipts.all({
+      where: {
+        doc_id: id,
+      }
+    });
+
+    const allReaderIDs = allReaders.map(reader => {
+      return reader.user_id;
+    });
+
+    let condition = {
+      doc_id: id,
+    }
+
+    if (allReaderIDs.length > 0) {
+      condition.receiver_id = {
+        $notIn: allReaderIDs,
+      }
+    }
+
+    return await DocReceivers.all({
+      where: condition,
+      include: [
+        {
+          model: this.getModel('User'),
+          as: 'receiver',
+          attributes: ['id', 'name', 'avatar'],
+          include: [
+            {
+              model: this.getModel('Dept'),
+              as: 'department',
+            }
+          ]
+        }
+      ]
+    });
+  }
+
+  async getLastReminder(id) {
+    return await this.getModel('DocReminder').findOne({
+      where: {
+        doc_id: id,
+      }
+    });
+  }
+
+  async setReminder(id) {
+    const foundReminder = await this.getModel('DocReminder').findOne({
+      where: {
+        doc_id: id,
+      }
+    });
+
+    if (!foundReminder) {
+      return await this.getModel('DocReminder').create({
+        doc_id: id,
+        last_remind_time: Date.now(),
+      });
+    }
+
+    foundReminder.last_remind_time = Date.now();
+    await foundReminder.save();
+
+    return true;
   }
 }

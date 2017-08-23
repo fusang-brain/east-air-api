@@ -111,6 +111,13 @@ export default class IntentionService extends Service {
         message: '不存在的资源',
       }
     }
+
+    if (foundIntention.status === 2) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '该征集已经终止无法投票',
+      }
+    }
     const IntentionVote = this.getModel('IntentionVote');
     const foundVote = await IntentionVote.findOne({
       where: {
@@ -132,6 +139,31 @@ export default class IntentionService extends Service {
     }
 
     return true;
+  }
+
+  async stop(id) {
+    const Intention = this.getModel();
+    const foundIntention = await Intention.findOne({
+      where: {
+        id,
+      }
+    });
+
+    if (!foundIntention) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '没有找到该资源',
+      }
+    }
+
+    foundIntention.status = 2;
+
+    await foundIntention.save();
+
+    return {
+      code: Response.getSuccessCode(),
+      message: '终止成功',
+    }
   }
 
 }

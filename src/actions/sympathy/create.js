@@ -38,8 +38,8 @@ export default async function (req, params, {response, checkAccess, services}) {
     await approvalService.generateApproval(createdSympathy.id, req.user.id, 2, {
       project_subject: createdSympathy.reason,
       project_type: 9,
-      project_content: '无',
-      project_purpose: '无',
+      project_content: createdSympathy.reason,
+      project_purpose: createdSympathy.reason,
       dept_id: createdSympathy.dept_id,
       total_amount: createdSympathy.sympathy_cost,
       has_grant: true,

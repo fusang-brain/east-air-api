@@ -1,10 +1,8 @@
-## 获取公文列表接口
+## 公文中心首页数据拉取接口
 
 ### 接口调用说明
 
-__请求地址 :__ [/doc/list](#)
-
-__请求地址(未读公文) :__ [/doc/list/unread](#)
+__请求地址 :__ [/doc/home](#)
 
 __请求方式 :__ GET
 
@@ -14,13 +12,6 @@ __请求方式 :__ GET
 
 #### 参数列表
 
-|字段名|类型|描述|是否必要|备注|
-|-|-|-|-|-|
-|offset|integer|数据偏移量|no|默认为0|
-|limit|integer|分页数|no|默认为20|
-|search|string|搜索|no|-|
-|doc_type|integer|公文类型|no|0:未知 1:上级来文 2:股份文件 3:集团文件 4:分公司文件 5:公文批复 6:其他|
-|doc_level|string|公文等级|no|general:一般 important:重要 crash:紧急 top_secret:绝密|
 
 #### 返回值
 
@@ -34,30 +25,20 @@ _data 说明_
 
 |字段名|类型|描述|是否必要|备注|
 |-|-|-|-|-|
+|unread_total|integer|未读公文数|yes|-|
 
 
 #### 返回示例
 
 ```json
+
 {
     "code": 1000,
-    "message": "查询成功",
+    "message": "未读数查询成功",
     "data": {
-        "total": 14,
-        "list": [
-            {
-                "id": "35a67243-2d6c-477c-9ba9-70a5f5382f6e",
-                "doc_note": "123",
-                "doc_title": "koko",
-                "doc_type": "1",
-                "doc_level": "general",
-                "create_time": "1503310785272"
-            },
-            ...
-        ]
+        "unread_total": 14
     }
 }
-
 ```
 
 * [返回索引](../readme.md)

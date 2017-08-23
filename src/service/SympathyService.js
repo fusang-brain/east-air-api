@@ -126,6 +126,7 @@ export default class SympathyService extends Service {
   }
 
   async details(id) {
+    console.log(this.dataAccess);
     return await this.Sympathy.findOne({
       where: {
         id,

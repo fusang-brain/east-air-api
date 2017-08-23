@@ -172,4 +172,14 @@ ea://[module]/[id]
 * [详情](./intention/details.md)
 * [列表](./intention/list.md)
 * [投票](./intention/vote.md)
+* [终止征集](./intention/stop.md)
+
+#### 满意度调查
+
+* [发起调查](./satisfaction/create.md)
+* [评价](./satisfaction/evaluate.md)
+* [评价人员](./satisfaction/evaluate_person.md)
+* [列表](./satisfaction/list.md)
+* [删除](./satisfaction/remove.md)
+* [修改](./satisfaction/update.md)
 

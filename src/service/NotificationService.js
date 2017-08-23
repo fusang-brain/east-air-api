@@ -10,16 +10,61 @@ export default class NotificationService extends Service {
   constructor () {
     super();
     this.modelName = 'Notification';
+    this.template = {
+      approval: {
+        title: '需要您审批',
+      },
+      approval_success: {
+        title: '审批通过',
+      },
+      approval_refuse: {
+        title: '审批已被拒绝',
+      },
+      doc: {
+        title: '需要您阅读',
+      }
+    }
   }
 
-  async sendToPersonal({title, body, sender, items, receiver}) {
+  async sendToPeople({title, body, sender, items, receivers, template}) {
+    const msgTemplate = this.template[template];
+
+    if (!msgTemplate) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '没有找到正确的消息模板',
+      }
+    }
+
+    const executedReceivers = receivers.map(item => ({
+        receiver_type: 'personal',
+        receiver_id: item,
+    }));
+
+    title = `${title} ${msgTemplate.title}`;
+
+    return await this.sendTo({title, body, sender, items, receivers: executedReceivers});
+  }
+
+  async sendToPersonal({title, body, sender, items, receiver, template}) {
+
+    const msgTemplate = this.template[template];
+
+    if (!msgTemplate) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '没有找到正确的消息模板',
+      }
+    }
 
     const receivers = [
       {
         receiver_type: 'personal',
         receiver_id: receiver,
       }
-    ]
+    ];
+
+    title = `${title} ${msgTemplate.title}`;
 
     return await this.sendTo({title, body, sender, items, receivers});
   }

@@ -49,7 +49,7 @@ export default async function  (req, params, {response, checkAccess, services}) 
       project_subject: foundGrant.type_string,
       project_type: 10,
       project_purpose: args.purpose || foundGrant.purpose,
-      project_content: args.others || foundGrant.others,
+      project_content: args.purpose || foundGrant.purpose,
       dept_id: args.dept_id || foundGrant.dept_id,
       total_amount: args.cost || foundGrant.cost,
       has_grant: true,

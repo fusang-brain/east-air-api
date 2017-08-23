@@ -32,7 +32,6 @@ _data 说明_
 |receivers|dict|未读接收者详情|yes|-|
 
 
-
 #### 返回示例
 
 ```json
@@ -42,18 +41,40 @@ _data 说明_
     "data": {
         "receivers": [
             {
-                "receipts_id": "0c2d3cbb-b2df-4bd3-baab-5e551d091dd5", 
-                "dept_id": "bad6614a-4a04-4bcb-b372-45dbaf16b4d7", // 部门ID,
-                "dept_name": "部门2",                               // 部门名
-                "people": [          
+                "id": "9269ec2a-09e1-4673-95ea-7c11415f4a18",
+                "tree_level": 2,
+                "parent": "21af1488-6824-4b93-9919-f16b38290bcb",
+                "dept_name": "飞行部分会",
+                "children": [
                     {
-                        "id": "0968388f-503d-494c-8ab9-65770a30ac55",
-                        "name": "用户5760",
-                        "avatar": ""
+                        "id": "bad6614a-4a04-4bcb-b372-45dbaf16b4d7",
+                        "tree_level": 3,
+                        "parent": "9269ec2a-09e1-4673-95ea-7c11415f4a18",
+                        "dept_name": "部门2",
+                        "children": [],
+                        "members": [
+                            {
+                                "id": "0968388f-503d-494c-8ab9-65770a30ac55",
+                                "name": "用户5760",
+                                "avatar": ""
+                            }
+                        ],
+                        "member_total": 1
                     }
-                ],        // 所有未读者
-                "people_total": 1  // 未读总数
-            }
+                ],
+                "members": [],
+                "member_total": 1
+            },
+            {
+                "id": "0460bd2b-1cd9-4165-b9a9-ef364eb9c75a",
+                "tree_level": 2,
+                "parent": "21af1488-6824-4b93-9919-f16b38290bcb",
+                "dept_name": "客舱部分会",
+                "children": [],
+                "members": [],
+                "member_total": 0
+            },
+            ...
         ]
     }
 }
