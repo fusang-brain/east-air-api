@@ -31,36 +31,49 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'dept_id',
           targetKey: 'id',
         });
+
         this.belongsTo(models.User, {
           as: 'publisher',
           foreignKey: 'user_id',
           targetKey: 'id',
         });
+
         this.belongsTo(models.GrantApplication, {
           as: 'grant_apply',
           foreignKey: 'grant_apply_id',
           targetKey: 'id',
         });
+
         this.hasMany(models.TradeUnionActAttach, {
           as: 'attach',
           foreignKey: 'act_id',
           sourceKey: 'id',
         });
+
         this.hasMany(models.TradeUnionActImage, {
           as: 'images',
           foreignKey: 'act_id',
           sourceKey: 'id',
         });
+
         this.hasMany(models.TradeUnionActBudget, {
           as: 'budgets',
           foreignKey: 'act_id',
           sourceKey: 'id',
         });
+
         this.hasMany(models.ActEvaluation, {
           as: 'evaluations',
           foreignKey: 'act_id',
           sourceKey: 'id',
         });
+
+        this.hasMany(models.TradeUnionActActors, {
+          as: 'actors',
+          foreignKey: 'act_id',
+          sourceKey: 'id',
+        });
+        
       }
     }
   })

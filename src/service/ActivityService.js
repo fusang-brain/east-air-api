@@ -113,4 +113,55 @@ export default class ActivityService extends Service {
       ]
     })
   }
+
+  async sign(id, dept_id, user_id) {
+    const foundAct = await this.getModel().findOne({
+      where: {
+        id,
+        dept_id,
+      }
+    });
+
+    if (!foundAct) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '没有找到您要签到的活动',
+      }
+    }
+
+    if (foundAct.state !== 2) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '该活动未通过审批，无法签到',
+      }
+    }
+
+    const TradeUnionActActors = this.getModel('TradeUnionActActors');
+
+    const foundActor = await TradeUnionActActors.findOne({
+      where: {
+        act_id: id,
+        user_id,
+      }
+    });
+
+    if (!foundActor) {
+      await TradeUnionActActors.create({
+        act_id: id,
+        user_id: user_id,
+      });
+
+      const integration = +foundAct.integration;
+      const foundUser = await this.getModel('User').findOne({
+        where: {
+          id: user_id,
+        }
+      });
+
+      foundUser.integration = foundUser.integration + integration;
+      await foundUser.save();
+    }
+
+    return true;
+  }
 }

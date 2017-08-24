@@ -70,11 +70,13 @@ export default async function (req, params, {response, models, device, services}
     approval.setDataValue('flows', f);
   }
   const evaluations = await activityService.getEvaluations(foundAct.id);
+  const qrcodeStr = `eastern://sign_act?act_id=${foundAct.id}`;
   return {
     code: response.getSuccessCode(),
     message: '获取详情成功',
     data: {
       act: foundAct,
+      qrcode_str: qrcodeStr,
       approval_flow: approvalDetail.getDataValue('flows'),
       evaluations,
     }

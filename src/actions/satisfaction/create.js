@@ -6,6 +6,7 @@
 import { filterParams } from '../../utils/filters'
 
 export default async (req, params, {response, services}) => {
+
   const args = filterParams(req.body, {
     survey_subject: ['string', 'required'],
     image: ['string', 'required'],
@@ -14,7 +15,6 @@ export default async (req, params, {response, services}) => {
   args.user_id = req.user.id;
 
   const createdSurvey = await services.satisfaction.create(args);
-
 
   return {
     code: response.getSuccessCode('create'),

@@ -80,6 +80,7 @@ export default async function (req, param, {response, models, device, checkAcces
     if (Array.isArray(act.evaluations) && act.evaluations.length > 0) {
       has_evaluation = true;
     }
+    // const qodeStr = `eastern://sign_act?act_id=${act.id}`;
     return {
       no: act.no,
       id: act.id,
@@ -94,6 +95,7 @@ export default async function (req, param, {response, models, device, checkAcces
       department: act.department,
       is_end: isEnd,
       has_evaluation,
+      // qode_str: qodeStr,
     }
 
   });
