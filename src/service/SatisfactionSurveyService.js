@@ -3,8 +3,9 @@
  * Author: alixez <alixe.z@foxmail.com>
  * Date: 2017/8/22
  */
-import Service from './Service'
-import Response from '../config/response'
+import Service from './Service';
+import Response from '../config/response';
+import moment from 'moment';
 
 export default class SatisfactionSurveyService extends Service {
   constructor () {
@@ -136,7 +137,7 @@ export default class SatisfactionSurveyService extends Service {
         user_id: currentUser,
       });
     }
-
+    otherArgs.survey_dept = foundUser.dept;
     otherArgs.survey_id = foundSurvey.id;
     return await this.evaluate(otherArgs);
   }
@@ -144,7 +145,18 @@ export default class SatisfactionSurveyService extends Service {
   async evaluate(args) {
     // args.evaluate_time = Date.now();
     const {tags, ...otherArgs} = args;
-    otherArgs.evaluate_time = Date.now();
+    const now = Date.now();
+    otherArgs.evaluate_time = now;
+    const week = moment(now).week();
+    const year = moment(now).year();
+    const month = moment(now).month() + 1;
+    const quarter = moment(now).quarter();
+
+    otherArgs.evaluate_year = year;
+    otherArgs.evaluate_month = month;
+    otherArgs.evaluate_week = week;
+    otherArgs.evaluate_quarterly = quarter;
+
     if (otherArgs.satisfaction_level === 'not_satisfied' && Array.isArray(tags) && tags.length > 0) {
       otherArgs.not_satisfied_tags = tags.map(tag => ({
         tag,
@@ -164,13 +176,15 @@ export default class SatisfactionSurveyService extends Service {
   async generateSiteList({limit, offset}) {
 
     const total = await this.getModel().count({
-      survey_type: 1,
-      limit,
-      offset,
+      where: {
+        survey_type: 1,
+      }
     });
 
     const list = await this.getModel().all({
-      survey_type: 1,
+      where:{
+        survey_type: 1,
+      },
       limit,
       offset,
       include: [
@@ -186,4 +200,428 @@ export default class SatisfactionSurveyService extends Service {
       list,
     }
   }
+
+  async generatePersonList({limit, offset, dept}) {
+
+    if (dept && !this.dataAccess.includes(dept)) {
+      return {
+        total: 0,
+        list: [],
+      }
+    }
+
+    if (!dept) {
+      dept = {
+        $in: this.dataAccess,
+      }
+    }
+
+    const total = await this.getModel().count({
+      where: {
+        survey_type: 0,
+      },
+      include: [
+        {
+          model: this.getModel('User'),
+          as: 'survey_user',
+          required: true,
+          where: {
+            dept: dept,
+          }
+        }
+      ]
+    });
+
+    const list = await this.getModel().all({
+      where: {
+        survey_type: 0,
+      },
+      limit,
+      offset,
+      include: [
+        {
+          model: this.getModel('SatisfactionSurveyImage'),
+          as: 'satisfaction_image',
+          required: false,
+        },
+        {
+          model: this.getModel('User'),
+          as: 'survey_user',
+          required: true,
+          where: {
+            dept: dept,
+          }
+        }
+      ]
+    });
+
+    return {
+      total,
+      list,
+    }
+  }
+
+  async statisticVote({survey_id, dept_id, filter_by, filter_dept, to_heavy}) {
+    // const SatisfactionPoll = this.getModel('SatisfactionPoll');
+    const resultMapper = [];
+    if (!filter_by) {
+      filter_by = 'week';
+    }
+    if (!to_heavy) {
+      to_heavy = false;
+    }
+    let condition = {
+      where: {
+        survey_id,
+      },
+      include: [
+        {
+          model: this.getModel('SatisfactionPollTag'),
+          as: 'not_satisfied_tags',
+        }
+      ]
+    };
+
+    if (dept_id) {
+      condition.where.survey_dept = dept_id;
+    }
+
+    if (filter_dept) {
+      condition.include.push({
+        model: this.getModel('User'),
+        as: 'evaluate_person',
+        required: true,
+        where: {
+          dept: filter_dept,
+        }
+      })
+    }
+
+    if (survey_id === null) {
+      delete condition.where.survey_id;
+    }
+
+    const allPolls = await this.getModel('SatisfactionPoll').all(condition);
+
+    const peopleCountMapper = {};
+    const satisfiedPeopleCountMapper = {};
+    const peopleVoteRecord = {};
+
+
+    allPolls.forEach(poll => {
+      if (to_heavy) {
+        if (peopleVoteRecord[poll.evaluate_person_id] && peopleVoteRecord[poll.evaluate_person_id] === poll.satisfaction_level) {
+          return;
+        }
+        peopleVoteRecord[poll.evaluate_person_id] = poll.satisfaction_level;
+      }
+
+      let key = `${poll.evaluate_week}-${poll.evaluate_month}`;
+      if (filter_by === 'month') {
+        key = `${poll.evaluate_month}`;
+      }
+      if (filter_by === 'year') {
+        key = `${poll.evaluate_year}`;
+      }
+
+      if (filter_by === 'quarterly') {
+        key = `${poll.evaluate_quarterly}`;
+      }
+
+
+      if (!resultMapper[key]) {
+        resultMapper[key] = {
+          evaluate_week: poll.evaluate_week,
+          evaluate_month: poll.evaluate_month,
+          evaluate_year: poll.evaluate_year,
+          evaluate_quarter: poll.evaluate_quarterly,
+          vote_count: 0,
+          people_count: 0,
+          satisfied_people_count: 0,
+          very_satisfied_count: 0,
+          very_satisfied_rate: 0,
+          satisfied_count: 0,
+          satisfied_rate: 0,
+          not_satisfied_count: 0,
+          not_satisfied_rate: 0,
+          tags_count: {},
+          tags_rate: {},
+          tags_total: 0,
+        };
+      }
+
+      resultMapper[key].vote_count += 1;
+      if (!peopleCountMapper[poll.evaluate_person_id]) {
+        resultMapper[key].people_count += 1;
+        peopleCountMapper[poll.evaluate_person_id] = true;
+      }
+      if (poll.satisfaction_level !== 'not_satisfied' && !satisfiedPeopleCountMapper[poll.evaluate_person_id]) {
+        resultMapper[key].satisfied_people_count += 1;
+        satisfiedPeopleCountMapper[poll.evaluate_person_id] = true;
+      }
+
+      switch (poll.satisfaction_level) {
+        case 'very_satisfied':
+          resultMapper[key].very_satisfied_count += 1;
+          break;
+        case 'satisfied':
+          resultMapper[key].satisfied_count += 1;
+          break;
+        case 'not_satisfied':
+          resultMapper[key].not_satisfied_count += 1;
+          poll.not_satisfied_tags.forEach(tag => {
+            if (!resultMapper[key].tags_count[tag.tag]) {
+              resultMapper[key].tags_count[tag.tag] = 0;
+            }
+            resultMapper[key].tags_count[tag.tag] += 1;
+            resultMapper[key].tags_total += 1;
+            // resultMapper[key].tags_rate[tag.tag] = Math.round(resultMapper[key].tags_count[tag.tag] / resultMapper[key].tags_total * 100);
+
+          });
+          break;
+      }
+      let vote_count = resultMapper[key].vote_count;
+      resultMapper[key].very_satisfied_rate = Math.round(resultMapper[key].very_satisfied_count / resultMapper[key].vote_count * 100);
+      resultMapper[key].satisfied_rate = Math.round(resultMapper[key].satisfied_count / vote_count * 100)
+      resultMapper[key].not_satisfied_rate = Math.round(resultMapper[key].not_satisfied_count / vote_count * 100)
+
+    });
+
+    const result = [];
+    for (let key in resultMapper) {
+      for (let tag in resultMapper[key].tags_count) {
+        //mconsole.log(tag);
+        resultMapper[key].tags_rate[tag] = Math.round(resultMapper[key].tags_count[tag] / resultMapper[key].tags_total * 100);
+      }
+      result.push(resultMapper[key]);
+    }
+
+    return result;
+  }
+
+  async recentWeekStatisticVote({survey_id, dept_id, type}) {
+    const SatisfactionPoll = this.getModel('SatisfactionPoll');
+    let condition = {
+      where: {
+        survey_id,
+      },
+      include: [
+        {
+          model: this.getModel('SatisfactionPollTag'),
+          as: 'not_satisfied_tags',
+        }
+      ]
+    };
+
+    if (dept_id) {
+      condition.where.survey_dept = dept_id;
+    }
+
+    if (survey_id === null) {
+      delete condition.where.survey_id;
+    }
+
+    const startOfWeek = moment().startOf('week').valueOf();
+    const endOfWeek = moment().endOf('week').valueOf();
+
+    console.log(moment(+startOfWeek).days(), '星期')
+    console.log(moment(+endOfWeek).days(), '星期')
+
+
+
+    condition.where.evaluate_time = {
+      $lt: endOfWeek,
+      $gt: startOfWeek,
+    }
+
+    const allPolls = await this.getModel('SatisfactionPoll').all(condition);
+    const weekDayMapper = {
+      0: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+    };
+    let total = 0;
+    let pieChart = {
+      total: 0,
+      satisfied: {
+        total: 0,
+        rate: 0,
+      },
+      very_satisfied: {
+        total: 0,
+        rate: 0,
+      },
+      not_satisfied: {
+        total: 0,
+        rate: 0,
+      }
+    }
+    allPolls.forEach(poll => {
+      total += 1;
+      if (poll.satisfaction_level !== 'not_satisfied') {
+        let weekDay = moment(+poll.evaluate_time).days();
+
+        if (!weekDayMapper[weekDay]) {
+          weekDayMapper[weekDay] = 0;
+        }
+
+        weekDayMapper[weekDay] += 1;
+      }
+
+      if (poll.satisfaction_level === 'satisfied') {
+        pieChart.satisfied.total += 1;
+      }
+
+      if (poll.satisfaction_level === 'very_satisfied') {
+        pieChart.very_satisfied.total += 1;
+      }
+
+      if (poll.satisfaction_level === 'not_satisfied') {
+        pieChart.not_satisfied.total += 1;
+      }
+
+    });
+
+    const weekDistributedRate = [];
+
+    for (let key in weekDayMapper) {
+      if (total === 0) {
+        weekDistributedRate[key] = 0;
+      } else {
+        weekDistributedRate[key] = Math.round(weekDayMapper[key] / total * 100);
+      }
+    }
+    pieChart.satisfied.rate = Math.round(pieChart.satisfied.total / total * 100);
+    pieChart.very_satisfied.rate = Math.round(pieChart.very_satisfied.total / total * 100);
+    pieChart.not_satisfied.rate = Math.round(pieChart.not_satisfied.total / total * 100);
+    pieChart.total = total;
+
+    return {
+      week_distribute_rate: weekDistributedRate,
+      pie_chart: pieChart,
+    };
+  }
+
+  // async statisticsVoteByWeek() {
+  //   const SatisfactionPoll = this.getModel('SatisfactionPoll');
+  //
+  //   // const queryStr = `SELECT COUNT() as times FROM \`${SatisfactionPoll.tableName}\` as sp GROUP BY sp.evaluate_week, sp.evaluate_month`;
+  //
+  //   const results = [];
+  //   const voteTimesMapper = {};
+  //   const votePeopleMapper = {};
+  //   const voteGoodPeopleMapper = {};
+  //   const verySatisfiedMapper = {};
+  //   const satisfiedMapper = {};
+  //   const notSatisfiedMapper = {};
+  //
+  //   const voteTimesList = await SatisfactionPoll.all({
+  //     attributes: ['evaluate_week', 'evaluate_month', [this.connect.fn('COUNT', this.connect.col('id')), 'total']],
+  //     group:['evaluate_week', 'evaluate_month'],
+  //   });
+  //
+  //   const votePeopleCount = await SatisfactionPoll.all({
+  //     attributes: ['evaluate_week', 'evaluate_month', 'evaluate_person_id'],
+  //     group:['evaluate_week', 'evaluate_month', 'evaluate_person_id'],
+  //   });
+  //
+  //   const voteGoodPeopleCount = await SatisfactionPoll.all({
+  //     attributes: ['evaluate_week', 'evaluate_month', 'evaluate_person_id'],
+  //     where: {
+  //       satisfaction_level: {
+  //         $ne: 'not_satisfied',
+  //       }
+  //     },
+  //     group: ['evaluate_week', 'evaluate_month', 'evaluate_person_id'],
+  //   });
+  //
+  //   const voteVeryGoodCount = await SatisfactionPoll.all({
+  //     attributes: ['evaluate_week', 'evaluate_month', [this.connect.fn('COUNT', this.connect.col('id')), 'total']],
+  //     where: {
+  //       satisfaction_level: 'very_satisfied',
+  //     },
+  //     group: ['evaluate_week', 'evaluate_month'],
+  //   });
+  //
+  //
+  //   const voteGoodCount = await SatisfactionPoll.all({
+  //     attributes: ['evaluate_week', 'evaluate_month', [this.connect.fn('COUNT', this.connect.col('id')), 'total']],
+  //     where: {
+  //       satisfaction_level: 'satisfied',
+  //     },
+  //     group: ['evaluate_week', 'evaluate_month'],
+  //   });
+  //
+  //   console.log(voteGoodCount, '-----');
+  //
+  //   const voteNotGoodCount = await SatisfactionPoll.all({
+  //     attributes: ['evaluate_week', 'evaluate_month', [this.connect.fn('COUNT', this.connect.col('id')), 'total']],
+  //     where: {
+  //       satisfaction_level: 'not_satisfied',
+  //     },
+  //     group: ['evaluate_week', 'evaluate_month'],
+  //   });
+  //
+  //   voteVeryGoodCount.forEach(item => {
+  //     verySatisfiedMapper[`${item.evaluate_week}-${item.evaluate_month}`] = item.dataValues.total;
+  //   });
+  //   voteGoodCount.forEach(item => {
+  //     satisfiedMapper[`${item.evaluate_week}-${item.evaluate_month}`] = item.dataValues.total;
+  //   });
+  //   voteNotGoodCount.forEach(item => {
+  //     notSatisfiedMapper[`${item.evaluate_week}-${item.evaluate_month}`] = item.dataValues.total;
+  //   })
+  //
+  //   voteTimesList.forEach(item => {
+  //     results.push({
+  //       evaluate_week: item.evaluate_week,
+  //       evaluate_month: item.evaluate_month,
+  //     });
+  //
+  //     voteTimesMapper[`${item.evaluate_week}-${item.evaluate_month}`] = item.dataValues.total;
+  //   });
+  //
+  //   votePeopleCount.forEach(item => {
+  //     let vote = votePeopleMapper[`${item.evaluate_week}-${item.evaluate_month}`]
+  //     if (typeof vote === 'undefined') {
+  //       votePeopleMapper[`${item.evaluate_week}-${item.evaluate_month}`] = 1
+  //     } else {
+  //       votePeopleMapper[`${item.evaluate_week}-${item.evaluate_month}`] += 1;
+  //     }
+  //   });
+  //
+  //   voteGoodPeopleCount.forEach(item => {
+  //     if (!voteGoodPeopleMapper[`${item.evaluate_week}-${item.evaluate_month}`]) {
+  //       voteGoodPeopleMapper[`${item.evaluate_week}-${item.evaluate_month}`] = 1;
+  //     } else {
+  //       voteGoodPeopleMapper[`${item.evaluate_week}-${item.evaluate_month}`] += 1;
+  //     }
+  //   });
+  //
+  //   results.forEach(item => {
+  //     let key = `${item.evaluate_week}-${item.evaluate_month}`;
+  //     item.vote_count = voteTimesMapper[key] || 0;
+  //     item.vote_people_count = votePeopleMapper[key] || 0;
+  //     item.satisfied_people_count = votePeopleMapper[key] || 0;
+  //     item.very_satisfied_votes = verySatisfiedMapper[key] || 0;
+  //     item.satisfied_votes = satisfiedMapper[key] || 0;
+  //     item.not_satisfied_votes = notSatisfiedMapper[key] || 0;
+  //
+  //     item.very_satisfied_votes = Math.round(item.very_satisfied_votes / item.vote_count * 100);
+  //     item.not_satisfied_votes = Math.round(item.not_satisfied_votes / item.vote_count * 100);
+  //     item.satisfied_votes = Math.round(item.satisfied_votes / item.vote_count * 100);
+  //     // item.very_satisfied_votes = item.very_satisfied_votes / item.vote_count;
+  //   })
+  //   console.log(results);
+  //   // console.log(voteTimesMapper);
+  //   // console.log(votePeopleMapper);
+  //   // console.log(voteGoodPeopleMapper);
+  //   // console.log(satisfiedMapper, '1');
+  //   // console.log(verySatisfiedMapper, '2');
+  //   // console.log(notSatisfiedMapper, '3');
+  // }
 }

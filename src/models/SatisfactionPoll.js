@@ -7,9 +7,14 @@
 export default (sequelize, DataTypes) => sequelize.define('SatisfactionPoll', {
   id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
   survey_id: {type: DataTypes.UUID},
+  survey_dept: {type: DataTypes.UUID},
   satisfaction_level: {type: DataTypes.STRING}, // 'very_satisfied': 非常满意 'satisfied': 满意 'not_satisfied': 不满意
   options: {type: DataTypes.TEXT},
   evaluate_time: {type: DataTypes.STRING},
+  evaluate_year: {type: DataTypes.STRING},
+  evaluate_week: {type: DataTypes.STRING},
+  evaluate_month: {type: DataTypes.STRING},
+  evaluate_quarterly: {type: DataTypes.STRING},
   evaluate_person_id: {type: DataTypes.UUID},
 }, {
   classMethods: {

@@ -20,6 +20,8 @@ export default async (req, params, {response, services}) => {
     }
   }
 
+  args.evaluate_person_id = req.user.id;
+
   await services.satisfaction.evaluate(args);
 
   return {

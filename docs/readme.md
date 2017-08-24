@@ -182,4 +182,5 @@ ea://[module]/[id]
 * [列表](./satisfaction/list.md)
 * [删除](./satisfaction/remove.md)
 * [修改](./satisfaction/update.md)
+* [统计相关接口](./satisfaction/statistics.md)
 
