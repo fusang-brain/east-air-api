@@ -13,6 +13,10 @@ const compressFolder = path.join(__dirname, '/../storage/compress');
 const environment = {
   development: {
     isProduction: false,
+    aliyun: {
+      accessKeyID: 'LTAI1JfGT656c0Zd',
+      accessKeySecret: 'aQexfzX24BeC8Zx2ZraPF375q5OHMh',
+    },
     auth: {
       jwt_secret: 'its-20160612-uibki131-21nhusfd',
       whitelist: [
@@ -46,6 +50,10 @@ module.exports = Object.assign({
   port: process.env.PORT,
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
+  aliyun: {
+    accessKeyID: 'LTAI1JfGT656c0Zd',
+    accessKeySecret: 'aQexfzX24BeC8Zx2ZraPF375q5OHMh',
+  },
   auth: {
     jwtSecret: 'its-20160612-uibki131-21nhusfd',
     whitelist: [

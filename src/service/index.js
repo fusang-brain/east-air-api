@@ -10,6 +10,8 @@ import SympathyService from './SympathyService';
 import ActivityService from './ActivityService';
 import IntentionService from './IntentionService';
 import SatisfactionSurveyService from './SatisfactionSurveyService';
+import VodService from './VodService';
+import Vod from '../models/Vod'
 
 
 export Service from './Service';
@@ -26,6 +28,7 @@ export {
   SympathyService,
   IntentionService,
   SatisfactionSurveyService,
+  VodService,
 }
 
 export const registerService = () => {
@@ -42,6 +45,7 @@ export const registerService = () => {
     sympathy: new SympathyService(),
     intention: new IntentionService(),
     satisfaction: new SatisfactionSurveyService(),
+    vod: new VodService(),
   }
 };
 

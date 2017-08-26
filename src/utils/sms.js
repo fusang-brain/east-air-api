@@ -57,5 +57,5 @@ export async function verifyCode(mobile, code) {
     }
   }
 
-  return codeOfMobile === code;
+  return +codeOfMobile === +code;
 }
