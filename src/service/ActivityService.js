@@ -136,6 +136,13 @@ export default class ActivityService extends Service {
       }
     }
 
+    if (foundAct.end_date <= Date.now()) {
+      throw {
+        code: Response.getErrorCode(),
+        message: '活动未完成，无法评价',
+      }
+    }
+
     const TradeUnionActActors = this.getModel('TradeUnionActActors');
 
     const foundActor = await TradeUnionActActors.findOne({
@@ -163,5 +170,40 @@ export default class ActivityService extends Service {
     }
 
     return true;
+  }
+
+  async getEvaluationStatistics(act_id) {
+    // if (!dept_id) {
+    //   const foundAct = await this.getModel('TradeUnionAct').findOne({
+    //     where: {
+    //       id: act_id,
+    //     }
+    //   });
+    //
+    //   dept_id = foundAct.dept_id;
+    // }
+    // const peopleCount = await this.getModel('User').count({
+    //   where: {
+    //     dept: dept_id,
+    //   }
+    // });
+
+    const evaluatePeopleCount = await this.getModel('ActEvaluation').count({
+      where: {
+        act_id,
+      }
+    });
+
+    const satisfiedPeopleCount = await this.getModel('ActEvaluation').count({
+      where: {
+        act_id,
+        result: true,
+      }
+    });
+
+    return {
+      total: evaluatePeopleCount,
+      satisfied_rate: Math.round(satisfiedPeopleCount / evaluatePeopleCount * 100) || 0,
+    }
   }
 }

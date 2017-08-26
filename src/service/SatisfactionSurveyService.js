@@ -415,6 +415,7 @@ export default class SatisfactionSurveyService extends Service {
 
     if (dept_id) {
       condition.where.survey_dept = dept_id;
+      delete condition.where.survey_id;
     }
 
     if (survey_id === null) {
@@ -423,11 +424,6 @@ export default class SatisfactionSurveyService extends Service {
 
     const startOfWeek = moment().startOf('week').valueOf();
     const endOfWeek = moment().endOf('week').valueOf();
-
-    console.log(moment(+startOfWeek).days(), '星期')
-    console.log(moment(+endOfWeek).days(), '星期')
-
-
 
     condition.where.evaluate_time = {
       $lt: endOfWeek,
@@ -504,6 +500,53 @@ export default class SatisfactionSurveyService extends Service {
       week_distribute_rate: weekDistributedRate,
       pie_chart: pieChart,
     };
+  }
+
+  async evaluateList(args) {
+    const {id, offset, limit} = args;
+    const SatisfactionPoll = this.getModel('SatisfactionPoll');
+    const total = await SatisfactionPoll.count({
+      where: {
+        survey_id: id,
+      }
+    })
+    const list = await SatisfactionPoll.all({
+      where: {
+        survey_id: id,
+      },
+      offset,
+      limit,
+      include: [
+        {
+          model: this.getModel('User'),
+          as: 'evaluate_person',
+        },
+        {
+          model: this.getModel('SatisfactionPollTag'),
+          as: 'not_satisfied_tags',
+        }
+      ]
+    });
+
+    const levelMapper = {
+      'very_satisfied': '非常满意',
+      'satisfied': '满意',
+      'not_satisfied': '不满意',
+    };
+
+    const result = list.map(value => ({
+      user_name: value.evaluate_person.name,
+      evaluate_time: value.evaluate_time,
+      options: value.options,
+      satisfaction_level: value.satisfaction_level,
+      satisfaction_level_str: levelMapper[value.satisfaction_level],
+      not_satisfied_tags: value.not_satisfied_tags,
+    }));
+
+    return {
+      total,
+      list: result,
+    }
   }
 
   // async statisticsVoteByWeek() {

@@ -5,7 +5,7 @@
  */
 import { filterParams } from '../../utils/filters'
 
-export default async (req, params, {response, services}) => {
+export default async (req, params, {response, services, models}) => {
   if (!['site', 'person'].includes(params[0])) {
     return {
       code: response.getErrorCode(),
@@ -31,6 +31,15 @@ export default async (req, params, {response, services}) => {
     delete args.id;
   }
 
+  let department = {};
+  if (args.dept_id) {
+    department = await models.Dept.findOne({
+      where: {
+        id: args.dept_id,
+      }
+    });
+  }
+
   const results = await services.satisfaction.recentWeekStatisticVote({
     survey_id: args.id || null,
     dept_id: args.dept_id || null,
@@ -42,6 +51,7 @@ export default async (req, params, {response, services}) => {
     message: '查询成功',
     data: {
       results,
+      department,
     }
   }
 }

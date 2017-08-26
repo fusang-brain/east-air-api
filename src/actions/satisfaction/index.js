@@ -1,5 +1,4 @@
 
-import week_statistics from './week_statistics'
 
 export create from './create';
 export evaluate from './evaluate';
@@ -10,3 +9,4 @@ export list from './list';
 export list_person from './list_person';
 export statistics from './statistics';
 export week_statistics from './week_statistics';
+export evaluate_list from './evaluate_list';

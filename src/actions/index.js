@@ -21,3 +21,4 @@ export * as notification from './notification';
 export * as doc from './doc';
 export * as intention from './intention';
 export * as satisfaction from './satisfaction';
+export * as sms from './sms';

@@ -22,6 +22,7 @@ const environment = {
         '/member/export_xlsx',
         '/export_doc/statistics/relax_action',
         '/export_doc/statistics/sympathy',
+        '/sms/send',
       ]
     },
     storage: {
@@ -54,6 +55,7 @@ module.exports = Object.assign({
       '/member/export_xlsx',
       '/export_doc/statistics/relax_action',
       '/export_doc/statistics/sympathy',
+      '/sms/send',
     ]
   },
   storage: {

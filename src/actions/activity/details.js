@@ -71,6 +71,11 @@ export default async function (req, params, {response, models, device, services}
   }
   const evaluations = await activityService.getEvaluations(foundAct.id);
   const qrcodeStr = `eastern://sign_act?act_id=${foundAct.id}`;
+
+  let evaluationStatistics = await activityService.getEvaluationStatistics(foundAct.id);
+  if (foundAct.end_date <= Date.now()) {
+    // evaluationStatistics = null;
+  }
   return {
     code: response.getSuccessCode(),
     message: '获取详情成功',
@@ -79,6 +84,7 @@ export default async function (req, params, {response, models, device, services}
       qrcode_str: qrcodeStr,
       approval_flow: approvalDetail.getDataValue('flows'),
       evaluations,
+      evaluation_statistics: evaluationStatistics,
     }
   }
 }
