@@ -14,23 +14,47 @@ export default async function (req, param, {response, models, device, checkAcces
   console.log(req.dataAccess);
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
-  const condition = {};
+  const condition = {
+    $or: [
+      // 用户自己发起的活动
+      {
+        user_id: req.user.id,
+      },
+
+      // 别人发起，同部门已通过的活动
+      {
+        state: 2,
+        dept_id: {
+          $in: req.dataAccess,
+        }
+      }
+
+      // todo 部门主管发起的活动
+    ],
+  };
   const ActModel = models.TradeUnionAct;
   let attributes = ['no', 'id', 'subject', 'act_type', 'create_date', 'state', 'start_date', 'end_date'];
   if (device === 'app') {
     attributes.push('process');
   }
+
   if (params.search) {
-    condition.subject = {
+    condition.$or[0].subject = {
+      $like: `%${params.search}%`,
+    };
+    condition.$or[1].subject = {
       $like: `%${params.search}%`,
     };
   }
+
   if (params.state) {
-    condition.state = params.state
+    condition.$or[0].state = params.state;
+    condition.$or[1].state = params.state;
+    if (params.state !== 2) {
+      condition.$or[1].user_id = req.user.id;
+    }
   }
-  condition.dept_id = {
-    $in: req.dataAccess,
-  }
+
   const total = await ActModel.count({
     where: condition,
   });

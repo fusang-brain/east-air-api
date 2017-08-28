@@ -70,9 +70,9 @@ export class ALIYunAPI {
 
   __getCommonParams() {
 
-    if (!this.signatureNonce) {
-      this.signatureNonce = uuid();
-    }
+    // if (!this.signatureNonce) {
+    this.signatureNonce = uuid();
+    // }
     return {
       Format: this.format,
       Version: this.version,
@@ -145,6 +145,46 @@ export class ALIYunAPI {
       }
     }
 
+
+    return false;
+  }
+
+  async getPlayInfo(videoID, authTimeout=3600, formats='mp4') {
+    this.__initialTimestamp();
+
+    let _formats = 'mp4';
+
+    if (typeof formats === 'string') {
+      _formats = formats;
+    }
+
+    if (Array.isArray(formats)) {
+      _formats = formats.join(',');
+    }
+
+    const queryParams = {
+      Action: 'GetPlayInfo',
+      VideoId: videoID,
+      Formats: _formats,
+      AuthTimeout: authTimeout,
+      ...this.__getCommonParams(),
+    };
+
+    queryParams.Signature = this.__generateSignature(queryParams, 'GET');
+    const url = `http://${this.host}?${querystring.stringify(queryParams)}`;
+    try {
+      const resp = await axios.get(url);
+
+      if (resp.status / 100 === 2) {
+        return resp.data;
+      }
+    } catch (err) {
+      console.log(err);
+      throw {
+        code: Response.getErrorCode(),
+        message: err.response.data.Message,
+      }
+    }
 
     return false;
   }

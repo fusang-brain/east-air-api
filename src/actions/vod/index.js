@@ -7,3 +7,5 @@
 export refresh_upload_video from './refresh_upload_video'
 export create_upload_video from './create_upload_video';
 export create from './create';
+export list from './list';
+export details from './details';

@@ -96,4 +96,8 @@ export default class RoleService extends Service {
 
     return true;
   }
+
+  async getMaster(userID) {
+
+  }
 }

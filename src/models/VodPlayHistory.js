@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => sequelize.define('VodPlayHistory', {
   vod_id: {type: DataTypes.UUID}, // 关联的点播文件ID,
   user_id: {type: DataTypes.UUID}, // 关联的用户ID,
   last_play_seed: {type: DataTypes.STRING}, // 上次播放的进度
-  is_finished: {type: DataTypes.BOOLEAN}, // 是否完成
+  is_finished: {type: DataTypes.BOOLEAN, defaultValue: false}, // 是否完成
 }, {
   classMethods: {
     associate(models) {
