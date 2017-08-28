@@ -23,6 +23,10 @@ export default class VodService extends Service {
     this.modelName = 'Vod';
   }
 
+  async update(id, values) {
+
+  }
+
   async create(args, level) {
 
     if (level === 'create.level.first') {
@@ -108,12 +112,6 @@ export default class VodService extends Service {
       return true;
     }
 
-    // await VodPlayHistory.update(otherArgs, {
-    //   where: {
-    //     user_id,
-    //     vod_id,
-    //   }
-    // });
     foundHistory.last_play_seed = otherArgs.last_play_seed;
     await foundHistory.save();
     return true;
@@ -160,11 +158,35 @@ export default class VodService extends Service {
     return localVodInfo;
   }
 
-  async lastPlayHistory(id) {
+  async lastPlayHistory(vodID, userID) {
+    const VodPlayHistory = this.getModel('VodPlayHistory');
 
+    return await VodPlayHistory.findOne({
+      where: {
+        vod_id: vodID,
+        user_id: userID,
+      }
+    });
   }
 
-  async vodHistory(userID) {
+  async vodHistory(userID, offset, limit) {
+    const VodPlayHistory = this.getModel('VodPlayHistory');
+    const total = await VodPlayHistory.count({
+      where: {
+        user_id: userID,
+      }
+    });
+    const playHistory = await VodPlayHistory.all({
+      where: {
+        offset,
+        limit,
+        user_id: userID,
+      }
+    });
 
+    return {
+      total,
+      play_history: playHistory,
+    }
   }
 }

@@ -62,13 +62,6 @@ class Auth {
         {
           model: models.Role,
           as: 'user_role',
-          include: [
-            {
-              model: models.Permission,
-              as: 'permissions',
-            },
-
-          ]
         },
 
       ],
@@ -84,13 +77,25 @@ class Auth {
       }
     }
     const originDataAccess = user.data_access;
-    const originPermissions = user.user_role.permissions;
+    // const originPermissions = user.user_role.permissions;
+    const originPermissions = await models.RolePermission.all({
+      where: {
+        role_id: user.role
+      },
+      include: [
+        {
+          model: models.Permission,
+          as: 'permission',
+        }
+      ]
+    });
+
     let permissions = originPermissions.map(permission => ({
-      permission_id: permission.id,
-      module: permission.module_slug,
-      action: permission.slug,
-      action_name: permission.name,
-      platform: permission.RolePermission.platform,
+      permission_id: permission.permission.id,
+      module: permission.permission.module_slug,
+      action: permission.permission.slug,
+      action_name: permission.permission.name,
+      platform: permission.platform,
     }));
     let dataAccess = originDataAccess.map(dataAccess => dataAccess.id);
     user.user_role.setDataValue('permissions', undefined);
@@ -116,13 +121,15 @@ class Auth {
       platform = 'web';
     }
 
-    return true;
-
     if (req.user.user_role.role_slug === 'root') {
       return true;
     }
 
+    console.log(platform, '平台');
     const foundPermission = originPermissions.find((permission) => {
+      if (permission.module == module && permission.action == action) {
+        console.log(permission);
+      }
       return permission.module === module && permission.action === action && permission.platform === platform;
     });
 

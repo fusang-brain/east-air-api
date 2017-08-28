@@ -293,9 +293,7 @@ export default class ApprovalService extends Service {
     const sympathyService = new SympathyService();
     const grantApplicationService = new GrantApplicationService();
     const approval = await Approval.findOne({
-      where: {id: approvalID, dept_id: {
-        $in: this.dataAccess,
-      }},
+      where: {id: approvalID},
       include: [
         {
           model: User,
@@ -350,14 +348,10 @@ export default class ApprovalService extends Service {
     const Approval = this.getModel();
     const User = this.getModel('User');
     const activityService = new ActivityService();
-    activityService
 
     const approval = await Approval.findOne({
       where: {
         id: approvalID,
-        dept_id: {
-          $in: this.dataAccess,
-        }
       },
       include: [
         {
@@ -656,7 +650,8 @@ export default class ApprovalService extends Service {
           id: foundApprovalFlow.approval.project_id,
         }
       });
-      if (act.budget_total === 0) {
+
+      if (+act.budget_total === 0) {
         is_act = true;
       }
     } else if (approvalType === 2) {
@@ -702,6 +697,7 @@ export default class ApprovalService extends Service {
           approval: foundApprovalFlow.approval,
         };
       }
+
       if (foundApprovalFlow.approval_man.user_role.role_slug === 'dept_master') {
         await ProjectModel.update({
           state: 2,
@@ -730,6 +726,7 @@ export default class ApprovalService extends Service {
           approval: foundApprovalFlow.approval,
         };
       } else {
+
         const flow = await ApprovalFlows.findOne({
           where: {
             approval_id: approval_id,
@@ -775,10 +772,12 @@ export default class ApprovalService extends Service {
             flow_sort: foundApprovalFlow.flow_sort + 1,
           }
         });
+
         return {
           result: 'next',
           approval: foundApprovalFlow.approval,
         };
+
       }
     }
 

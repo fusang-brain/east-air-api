@@ -22,7 +22,7 @@ export default class DocService extends Service {
     });
   }
 
-  async generateList({offset, limit, filter, userID}) {
+  async generateList({offset, limit, filter, userID, device}) {
     const Doc = this.getModel();
     const condition = {};
     if (filter && filter.search) {
@@ -38,26 +38,30 @@ export default class DocService extends Service {
     if (filter && filter.doc_level) {
       condition.doc_level = filter.doc_level;
     }
+    const readReceipts = await this.getModel('DocReadReceipts').all({
+      where: {
+        user_id: userID,
+      }
+    });
+
+    const readedDocIDs = readReceipts.map(item => {
+      return item.doc_id;
+    });
 
     if (filter && filter.unread) {
-      const readReceipts = await this.getModel('DocReadReceipts').all({
-        where: {
-          user_id: userID,
-        }
-      });
-
-      console.log(readReceipts, '---===');
-
-      const readedDocIDs = readReceipts.map(item => {
-        return item.doc_id;
-      });
-
-      console.log(readedDocIDs, '---====----');
 
       if (readedDocIDs.length > 0) {
         condition.id = {
           $notIn: readedDocIDs,
         }
+      }
+    } else if (device === 'app') {
+      if (readedDocIDs.length > 0) {
+        condition.id = {
+          $in: readedDocIDs,
+        }
+      } else {
+        condition.id = 0;
       }
     }
 

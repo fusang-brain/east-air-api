@@ -34,7 +34,7 @@ export default async function (req, params, {models, checkAccess, response}) {
       await RolePermissionModel.create({
         role_id: createdRole.id,
         permission_id: item,
-        platform: 'web',
+        platform: 'app',
       });
     }
   }

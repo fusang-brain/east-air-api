@@ -51,9 +51,6 @@ export default class RelaxActionService extends Service {
     const relaxAction = await this.RelaxAction.findOne({
       where:{
         id,
-        dept_id: {
-          $in: this.dataAccess,
-        }
       }
     });
     if (!relaxAction) {
@@ -84,7 +81,6 @@ export default class RelaxActionService extends Service {
     const relaxAction = await this.RelaxAction.findOne({
       where:{
         id,
-        dept_id: this.dataAccess,
       }
     });
     if (!relaxAction) {
@@ -190,9 +186,6 @@ export default class RelaxActionService extends Service {
     const res = await this.RelaxAction.findOne({
       where: {
         id: id,
-        dept_id: {
-          $in: this.dataAccess,
-        }
       },
       order: [
         [{model: this.RelaxActionPeople, as:'people'}, 'person_category', 'ASC'],

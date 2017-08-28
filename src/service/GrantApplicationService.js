@@ -234,9 +234,6 @@ export default class GrantApplicationService extends Service {
     return await this.GrantApplication.findOne({
       where: {
         id,
-        dept_id: {
-          $in: this.dataAccess,
-        }
       },
       include: [
         {

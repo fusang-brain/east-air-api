@@ -94,7 +94,6 @@ export default class SympathyService extends Service {
     const foundTheSympathy = await this.Sympathy.findOne({
       where: {
         id: id,
-        dept_id: {$in: this.dataAccess}
       }
     });
     const Approval = this.getModel('Approval');
@@ -130,9 +129,6 @@ export default class SympathyService extends Service {
     return await this.Sympathy.findOne({
       where: {
         id,
-        dept_id: {
-          $in: this.dataAccess,
-        }
       },
       include: [
         {

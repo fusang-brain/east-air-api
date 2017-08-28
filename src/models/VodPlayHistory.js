@@ -18,6 +18,12 @@ export default (sequelize, DataTypes) => sequelize.define('VodPlayHistory', {
         foreignKey: 'user_id',
         sourceKey: 'id',
       });
+
+      this.belongsTo(models.Vod, {
+        as: 'vod_file_info',
+        foreignKey: 'vod_id',
+        sourceKey: 'id',
+      });
     }
   }
 });

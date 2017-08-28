@@ -10,6 +10,7 @@ export default async function (req, params, {response, checkAccess, services}) {
     activityWaitCount = await services.approval.waitCount(1, req.user.id);
     sympathyWaitCount = await services.approval.waitCount(2, req.user.id);
   }
+
   if (checkAccess('grant_approval', 'apply_funding', false)) {
     grantWaitCount = await services.approval.waitCount(3, req.user.id);
   }

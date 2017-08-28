@@ -27,9 +27,6 @@ export default async (req, params, {response, models, services}) => {
 
   const {total,list} = await DocService.generateList({offset, limit, filter: args, userID: req.user.id});
 
-
-
-
   return {
     code: response.getSuccessCode(),
     message: '查询成功',

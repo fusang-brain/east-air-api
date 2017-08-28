@@ -46,7 +46,7 @@ export default async function (req, params, {models, response, checkAccess}) {
       await RolePermissionModel.findOrCreate({where: {permission_id: item, role_id: foundRole.id, platform: 'app'}, default: {
         role_id: foundRole.id,
         permission_id: item,
-        platform: 'web',
+        platform: 'app',
       }});
     }
   }

@@ -3,7 +3,7 @@
  */
 import models from './models';
 import Auth from './utils/auth';
-import {permissions, dept, sysuser, roles} from './config/init_data';
+import {permissions, dept, sysuser, roles, defaultImage, SurveyImages, SatisfactionSurvey} from './config/init_data';
 
 const userTotal = 10;
 
@@ -81,6 +81,20 @@ async function start() {
   }
   log('>> 角色创建成功');
 
+  log('>> 创建初始的满意度调查 >>');
+  for (let i = 0; i < SatisfactionSurvey.length; i ++) {
+    await models.SatisfactionSurvey.create(SatisfactionSurvey[i]);
+    console.log('+++', i);
+  }
+  for (let i = 0; i < SurveyImages.length; i ++) {
+    await models.SatisfactionSurveyImage.create(SurveyImages[i]);
+    console.log('-=-=');
+  }
+  for (let i = 0; i < defaultImage.length; i ++) {
+    await models.File.create(defaultImage[i]);
+  }
+  log('>> 满意度调查创建成功 >>');
+
   log('>> 创建系统管理员 >>');
   await models.User.create({
     name: 'root',
@@ -115,7 +129,6 @@ async function start() {
     await models.User.create(sysuser);
   }
   log('>> 批量生成用户成功 >>');
-
   log('== 初始数据创建成功 ==');
 }
 

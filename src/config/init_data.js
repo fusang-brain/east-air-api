@@ -2,6 +2,7 @@
  * Created by alixez on 17-6-21.
  */
 import Auth from '../utils/auth';
+import path from 'path';
 
 const permissions = [
   {
@@ -366,10 +367,78 @@ const dept = [
   }
 ];
 
+const SatisfactionSurvey = [
+  {
+    id: 'default.survey.canteen',
+    survey_type: 1,
+    survey_subject: '机关食堂',
+    is_system_survey: true,
+    state: 1,
+  },
+  {
+    id: 'default.survey.office',
+    survey_type: 1,
+    survey_subject: '员工免优票',
+    is_system_survey: true,
+    state: 1,
+  },
+  {
+    id: 'default.survey.service_center',
+    survey_type: 1,
+    survey_subject: '职工服务中心',
+    is_system_survey: true,
+    state: 1,
+  }
+];
+
+const SurveyImages = [
+  {
+    survey_id: 'default.survey.canteen',
+    file_id: 'default.satisfaction.canteen',
+    file_path: path.join('/file', 'EasternDefaultCanteen.png'),
+    size: 0,
+  },{
+    survey_id: 'default.survey.office',
+    file_id: 'default.satisfaction.office',
+    file_path: path.join('/file', 'EasternDefaultOffice.png'),
+    size: 0,
+  },{
+    survey_id: 'default.survey.service_center',
+    file_id: 'default.satisfaction.service_center',
+    file_path: path.join('/file', 'EasternDefaultServiceCenter.png'),
+    size: 0,
+  }
+]
+
+const defaultImage = [
+  {
+    id: 'default.satisfaction.canteen',
+    abs_path: path.join(__dirname, '/../storage/origin', 'EasternDefaultCanteen.png'),
+    path: path.join('/file', 'EasternDefaultCanteen.png'),
+    size: 0,
+    mimetype: 'image/png',
+    filename: 'EasternDefaultCanteen.png',
+  },{
+    id: 'default.satisfaction.office',
+    abs_path: path.join(__dirname, '/../storage/origin', 'EasternDefaultOffice.png'),
+    path: path.join('/file', 'EasternDefaultOffice.png'),
+    size: 0,
+    mimetype: 'image/png',
+    filename: 'EasternDefaultOffice.png',
+  },{
+    id: 'default.satisfaction.service_center',
+    abs_path: path.join(__dirname, '/../storage/origin', 'EasternDefaultServiceCenter.png'),
+    path: path.join('/file', 'EasternDefaultServiceCenter.png'),
+    size: 0,
+    mimetype: 'image/png',
+    filename: 'EasternDefaultServiceCenter.png',
+  }
+]
+
 function getMasterRole() {
   return roles.filter(loop => {
     return loop.is_master;
   })
 }
 
-export {permissions, dept, sysuser, roles, getMasterRole};
+export {permissions, dept, sysuser, roles, getMasterRole, defaultImage, SatisfactionSurvey, SurveyImages};

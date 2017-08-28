@@ -10,5 +10,15 @@ export default function (sequelize, DataTypes) {
     role_id: {type: DataTypes.UUID},
     permission_id: {type: DataTypes.UUID},
     platform: {type: DataTypes.STRING}, // 'web' web平台的权限, 'app' 移动端的权限
+  }, {
+    classMethods: {
+      associate(models) {
+        this.belongsTo(models.Permission, {
+          as: 'permission',
+          foreignKey: 'permission_id',
+          sourceKey: 'id',
+        })
+      }
+    }
   });
 }

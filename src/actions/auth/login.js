@@ -51,7 +51,20 @@ export default async function (req, params, {device}) {
   //todo record token to redis
 
   user.password = undefined;
+
   const permissions = user.user_role.permissions;
+
+  const originPermissions = await models.RolePermission.all({
+    where: {
+      role_id: user.role
+    },
+    include: [
+      {
+        model: models.Permission,
+        as: 'permission',
+      }
+    ]
+  });
 
   const scope = {
     modules: [],
@@ -60,19 +73,21 @@ export default async function (req, params, {device}) {
   if (device === 'pc') {
     device = 'web';
   }
-  for (let i = 0; i < permissions.length; i ++) {
-    let item = permissions[i];
-    if (!item.RolePermission.platform === device) {
+
+  for (let i = 0; i < originPermissions.length; i ++) {
+    let item = originPermissions[i];
+    if (item.platform !== device) {
       continue;
     }
-    if (!scope.modules.includes(item.module_slug)) {
-      scope.modules.push(item.module_slug);
+    if (!scope.modules.includes(item.permission.module_slug)) {
+      scope.modules.push(item.permission.module_slug);
     }
-    if (!scope.permissions[item.module_slug]) {
-      scope.permissions[item.module_slug] = [];
+    if (!scope.permissions[item.permission.module_slug]) {
+      scope.permissions[item.permission.module_slug] = [];
     }
-    scope.permissions[item.module_slug].push(item.slug);
+    scope.permissions[item.permission.module_slug].push(item.permission.slug);
   }
+
   user.user_role.setDataValue('permissions', undefined);
 
   return {

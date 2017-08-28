@@ -192,7 +192,8 @@ export default class SatisfactionSurveyService extends Service {
           model: this.getModel('SatisfactionSurveyImage'),
           as: 'satisfaction_image',
         }
-      ]
+      ],
+      order: [['create_time', 'DESC']],
     });
 
     return {

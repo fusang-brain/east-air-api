@@ -51,9 +51,6 @@ export default class ActivityService extends Service {
     return await Act.findOne({
       where: {
         id,
-        dept_id: {
-          $in: this.dataAccess,
-        }
       },
       include: [
         {
@@ -136,43 +133,54 @@ export default class ActivityService extends Service {
       }
     }
 
-    if (foundAct.end_date <= Date.now()) {
-      throw {
-        code: Response.getErrorCode(),
-        message: '活动未完成，无法评价',
-      }
-    }
+    // if (foundAct.end_date <= Date.now()) {
+    //   throw {
+    //     code: Response.getErrorCode(),
+    //     message: '活动未完成，无法签到',
+    //   }
+    // }
 
     const TradeUnionActActors = this.getModel('TradeUnionActActors');
 
-    const foundActor = await TradeUnionActActors.findOne({
+    let foundActor = await TradeUnionActActors.findOne({
       where: {
         act_id: id,
         user_id,
       }
     });
 
+    let integration = 0;
+    let hasSigned = true;
+
     if (!foundActor) {
-      await TradeUnionActActors.create({
+      foundActor = await TradeUnionActActors.create({
         act_id: id,
         user_id: user_id,
       });
+      hasSigned = false;
 
-      const integration = +foundAct.integration;
-      const foundUser = await this.getModel('User').findOne({
-        where: {
-          id: user_id,
-        }
-      });
-
-      foundUser.integration = foundUser.integration + integration;
-      await foundUser.save();
+      integration = +foundAct.integration;
     }
 
-    return true;
+    const foundUser = await this.getModel('User').findOne({
+      where: {
+        id: user_id,
+      }
+    });
+
+    foundUser.integration = foundUser.integration + integration;
+    await foundUser.save();
+
+    return {
+      hasSigned,
+      act_name: foundAct.subject,
+      total_integration: foundUser.integration,
+      current_integration: integration,
+    };
   }
 
   async getEvaluationStatistics(act_id) {
+
     // if (!dept_id) {
     //   const foundAct = await this.getModel('TradeUnionAct').findOne({
     //     where: {
@@ -182,11 +190,32 @@ export default class ActivityService extends Service {
     //
     //   dept_id = foundAct.dept_id;
     // }
+
     // const peopleCount = await this.getModel('User').count({
     //   where: {
     //     dept: dept_id,
     //   }
     // });
+
+    const foundAct = await this.getModel('TradeUnionAct').findOne({
+      where: {
+        id: act_id,
+      }
+    });
+
+    const totalUser = await this.getModel('User').count({
+      where: {
+        dept: foundAct.dept_id,
+      }
+    });
+
+    const TradeUnionActActors = this.getModel('TradeUnionActActors');
+
+    const totalActor = await TradeUnionActActors.count({
+      where: {
+        act_id: foundAct.id,
+      }
+    });
 
     const evaluatePeopleCount = await this.getModel('ActEvaluation').count({
       where: {
@@ -202,6 +231,8 @@ export default class ActivityService extends Service {
     });
 
     return {
+      total_actor: totalActor,
+      total_people: totalUser,
       total: evaluatePeopleCount,
       satisfied_rate: Math.round(satisfiedPeopleCount / evaluatePeopleCount * 100) || 0,
     }
