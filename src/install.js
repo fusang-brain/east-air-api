@@ -84,11 +84,9 @@ async function start() {
   log('>> 创建初始的满意度调查 >>');
   for (let i = 0; i < SatisfactionSurvey.length; i ++) {
     await models.SatisfactionSurvey.create(SatisfactionSurvey[i]);
-    console.log('+++', i);
   }
   for (let i = 0; i < SurveyImages.length; i ++) {
     await models.SatisfactionSurveyImage.create(SurveyImages[i]);
-    console.log('-=-=');
   }
   for (let i = 0; i < defaultImage.length; i ++) {
     await models.File.create(defaultImage[i]);

@@ -15,12 +15,16 @@ export default async function (req, params, {response, checkAccess, services}) {
     grantWaitCount = await services.approval.waitCount(3, req.user.id);
   }
 
+  // todo get unread doc count
+  const unreadDocTotal = await services.doc.unreadTotal(req.user.id);
+
   return {
     code: response.getSuccessCode(),
     message: '查询成功',
     data: {
       activity: parseInt(activityWaitCount) + sympathyWaitCount,
       grant: +grantWaitCount,
+      doc: unreadDocTotal,
     }
   }
 }

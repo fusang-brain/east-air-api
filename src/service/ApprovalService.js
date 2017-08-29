@@ -486,9 +486,10 @@ export default class ApprovalService extends Service {
     });
   }
 
-  async approvalList({state, search, offset, limit, user_id, type}) {
+  async approvalList({state, search, offset, limit, user_id, type, notLimit}) {
     const Approval = this.getModel();
     const condition = {};
+
     let stateCondition = [0, 1, 2];
     if (state === 'all') {
       stateCondition = [0, 1, 2];
@@ -567,6 +568,11 @@ export default class ApprovalService extends Service {
       ]
     });
 
+    if (notLimit) {
+      offset = undefined;
+      limit = undefined;
+    }
+
     const approvals = await Approval.all({
       where: condition,
       offset,
@@ -600,6 +606,7 @@ export default class ApprovalService extends Service {
       approvals,
     }
   }
+
 
   async executeApproval({approval_id, result, content, user_id}) {
     const Approval = this.getModel('Approval');

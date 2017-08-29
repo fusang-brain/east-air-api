@@ -5,7 +5,7 @@
  */
 import { filterParams } from '../../utils/filters'
 
-export default async (req, params, {response, models, services}) => {
+export default async (req, params, {response, models, services, device}) => {
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
 
@@ -25,7 +25,7 @@ export default async (req, params, {response, models, services}) => {
 
   const DocService = services.doc;
 
-  const {total,list} = await DocService.generateList({offset, limit, filter: args, userID: req.user.id});
+  const {total,list} = await DocService.generateList({offset, limit, filter: args, userID: req.user.id, device});
 
   return {
     code: response.getSuccessCode(),

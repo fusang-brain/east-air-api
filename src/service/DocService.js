@@ -22,7 +22,7 @@ export default class DocService extends Service {
     });
   }
 
-  async generateList({offset, limit, filter, userID, device}) {
+  async generateList({offset, limit, filter, userID, device, notLimit}) {
     const Doc = this.getModel();
     const condition = {};
     if (filter && filter.search) {
@@ -78,7 +78,10 @@ export default class DocService extends Service {
         }
       ]
     });
-
+    if (notLimit) {
+      offset = undefined;
+      limit = undefined;
+    }
     const originList = await Doc.all({
       offset,
       limit,
