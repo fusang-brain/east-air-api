@@ -11,7 +11,7 @@ import ActivityService from './ActivityService';
 import IntentionService from './IntentionService';
 import SatisfactionSurveyService from './SatisfactionSurveyService';
 import VodService from './VodService';
-import Vod from '../models/Vod'
+import UserService from './UserService';
 
 
 export Service from './Service';
@@ -29,10 +29,10 @@ export {
   IntentionService,
   SatisfactionSurveyService,
   VodService,
+  UserService,
 }
 
 export const registerService = () => {
-  console.log('register ...');
   return {
     activity: new ActivityService(),
     approval: new ApprovalService(),
@@ -46,6 +46,7 @@ export const registerService = () => {
     intention: new IntentionService(),
     satisfaction: new SatisfactionSurveyService(),
     vod: new VodService(),
+    user: new UserService(),
   }
 };
 

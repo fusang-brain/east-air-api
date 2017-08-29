@@ -4,16 +4,20 @@
 import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
-export default async function (req, param, {response, models, device, checkAccess}) {
+export default async function (req, param, {response, models, services, device, checkAccess}) {
   await checkAccess('activity', 'view');
   const params = filterParams(req.query, {
     search: 'string',
     state: 'string',
   });
 
-  console.log(req.dataAccess);
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
+
+  // found all department master
+  const masters = await services.user.getAllMaster(req.user.dept);
+  const masterIDs = masters.map(master => master.id);
+
   const condition = {
     $or: [
       // 用户自己发起的活动
@@ -30,9 +34,16 @@ export default async function (req, param, {response, models, device, checkAcces
         dept_id: {
           $in: req.dataAccess,
         }
+      },
+
+      // 部门主管发起的活动
+      {
+        user_id: {
+          $in: masterIDs,
+        },
+        state: 2,
       }
 
-      // todo 部门主管发起的活动
     ],
   };
   const ActModel = models.TradeUnionAct;
