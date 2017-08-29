@@ -65,8 +65,6 @@ export default class DocService extends Service {
       }
     }
 
-    console.log(condition);
-
     const total = await Doc.count({
       where: condition,
       include: [
@@ -79,7 +77,7 @@ export default class DocService extends Service {
           }
         }
       ]
-    })
+    });
 
     const originList = await Doc.all({
       offset,
@@ -94,7 +92,8 @@ export default class DocService extends Service {
             receiver_id: userID,
           }
         }
-      ]
+      ],
+      order: [['create_time', 'DESC']],
     });
 
     const list = originList.map(item => ({

@@ -21,8 +21,11 @@ export default async function (req, param, {response, models, device, checkAcces
         user_id: req.user.id,
       },
 
-      // 别人发起，同部门已通过的活动
+      // 数据权限内已通过的活动
       {
+        user_id: {
+          $ne: req.user.id,
+        },
         state: 2,
         dept_id: {
           $in: req.dataAccess,

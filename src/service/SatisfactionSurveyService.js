@@ -526,7 +526,7 @@ export default class SatisfactionSurveyService extends Service {
           model: this.getModel('SatisfactionPollTag'),
           as: 'not_satisfied_tags',
         }
-      ]
+      ],
     });
 
     const levelMapper = {
