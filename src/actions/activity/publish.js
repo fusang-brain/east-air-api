@@ -91,9 +91,22 @@ export default async function (req, param, {response, models, checkAccess}) {
   params.images = images.map(loop => ({
     file_path: loop,
   }));
-  params.attach = attach.map(loop => ({
-    file_path: loop,
+
+  // attach upload changed
+  const allAttachFiles = await models.File.all({
+    where: {
+      path: {
+        $in: attach,
+      }
+    }
+  });
+
+  params.attach = allAttachFiles.map(loop => ({
+    file_path: loop.path,
+    size: loop.size,
+    origin_filename: loop.origin_filename,
   }));
+
   const createdAct = await TradeUnionAct.create(params, {
     include: [
       {

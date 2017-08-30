@@ -119,11 +119,24 @@ export default async function (req, param, {response, models, checkAccess}) {
     file_path: loop,
     no: 1,
   }));
-  params.attach = attach.map(loop => ({
+
+  // attach upload changed
+  const allAttachFiles = await models.File.all({
+    where: {
+      path: {
+        $in: attach,
+      }
+    }
+  });
+
+  params.attach = allAttachFiles.map(loop => ({
     act_id: actID,
-    file_path: loop,
+    file_path: loop.path,
     no: 1,
+    size: loop.size,
+    origin_filename: loop.origin_filename,
   }));
+
   if (params.images.length >= 0) {
     models.TradeUnionActImage.destroy({where:{act_id: actID}});
     models.TradeUnionActImage.bulkCreate(params.images);

@@ -103,9 +103,19 @@ export default class GrantApplicationService extends Service {
     }
 
     if (attach && attach.length >= 0) {
-      let rightAttach = attach.map(loop => ({
+      const allAttachFiles = await this.getModel('File').all({
+        where: {
+          path: {
+            $in: attach,
+          }
+        }
+      });
+
+      let rightAttach = allAttachFiles.map(loop => ({
         grant_application_id: foundGrant.id,
-        file_path: loop,
+        file_path: loop.path,
+        size: loop.size,
+        origin_filename: loop.origin_filename,
       }));
       await GrantAttach.destroy({where: {grant_application_id: foundGrant.id}});
       await GrantAttach.bulkCreate(rightAttach);
@@ -139,12 +149,25 @@ export default class GrantApplicationService extends Service {
     }
 
     if (args.attach && args.attach.length > 0) {
-      args.attach = args.attach.map(loop => ({
-        file_path: loop,
+      const allAttachFiles = await this.getModel('File').all({
+        where: {
+          path: {
+            $in: args.attach,
+          }
+        }
+      })
+
+      args.attach = allAttachFiles.map(loop => ({
+        file_path: loop.path,
+        size: loop.size,
+        origin_filename: loop.origin_filename,
       }));
+
     } else {
       args.attach = [];
     }
+
+    console.log(args.attach);
 
 
     return await this.GrantApplication.create(args, {

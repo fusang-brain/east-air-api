@@ -58,6 +58,7 @@ log4js.configure({
 
 // app.use(multer(storage).single('file'));
 
+// 处理上传文件
 function uploadExcute(req, res, next) {
   const files = req.files;
   const allFileKeys = [];

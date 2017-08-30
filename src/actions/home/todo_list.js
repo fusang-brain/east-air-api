@@ -10,7 +10,7 @@ export default async (req, params, {response, services}) => {
   const limit = parseInt(req.query.limit) || 20;
 
   const {approvals} = await services.approval.approvalList({
-    state: 'all',
+    state: 'pending',
     type: 'all',
     user_id: req.user.id,
     notLimit: true,
