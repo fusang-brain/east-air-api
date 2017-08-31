@@ -31,18 +31,15 @@ export default async function (req, param, {response, models, services, device, 
           $ne: req.user.id,
         },
         state: 2,
-        dept_id: {
-          $in: req.dataAccess,
-        }
       },
 
-      // 部门主管发起的活动
-      {
-        user_id: {
-          $in: masterIDs,
-        },
-        state: 2,
-      }
+      // // 部门主管发起的活动
+      // {
+      //   user_id: {
+      //     $in: masterIDs,
+      //   },
+      //   state: 2,
+      // }
 
     ],
   };
@@ -96,7 +93,23 @@ export default async function (req, param, {response, models, services, device, 
           user_id: req.user.id,
         },
         required: false,
+      },
+      {
+        model: models.TradeUnionActDept,
+        as: 'accept_depts',
+        where: {
+          $or: [
+            {
+              dept_id: req.user.dept,
+            },
+            {
+              dept_id: req.user.department.parent,
+            }
+          ]
+        },
+        required: true,
       }
+
     ],
     order: [
       ['create_date', 'DESC'],

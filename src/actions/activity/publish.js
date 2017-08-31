@@ -26,6 +26,7 @@ export default async function (req, param, {response, models, checkAccess}) {
     end_date: ['string', 'required'],
     process: ['string', 'required'],
     integration: ['integer'],
+    // dept_ids: ['array', 'required'],
   });
 
   if (req.body.is_draft && req.body.is_draft === true) {
@@ -70,6 +71,23 @@ export default async function (req, param, {response, models, checkAccess}) {
   const budgets = req.body.budgets;
   const images = req.body.images || [];
   const attach = req.body.attach || [];
+  const acceptDeptIDs = req.body.dept_ids || [];
+
+  if (!Array.isArray(acceptDeptIDs)) {
+    return {
+      code: response.getErrorCode(),
+      message: '请上传正确的活动部门',
+    }
+  }
+
+  if (!acceptDeptIDs.includes(req.user.dept)) {
+    acceptDeptIDs.push(req.user.dept);
+  }
+
+  params.accept_depts = acceptDeptIDs.map(deptID => ({
+    dept_id: deptID,
+  }));
+
   if (!budgets) {
     return {
       code: response.getErrorCode(),
@@ -128,6 +146,9 @@ export default async function (req, param, {response, models, checkAccess}) {
       },{
         model: models.TradeUnionActImage,
         as: 'images',
+      },{
+        model: models.TradeUnionActDept,
+        as: 'accept_depts',
       }
     ]
   });

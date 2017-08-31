@@ -63,6 +63,10 @@ class Auth {
           model: models.Role,
           as: 'user_role',
         },
+        {
+          model: models.Dept,
+          as: 'department',
+        }
 
       ],
       where: {
