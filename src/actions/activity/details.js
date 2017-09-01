@@ -5,7 +5,17 @@ import {ApprovalService, ActivityService} from '../../service';
 export default async function (req, params, {response, models, device, services}) {
   const actID = req.query.act_id;
   const foundAct = await services.activity.details(actID);
-  console.log(actID);
+  let depts = null;
+  if (device === 'pc') {
+    depts = foundAct.accept_depts.map(item => item.dept_id);
+    foundAct.setDataValue('accept_dept_ids', depts);
+  } else if (device === 'app') {
+    depts = foundAct.accept_depts.map(item => item.dept_info);
+    foundAct.setDataValue('accept_dept_values', depts);
+  }
+  // delete foundAct.accept_depts;
+  // foundAct.setDataValue('accept_depts', depts);
+  // foundAct.accept_depts = depts;
   const approval = await models.Approval.findOne({
     where: {
       project_id: foundAct.id,
@@ -14,7 +24,7 @@ export default async function (req, params, {response, models, device, services}
 
   const approvalService = services.approval;
   const activityService = services.activity;
-  console.log(approval);
+
   const approvalDetail = await approvalService.getActApprovalDetail(approval.id);
   let flows = approvalDetail.getDataValue('flows');
   if (device === 'app') {

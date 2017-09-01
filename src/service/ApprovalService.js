@@ -344,7 +344,7 @@ export default class ApprovalService extends Service {
     return approval;
   }
 
-  async getActApprovalDetail(approvalID) {
+  async getActApprovalDetail(approvalID, device='pc') {
     const Approval = this.getModel();
     const User = this.getModel('User');
     const activityService = new ActivityService();
@@ -358,7 +358,7 @@ export default class ApprovalService extends Service {
           model: User,
           as: 'publisher',
           attributes: ['id', 'name', 'avatar'],
-        }
+        },
       ]
     });
 

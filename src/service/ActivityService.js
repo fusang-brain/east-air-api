@@ -88,6 +88,15 @@ export default class ActivityService extends Service {
         },{
           model: TradeUnionActImage,
           as: 'images',
+        },{
+          model: this.getModel('TradeUnionActDept'),
+          as: 'accept_depts',
+          include: [
+            {
+              model: this.getModel('Dept'),
+              as: 'dept_info',
+            }
+          ]
         }
       ]
     });

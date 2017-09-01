@@ -16,6 +16,12 @@ export default (sequelize, DataTypes) => sequelize.define('TradeUnionActDept', {
         foreignKey: 'act_id',
         sourceKey: 'id',
       });
+
+      this.belongsTo(models.Dept, {
+        as: 'dept_info',
+        foreignKey: 'dept_id',
+        sourceKey: 'id',
+      });
     }
   }
 });
