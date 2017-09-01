@@ -48,20 +48,22 @@ export default class DocService extends Service {
       return item.doc_id;
     });
 
-    if (filter && filter.unread) {
-
-      if (readedDocIDs.length > 0) {
-        condition.id = {
-          $notIn: readedDocIDs,
-        }
-      }
-    } else if (device === 'app') {
+    if (filter && !filter.unread && device === 'app') {
       if (readedDocIDs.length > 0) {
         condition.id = {
           $in: readedDocIDs,
         }
       } else {
         condition.id = 0;
+      }
+    }
+
+    if (filter && filter.unread) {
+
+      if (readedDocIDs.length > 0) {
+        condition.id = {
+          $notIn: readedDocIDs,
+        }
       }
     }
 
