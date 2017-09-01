@@ -19,6 +19,8 @@ export default async function (req, params, {response, services}) {
     people: ['array'],
   });
 
+  console.log(args);
+
   const saveType = params[0];
   if (!['submit', 'draft'].includes(saveType)) {
     return {
