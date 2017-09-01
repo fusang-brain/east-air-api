@@ -313,7 +313,7 @@ export default class SatisfactionSurveyService extends Service {
     }
 
     const allPolls = await this.getModel('SatisfactionPoll').all(condition);
-    console.log(allPolls.length, '------');
+
     const peopleCountMapper = {};
     const satisfiedPeopleCountMapper = {};
     const peopleVoteRecord = {};
@@ -323,7 +323,7 @@ export default class SatisfactionSurveyService extends Service {
       if (to_heavy) {
 
         // console.log(to_heavy, '---- a');
-        if (peopleVoteRecord[poll.evaluate_person_id] && peopleVoteRecord[poll.evaluate_person_id] === poll.satisfaction_level) {
+        if (peopleVoteRecord[poll.evaluate_person_id] && peopleVoteRecord[poll.evaluate_person_id] == poll.satisfaction_level) {
           return;
         }
         peopleVoteRecord[poll.evaluate_person_id] = poll.satisfaction_level;

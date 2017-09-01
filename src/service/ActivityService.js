@@ -237,6 +237,9 @@ export default class ActivityService extends Service {
 
     const totalUser = await this.getModel('User').count({
       where: {
+        name: {
+          $ne: 'root',
+        },
         dept: {
           $in: allLevel3Depts,
         },
