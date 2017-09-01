@@ -21,9 +21,7 @@ export default class IntentionService extends Service {
 
   async generateList({limit, offset, search, sort}) {
 
-    const condition = {
-      is_hidden: false,
-    };
+    const condition = {};
     if (search) {
       condition.title = {
         $like: `%${search}%`
@@ -170,7 +168,7 @@ export default class IntentionService extends Service {
 
   async marked_hidden(id) {
     return await this.getModel('Intention').update({
-      is_hidden: true,
+      status: 2,
     }, {
       where: {
         id,
