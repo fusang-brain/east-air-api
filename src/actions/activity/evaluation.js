@@ -19,6 +19,7 @@ export default async function (req, params, {response, models, device, checkAcce
       act_id: actID,
     }
   });
+
   if (actTotal > 0) {
     await ActEvaluation.update(setData, {
       where: {

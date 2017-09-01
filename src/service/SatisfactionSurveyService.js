@@ -321,12 +321,15 @@ export default class SatisfactionSurveyService extends Service {
     allPolls.forEach(poll => {
 
       if (to_heavy) {
-
+        if (!peopleVoteRecord[poll.evaluate_person_id]) {
+          peopleVoteRecord[poll.evaluate_person_id] = [];
+        }
         // console.log(to_heavy, '---- a');
-        if (peopleVoteRecord[poll.evaluate_person_id] && peopleVoteRecord[poll.evaluate_person_id] == poll.satisfaction_level) {
+        if (Array.isArray(peopleVoteRecord[poll.evaluate_person_id]) && peopleVoteRecord[poll.evaluate_person_id].includes(poll.satisfaction_level)) {
           return;
         }
-        peopleVoteRecord[poll.evaluate_person_id] = poll.satisfaction_level;
+
+        peopleVoteRecord[poll.evaluate_person_id].push(poll.satisfaction_level);
       }
 
       let key = `${poll.evaluate_week}-${poll.evaluate_month}`;
