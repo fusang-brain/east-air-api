@@ -190,31 +190,53 @@ export default class ActivityService extends Service {
 
   async getEvaluationStatistics(act_id) {
 
-    // if (!dept_id) {
-    //   const foundAct = await this.getModel('TradeUnionAct').findOne({
-    //     where: {
-    //       id: act_id,
-    //     }
-    //   });
-    //
-    //   dept_id = foundAct.dept_id;
-    // }
-
-    // const peopleCount = await this.getModel('User').count({
-    //   where: {
-    //     dept: dept_id,
-    //   }
-    // });
-
     const foundAct = await this.getModel('TradeUnionAct').findOne({
       where: {
         id: act_id,
+      },
+      include: [
+        {
+          model: this.getModel('TradeUnionActDept'),
+          as: 'accept_depts',
+          include: [
+            {
+              model: this.getModel('Dept'),
+              as: 'dept_info',
+            }
+          ]
+        }
+      ]
+    });
+
+    const allLevel2Depts = [];
+    const allLevel3Depts = [];
+    foundAct.accept_depts.forEach(dept => {
+      if (dept.dept_info.tree_level === 2) {
+        allLevel2Depts.push(dept.dept_id);
       }
+      if (dept.dept_info.tree_level === 3) {
+        allLevel3Depts.push(dept.dept_id);
+      }
+    })
+
+    // 获取活动归属部门
+    const otherLevel3Depts = await this.getModel('Dept').all({
+      where: {
+        parent: {
+          $in: allLevel2Depts,
+        }
+      }
+    });
+
+    otherLevel3Depts.forEach(dept => {
+      allLevel3Depts.push(dept.id);
     });
 
     const totalUser = await this.getModel('User').count({
       where: {
-        dept: foundAct.dept_id,
+        dept: {
+          $in: allLevel3Depts,
+        },
       }
     });
 
