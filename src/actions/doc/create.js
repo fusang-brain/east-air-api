@@ -26,14 +26,13 @@ export default async (req, params, {response}) => {
 
   const unreadReceiverIDs = allUnreadReceivers.map(value => value.receiver_id);
 
-  const doc = await services.doc.one(args.id);
 
   await services.notification.sendToPeople({
-    title: `【公文】${doc.doc_title}`,
-    body: doc.doc_note || doc.doc_title,
+    title: `【公文】${createdDoc.doc_title}`,
+    body: createdDoc.doc_note || createdDoc.doc_title,
     sender: null,
     items: [{
-      subject_id: args.id,
+      subject_id: createdDoc.id,
       subject_type: 4,
       is_approval: false,
     }],
