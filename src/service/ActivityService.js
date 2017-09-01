@@ -48,7 +48,7 @@ export default class ActivityService extends Service {
     const TradeUnionActAttach = this.getModel('TradeUnionActAttach');
     const TradeUnionActImage = this.getModel('TradeUnionActImage');
 
-    return await Act.findOne({
+    const actDetails = await Act.findOne({
       where: {
         id,
       },
@@ -100,7 +100,10 @@ export default class ActivityService extends Service {
         }
       ]
     });
-
+    actDetails.budgets = actDetails.budgets.sort((a, b) => {
+      return a.create_time > b.create_time;
+    })
+    return actDetails;
   }
 
   async getEvaluations(act_id) {

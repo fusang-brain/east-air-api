@@ -34,11 +34,11 @@ export default async (req, params, {response, services, models}) => {
     });
   }
 
-  if (args.to_heavy === 'yes') {
+  if (args.to_heavy === 'true') {
     args.to_heavy = true;
   }
 
-  if (args.to_heavy === 'no') {
+  if (args.to_heavy === 'false') {
     args.to_heavy = false;
   }
   let department = {};

@@ -224,6 +224,17 @@ export default class ApprovalService extends Service {
         sortNo += 1;
       }
     }
+
+    if (foundUser.user_role.role_slug === 'chile_dept_master' && !has_grant) {
+      await this.getModel('TradeUnionAct').update({
+        state: 2,
+      }, {
+        where: {
+          id: projectID,
+        }
+      });
+    }
+
     if (has_grant) {
       // 找到当前发起人的工会主管（财务，主任，主席）
       for (let i = 0; i < flowMasterRoles.length; i ++) {

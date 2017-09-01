@@ -20,6 +20,18 @@ export default async function (req, params, {models, response, checkAccess}) {
     return response.errorResp('没有找到该角色', 'update');
   }
   if (role_name) {
+    const foundExistRole = await RoleModel.findOne({
+      where: {
+        role_name,
+      }
+    });
+
+    if (foundExistRole && foundExistRole.id !== id ) {
+      return {
+        code: response.getErrorCode(),
+        message: '该角色已存在',
+      }
+    }
     foundRole.role_name = role_name;
   }
   if (role_description) {
@@ -28,6 +40,7 @@ export default async function (req, params, {models, response, checkAccess}) {
   if (role_name || role_description) {
     await foundRole.save();
   }
+
   if (web_permissions) {
     await RolePermissionModel.destroy({where: {platform: 'web', permission_id: {$notIn: web_permissions}}});
     for (let i = 0; i < web_permissions.length; i ++) {
@@ -39,6 +52,7 @@ export default async function (req, params, {models, response, checkAccess}) {
       }});
     }
   }
+
   if (app_permissions) {
     await RolePermissionModel.destroy({where: {platform: 'app', permission_id: {$notIn: app_permissions}}});
     for (let i = 0; i < app_permissions.length; i ++) {

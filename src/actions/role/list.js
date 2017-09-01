@@ -7,16 +7,23 @@ import {getSuccessCode, getErrorCode} from '../../config/response';
 export default async function (req, params, {models, device}) {
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
+  const search = req.query.search || null;
   const RoleModel = models.Role;
-  const total = await RoleModel.count({
-    where: {
-      available: true,
+  const condition = {
+    available: true,
+  }
+
+  if (search) {
+    condition.role_name = {
+      $like: `%${search}%`
     }
+  }
+  const total = await RoleModel.count({
+    where: condition,
   });
+
   const list = await RoleModel.all({
-    where: {
-      available: true,
-    },
+    where: condition,
     offset,
     limit,
   });

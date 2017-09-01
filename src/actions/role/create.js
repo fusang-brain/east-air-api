@@ -12,6 +12,19 @@ export default async function (req, params, {models, checkAccess, response}) {
     return response.errorResp('参数错误');
   }
 
+  const foundRoleCount = await RoleModel.count({
+    where: {
+      role_name,
+    }
+  });
+
+  if (foundRoleCount > 0) {
+    return {
+      code: response.getErrorCode(),
+      message: '该角色已存在',
+    }
+  }
+
   const createdRole = await RoleModel.create({
     role_name,
     role_description,

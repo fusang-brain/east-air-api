@@ -48,6 +48,19 @@ export default async function (req, params, {models, response, checkAccess}) {
   const User = models.User;
   delete values.user;
 
+  const userCount = await User.count({
+    where: {
+      mobile: args.mobile,
+    }
+  });
+
+  if (userCount > 0 ) {
+    return {
+      code: response.getErrorCode('update'),
+      message: '该手机号已经存在',
+    }
+  }
+
   await User.update(values, {
     where: {
       id: args.user,

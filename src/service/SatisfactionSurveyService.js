@@ -71,6 +71,7 @@ export default class SatisfactionSurveyService extends Service {
   async update(id, args) {
     const {image, ...otherArgs} = args;
     const SatisfactionSurvey = this.getModel();
+    const SatisfactionSurveyImage = this.getModel('SatisfactionSurveyImage');
     // otherArgs.is_system_survey = false;
     // otherArgs.state = 1;
     // otherArgs.survey_type = 1;
@@ -90,6 +91,7 @@ export default class SatisfactionSurveyService extends Service {
       }
 
       otherArgs.satisfaction_image = {
+        survey_id: id,
         file_id: image,
         file_path: file.path,
         file_size: file.size,
@@ -101,7 +103,14 @@ export default class SatisfactionSurveyService extends Service {
         id,
         is_system_survey: false,
       }
-    })
+    });
+
+    await SatisfactionSurveyImage.destroy({
+      where: {
+        survey_id: id,
+      }
+    });
+    await SatisfactionSurveyImage.create(otherArgs.satisfaction_image);
 
   }
 
@@ -279,6 +288,7 @@ export default class SatisfactionSurveyService extends Service {
         {
           model: this.getModel('SatisfactionPollTag'),
           as: 'not_satisfied_tags',
+          required: false,
         }
       ]
     };
@@ -303,14 +313,16 @@ export default class SatisfactionSurveyService extends Service {
     }
 
     const allPolls = await this.getModel('SatisfactionPoll').all(condition);
-
+    console.log(allPolls.length, '------');
     const peopleCountMapper = {};
     const satisfiedPeopleCountMapper = {};
     const peopleVoteRecord = {};
 
-
     allPolls.forEach(poll => {
+
       if (to_heavy) {
+
+        // console.log(to_heavy, '---- a');
         if (peopleVoteRecord[poll.evaluate_person_id] && peopleVoteRecord[poll.evaluate_person_id] === poll.satisfaction_level) {
           return;
         }
@@ -328,7 +340,6 @@ export default class SatisfactionSurveyService extends Service {
       if (filter_by === 'quarterly') {
         key = `${poll.evaluate_quarterly}`;
       }
-
 
       if (!resultMapper[key]) {
         resultMapper[key] = {
@@ -527,6 +538,7 @@ export default class SatisfactionSurveyService extends Service {
           as: 'not_satisfied_tags',
         }
       ],
+      order:[['evaluate_time', 'DESC']],
     });
 
     const levelMapper = {
