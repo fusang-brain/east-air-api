@@ -695,6 +695,7 @@ export default class ApprovalService extends Service {
         });
 
         // 通知发起人
+
         await notificationService.sendToPersonal({
           title: `【${approvalTypeMapper[foundApprovalFlow.approval.approval_type]}】${foundApprovalFlow.approval.project_subject}`,
           body: foundApprovalFlow.approval.project_content,
@@ -706,7 +707,7 @@ export default class ApprovalService extends Service {
               is_approval: false,
             }
           ],
-          receiver: foundApprovalFlow.approval_man_id,
+          receiver: foundApprovalFlow.approval.publish_id,
           template: 'approval_success',
         });
 
@@ -724,7 +725,9 @@ export default class ApprovalService extends Service {
             id: foundApprovalFlow.approval.project_id
           }
         });
+
         // 通知发起人
+        console.log('通知发起人已经通过');
         await notificationService.sendToPersonal({
           title: `【${approvalTypeMapper[foundApprovalFlow.approval.approval_type]}】${foundApprovalFlow.approval.project_subject}`,
           body: foundApprovalFlow.approval.project_content,
@@ -736,7 +739,7 @@ export default class ApprovalService extends Service {
               is_approval: false,
             }
           ],
-          receiver: foundApprovalFlow.approval_man_id,
+          receiver: foundApprovalFlow.approval.publish_id,
           template: 'approval_success',
         });
         return {
@@ -810,6 +813,7 @@ export default class ApprovalService extends Service {
       });
 
       // 通知审批发起人
+      console.log('通知发起人已经拒绝');
       await notificationService.sendToPersonal({
         title: `【${approvalTypeMapper[foundApprovalFlow.approval.approval_type]}】${foundApprovalFlow.approval.project_subject}`,
         body: foundApprovalFlow.approval.project_content,

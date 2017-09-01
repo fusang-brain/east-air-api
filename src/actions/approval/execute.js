@@ -22,6 +22,20 @@ export default async function (req, params, {response, checkAccess, services}) {
 
   // switch (executeResult.result) {
   //   case 'success':
+  //     // await services.notification.sendToPersonal({
+  //     //   title: `【${approvalTypeMapper[foundApprovalFlow.approval.approval_type]}】${foundApprovalFlow.approval.project_subject}`,
+  //     //   body: foundApprovalFlow.approval.project_content,
+  //     //   sender: null,
+  //     //   items: [
+  //     //     {
+  //     //       subject_id: foundApprovalFlow.approval.project_id,
+  //     //       subject_type: foundApprovalFlow.approval.approval_type,
+  //     //       is_approval: false,
+  //     //     }
+  //     //   ],
+  //     //   receiver: foundApprovalFlow.approval_man_id,
+  //     //   template: 'approval_success',
+  //     // });
   //     await services.notification.sendToPersonal({
   //       title: '您的申请已被同意!',
   //       body: args.content,
