@@ -15,8 +15,6 @@ export default async (req, params, {response, services}) => {
 
   const docUnReadTotal = docReceiverTotal - docHasReadTotal;
 
-  // todo 判断时间间隔
-
   const lastReminder = await services.doc.getLastReminder(args.id);
   if (lastReminder) {
 

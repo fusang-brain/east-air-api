@@ -22,6 +22,25 @@ export default async (req, params, {response}) => {
 
   const createdDoc = await docService.create(args);
 
+  const allUnreadReceivers = await services.doc.getUnreadReceivers(createdDoc.id);
+
+  const unreadReceiverIDs = allUnreadReceivers.map(value => value.receiver_id);
+
+  const doc = await services.doc.one(args.id);
+
+  await services.notification.sendToPeople({
+    title: `【公文】${doc.doc_title}`,
+    body: doc.doc_note || doc.doc_title,
+    sender: null,
+    items: [{
+      subject_id: args.id,
+      subject_type: 4,
+      is_approval: false,
+    }],
+    receivers: unreadReceiverIDs,
+    template: 'doc',
+  });
+
   return {
     code: response.getSuccessCode(),
     message: '新增成功',
