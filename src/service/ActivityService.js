@@ -101,8 +101,8 @@ export default class ActivityService extends Service {
       ]
     });
     actDetails.budgets = actDetails.budgets.sort((a, b) => {
-      return a.create_time > b.create_time;
-    })
+      return a.sort > b.sort;
+    });
     return actDetails;
   }
 

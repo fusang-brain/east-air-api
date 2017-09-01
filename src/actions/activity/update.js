@@ -125,6 +125,7 @@ export default async function (req, param, {response, models, checkAccess}) {
     params.budget_total = 0;
     for (let i = 0; i < budgets.length; i ++) {
       budgets[i].act_id = actID;
+      budgets[i].sort = i;
       params.budget_total = Decimal.add(params.budget_total, budgets[i].cost).toNumber();
     }
     await models.TradeUnionActBudget.destroy({where:{act_id: actID}});

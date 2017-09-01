@@ -38,7 +38,7 @@ export default async function(req, params, {models, device}) {
   }
   if (args.birthday) {
     if (args.birthday[0] === args.birthday[1]) {
-      condition.birthday = moment(+args.birthday[0]).valueOf() * 1000;
+      condition.birthday = moment(+args.birthday[0]).valueOf();
       console.log(condition.birthday);
     } else {
       condition.birthday = {
