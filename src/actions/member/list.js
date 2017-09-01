@@ -32,7 +32,6 @@ export default async function(req, params, {models, device}) {
   }
   if (args.search) {
     condition.$or = {
-      ehr: { $like: `%${args.search}%`},
       name: { $like: `%${args.search}%`},
       mobile: { $like: `%${args.search}%`},
     };
