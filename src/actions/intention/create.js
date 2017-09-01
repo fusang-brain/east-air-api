@@ -18,7 +18,7 @@ export default async (req, params, {response, services}) => {
 
   return {
     code: response.getSuccessCode(),
-    message: '公文创建成功',
+    message: '创建成功',
     data: {
       intention: createdIntention,
     }

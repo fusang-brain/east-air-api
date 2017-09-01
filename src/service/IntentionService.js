@@ -21,14 +21,16 @@ export default class IntentionService extends Service {
 
   async generateList({limit, offset, search, sort}) {
 
-    const condition = {};
+    const condition = {
+      is_hidden: false,
+    };
     if (search) {
       condition.title = {
         $like: `%${search}%`
       }
     }
     let sortCondition = [['vote_count', 'DESC']];
-    console.log(sort);
+
     if (sort === 2) {
       sortCondition = [['vote_count', 'ASC']];
     }
@@ -164,6 +166,16 @@ export default class IntentionService extends Service {
       code: Response.getSuccessCode(),
       message: '终止成功',
     }
+  }
+
+  async marked_hidden(id) {
+    return await this.getModel('Intention').update({
+      is_hidden: true,
+    }, {
+      where: {
+        id,
+      }
+    });
   }
 
 }

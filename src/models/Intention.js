@@ -14,6 +14,7 @@ export default function (sequelize, DataTypes) {
     vote_count: {type: DataTypes.INTEGER, defaultValue: '0'}, // 投票数
     user_id: {type: DataTypes.UUID},  // 发起人ID
     dept_id: {type: DataTypes.UUID}, // 发起部门ID
+    is_hidden: {type: DataTypes.BOOLEAN, defaultValue: false}, // 隐藏
     create_time: {type: DataTypes.STRING, defaultValue: Date.now}
   }, {
     classMethods: {

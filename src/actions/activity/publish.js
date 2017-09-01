@@ -105,7 +105,6 @@ export default async function (req, param, {response, models, checkAccess}) {
     budgets[i].sort = i;
     params.budget_total = Decimal.add(params.budget_total, budgets[i].cost).toNumber();
   }
-  console.log(budgets);
   params.budgets = budgets;
   params.images = images.map(loop => ({
     file_path: loop,

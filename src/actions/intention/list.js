@@ -17,8 +17,6 @@ export default async (req, params, {response, services}) => {
   args.offset = +args.offset || 0;
   args.sort = +args.sort || 1;
 
-  console.log(args, 'args ===');
-
   const {list, total} = await services.intention.generateList(args);
 
   return {

@@ -13,6 +13,9 @@ export default async function (req, params, {device}) {
   const user = await models.User.scope('with_password').findOne({
     where: {
       mobile,
+      state: {
+        $in: [1, 0],
+      }
     },
     include: [
       {
