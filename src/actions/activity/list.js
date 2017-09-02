@@ -15,8 +15,8 @@ export default async function (req, param, {response, models, services, device, 
   const limit = parseInt(req.query.limit) || 20;
 
   // found all department master
-  const masters = await services.user.getAllMaster(req.user.dept);
-  const masterIDs = masters.map(master => master.id);
+  // const masters = await services.user.getAllMaster(req.user.dept);
+  // const masterIDs = masters.map(master => master.id);
 
   const condition = {
     $or: [

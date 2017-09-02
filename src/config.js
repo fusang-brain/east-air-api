@@ -14,7 +14,7 @@ const environment = {
   development: {
     isProduction: false,
     aliyun: {
-      accessKeyID: 'LTAI1JfGT656c0Zd',
+      accessKeyID: 'LTAI1JfGT656c0Zdkkk',
       accessKeySecret: 'aQexfzX24BeC8Zx2ZraPF375q5OHMh',
     },
     auth: {
@@ -51,7 +51,7 @@ module.exports = Object.assign({
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
   aliyun: {
-    accessKeyID: 'LTAI1JfGT656c0Zd',
+    accessKeyID: 'LTAI1JfGT656c0Zdkkk',
     accessKeySecret: 'aQexfzX24BeC8Zx2ZraPF375q5OHMh',
   },
   auth: {
