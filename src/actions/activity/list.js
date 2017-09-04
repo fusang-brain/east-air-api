@@ -51,18 +51,59 @@ export default async function (req, param, {response, models, services, device, 
   }
 
   if (params.state) {
-    if (params.state === 2) {
+    console.log(params.state, '------');
+    if (+params.state === 2) {
       condition.$or[0].state = params.state;
       condition.$or[1].state = params.state;
     } else {
+      condition.$or[0].state = params.state;
       condition.$or.splice(1, 1);
     }
 
   }
 
-  const total = await ActModel.count({
+  const all = await ActModel.all({
     where: condition,
+    include: [
+      {
+        model: models.User,
+        as: 'publisher',
+        required: true,
+        attributes: ['id', 'name', 'avatar']
+      },
+      {
+        model: models.Dept,
+        as: 'department',
+        required: true,
+        attributes: ['id', 'dept_name'],
+      },
+      {
+        model: models.ActEvaluation,
+        as: 'evaluations',
+        where: {
+          user_id: req.user.id,
+        },
+        required: false,
+      },
+      {
+        model: models.TradeUnionActDept,
+        as: 'accept_depts',
+        where: {
+          $or: [
+            {
+              dept_id: req.user.dept,
+            },
+            {
+              dept_id: req.user.department.parent,
+            }
+          ]
+        },
+        required: true,
+      }
+    ],
   });
+
+  const total = all.length;
 
   const acts = await ActModel.all({
     where: condition,
@@ -103,7 +144,6 @@ export default async function (req, param, {response, models, services, device, 
         },
         required: true,
       }
-
     ],
     order: [
       ['create_date', 'DESC'],
