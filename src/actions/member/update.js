@@ -75,10 +75,17 @@ export default async function (req, params, {models, response, checkAccess}) {
       user_id: args.user,
     }
   });
-  const dataAccess = args.data_access.map(loop => ({
+  const filteredDataAccess = [];
+  args.data_access.forEach(item => {
+    if (!filteredDataAccess.includes(item)) {
+      filteredDataAccess.push(item);
+    }
+  })
+  const dataAccess = filteredDataAccess.map(loop => ({
     user_id: args.user,
     dept_id: loop,
   }));
+
   await models.DataAccess.bulkCreate(dataAccess);
 
   return {

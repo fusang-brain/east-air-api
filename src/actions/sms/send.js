@@ -7,10 +7,23 @@ import { filterParams } from '../../utils/filters'
 import { sendCode } from '../../utils/sms';
 import config from '../../config/api';
 
-export default async (req, params, {response}) => {
+export default async (req, params, {response, models}) => {
   const args = filterParams(req.body, {
     mobile: ['string', 'required'],
   });
+
+  const foundUserCount = await models.User.count({
+    where: {
+      mobile: args.mobile,
+    }
+  });
+
+  if (foundUserCount === 0) {
+    return {
+      code: response.getErrorCode(),
+      message: '不存在该用户',
+    }
+  }
 
   const res = await sendCode(args.mobile);
 

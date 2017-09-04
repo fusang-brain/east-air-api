@@ -47,6 +47,14 @@ export default async function (req, params, {models, response, checkAccess}) {
   const User = models.User;
   if (!Array.isArray(args.data_access)) {
     args.data_access = [args.dept]
+  } else {
+    const filteredDataAccess = [];
+    args.data_access.forEach(item => {
+      if (!filteredDataAccess.includes(item)) {
+        filteredDataAccess.push(item);
+      }
+    });
+    args.data_access = filteredDataAccess;
   }
   const userCount = await User.count({
     where: {
