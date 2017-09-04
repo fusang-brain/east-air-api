@@ -96,7 +96,7 @@ export default async function(req, params, {models, response}) {
   });
 
   let allData = [['EHR', '姓名', '性别', '出生日期', '手机号码', '用工性质', '工会', '状态']];
-  const genderMapper = ['未知', '男', '女'];
+  const genderMapper = ['未知', '女', '男'];
   const typeMapper = ['合同制', '劳务制'];
   const statusMapper = ['其他', '在职', '离职', '退休'];
   const data = list.map(item => {

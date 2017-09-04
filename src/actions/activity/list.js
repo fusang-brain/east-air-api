@@ -33,14 +33,6 @@ export default async function (req, param, {response, models, services, device, 
         state: 2,
       },
 
-      // // 部门主管发起的活动
-      // {
-      //   user_id: {
-      //     $in: masterIDs,
-      //   },
-      //   state: 2,
-      // }
-
     ],
   };
   const ActModel = models.TradeUnionAct;
@@ -59,11 +51,13 @@ export default async function (req, param, {response, models, services, device, 
   }
 
   if (params.state) {
-    condition.$or[0].state = params.state;
-    condition.$or[1].state = params.state;
-    if (params.state !== 2) {
-      condition.$or[1].user_id = req.user.id;
+    if (params.state === 2) {
+      condition.$or[0].state = params.state;
+      condition.$or[1].state = params.state;
+    } else {
+      condition.$or.splice(1, 1);
     }
+
   }
 
   const total = await ActModel.count({
