@@ -35,6 +35,14 @@ export default async function (req, params, {models, response, checkAccess}) {
     integration: 'number',
     mark: 'string',
   });
+
+  if (args.name === 'root') {
+    return {
+      code: response.getErrorCode(),
+      message: '无法使用此姓名',
+    }
+  }
+
   if (!await deptService.checkIsAvailableDept(args.dept)) {
     return {
       code: response.getErrorCode(),

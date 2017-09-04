@@ -42,7 +42,10 @@ export default async function (req, params, {models, response, checkAccess}) {
   }
 
   if (web_permissions) {
-    await RolePermissionModel.destroy({where: {platform: 'web', permission_id: {$notIn: web_permissions}}});
+    if (web_permissions.length === 0) {
+      await RolePermissionModel.destroy({where: {platform: 'web', role_id: foundRole.id}});
+    }
+    await RolePermissionModel.destroy({where: {platform: 'web', role_id: foundRole.id, permission_id: {$notIn: web_permissions}}});
     for (let i = 0; i < web_permissions.length; i ++) {
       let item = web_permissions[i];
       await RolePermissionModel.findOrCreate({where: {permission_id: item, role_id: foundRole.id, platform: 'web'}, default: {
@@ -54,7 +57,7 @@ export default async function (req, params, {models, response, checkAccess}) {
   }
 
   if (app_permissions) {
-    await RolePermissionModel.destroy({where: {platform: 'app', permission_id: {$notIn: app_permissions}}});
+    await RolePermissionModel.destroy({where: {platform: 'app', role_id: foundRole.id}});
     for (let i = 0; i < app_permissions.length; i ++) {
       let item = app_permissions[i];
       await RolePermissionModel.findOrCreate({where: {permission_id: item, role_id: foundRole.id, platform: 'app'}, default: {
