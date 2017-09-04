@@ -4,7 +4,8 @@
  * Date: 2017/8/22
  */
 import {filterParams} from '../../utils/filters'
-export default async (req, params, {response, services}) => {
+export default async (req, params, {response, services, checkAccess}) => {
+  await checkAccess('opinion_collection', 'vote');
   const args = filterParams(req.body, {
     id: ['string'],
   });

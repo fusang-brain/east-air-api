@@ -6,7 +6,8 @@ import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
 
-export default async function (req, params, {response, services}) {
+export default async function (req, params, {response, services, checkAccess}) {
+  await checkAccess('relax_action', 'view');
   const relaxActionService = services.relaxAction;
   const args = filterParams(req.body, {
     id: ['string', 'required'],

@@ -5,8 +5,8 @@
  */
 import { filterParams } from '../../utils/filters'
 
-export default async (req, params, {response, services}) => {
-
+export default async (req, params, {response, services, checkAccess}) => {
+  await checkAccess('satisfaction_degree_investigation', 'create');
   const args = filterParams(req.body, {
     survey_subject: ['string', 'required'],
     image: ['string', 'required'],

@@ -5,7 +5,9 @@
  */
 import {filterParams} from '../../utils/filters';
 
-export default async (req, params, {response, services}) => {
+export default async (req, params, {response, services, checkAccess}) => {
+  await checkAccess('opinion_collection', 'start');
+
   const args = filterParams(req.body, {
     title: ['string', 'required'],
     content: ['string', 'required'],

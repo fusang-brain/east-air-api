@@ -84,6 +84,10 @@ const permissions = [
     slug: 'satisfaction_degree_investigation',
     permission: [
       {
+        name: '创建',
+        slug: 'create',
+      },
+      {
         name: '打印二维码',
         slug: 'print_qcode',
       },
@@ -91,6 +95,10 @@ const permissions = [
         name: '数据统计',
         slug: 'data_statistics',
       },
+      {
+        name: '参与投票',
+        slug: 'vote',
+      }
     ]
   },
   {

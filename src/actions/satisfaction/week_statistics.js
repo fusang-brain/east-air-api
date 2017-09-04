@@ -5,7 +5,8 @@
  */
 import { filterParams } from '../../utils/filters'
 
-export default async (req, params, {response, services, models}) => {
+export default async (req, params, {response, services, models, checkAccess}) => {
+  await checkAccess('satisfaction_degree_investigation', 'data_statistics');
   if (!['site', 'person'].includes(params[0])) {
     return {
       code: response.getErrorCode(),

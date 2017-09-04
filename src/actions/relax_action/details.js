@@ -4,7 +4,8 @@
 import {filterParams} from '../../utils/filters';
 import RelaxActionService from '../../service/RelaxActionService';
 
-export default async function (req, params, {response, services}) {
+export default async function (req, params, {response, services, checkAccess}) {
+  await checkAccess('relax_action', 'view');
   const relaxActionService = services.relaxAction;
   const args = filterParams(req.query, {
     id: ['string', 'required'],
