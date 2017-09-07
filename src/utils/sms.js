@@ -5,7 +5,8 @@
  */
 
 import redis from 'redis';
-import config from '../config/api';
+import axios from 'axios';
+import config from '../config';
 import bluebird from 'bluebird';
 import Response from '../config/response'
 
@@ -15,7 +16,7 @@ bluebird.promisifyAll(redis.Multi.prototype);
 const redisClient = redis.createClient();
 
 export function generateVerifyCode() {
-  return Math.floor(100000 + Math.random() * 900000);
+  return Math.floor(1000 + Math.random() * 9000);
 }
 
 export async function sendCode(mobile) {
@@ -32,9 +33,12 @@ export async function sendCode(mobile) {
 
   const code = generateVerifyCode();
 
-  redisClient.set(mobile, code, 'EX', 15 * 60);
+  redisClient.set(mobile, code, 'EX', 5 * 60);
+  const msgContent = `【蜜蜂网】东航工会密码修改验证码：${code}`;
 
   // todo Send SMS
+  const sendResp = await axios
+    .get(`http://${config.sms.url}?account=${config.sms.user}&pswd=${config.sms.pwd}&msg=${msgContent}&mobile=${mobile}&needstatus=false`);
 
   if (config.debug) {
     return code;
