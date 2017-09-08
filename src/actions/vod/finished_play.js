@@ -5,6 +5,7 @@
  */
 import { filterParams } from '../../utils/filters';
 
+// 完成播放
 export default async (req, params, {response, services}) => {
 
   const args = filterParams(req.body, {

@@ -5,6 +5,7 @@
  */
 import { filterParams } from '../../utils/filters'
 
+// 获取视频详情
 export default async (req, params, {response, services}) => {
   const args = filterParams(req.query, {
     id: ['string', 'required'],

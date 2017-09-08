@@ -6,6 +6,7 @@
 
 import { filterParams } from '../../utils/filters';
 
+// 最近一次的视频播放记录
 export default async (req, params, {response, services}) => {
   const args = filterParams(req.body, {
     vod_id: ['string', 'required']

@@ -4,6 +4,7 @@
  * Date: 2017/8/28
  */
 
+// 获取用户的历史视频
 export default async (req, params, {response, services}) => {
 
   const offset = parseInt(req.query.offset) || 0;

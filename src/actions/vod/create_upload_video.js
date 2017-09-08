@@ -8,6 +8,7 @@ import { ALIYunAPI } from '../../utils/vod';
 import { filterParams } from '../../utils/filters';
 import config from '../../config';
 
+// 获取阿里云视频上传地址
 export default async (req, params, {response, services}) => {
 
   const args = filterParams(req.body, {

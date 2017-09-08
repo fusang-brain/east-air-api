@@ -6,6 +6,7 @@
 import { filterParams } from '../../utils/filters'
 import VodService from '../../service/VodService'
 
+// 添加视频记录
 export default async (req, params, {response, services}) => {
 
   const args = filterParams(req.body, {

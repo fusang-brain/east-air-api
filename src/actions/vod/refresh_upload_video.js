@@ -7,6 +7,7 @@ import { filterParams } from '../../utils/filters';
 import { ALIYunAPI } from '../../utils/vod';
 import config from '../../config';
 
+// 刷新视频上传权鉴
 export default async (req, params, {response, services}) => {
   const args = filterParams(req.body, {
     aliyun_video_id: ['string', 'required'],

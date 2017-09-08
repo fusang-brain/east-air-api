@@ -6,6 +6,7 @@
 
 import { filterParams } from '../../utils/filters'
 
+// 更新视频播放历史
 export default async (req, params, {response, services}) => {
 
   const args = filterParams(req.body, {
