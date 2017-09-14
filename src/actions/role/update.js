@@ -2,7 +2,7 @@
  * Created by alixez on 17-6-22.
  */
 
-export default async function (req, params, {models, response, checkAccess}) {
+export default async function (req, params, {models, response, checkAccess, redisClient}) {
   await checkAccess('role_permission', 'edit');
   const {id, role_name, role_description, web_permissions, app_permissions} = req.body;
   const RoleModel = models.Role;
@@ -67,6 +67,17 @@ export default async function (req, params, {models, response, checkAccess}) {
       }});
     }
   }
+
+  // 踢出当前修改角色的已登录用户
+  const willQuitUser = await models.User.all({
+    where: {
+      role: id,
+    }
+  });
+
+  willQuitUser.forEach(user => {
+    redisClient.set(`ACCESS_TOKEN_${user.id}`, 'quit out', 'EX', 60);
+  });
 
   return {
     code: response.getSuccessCode('update'),

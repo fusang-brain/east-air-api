@@ -20,7 +20,7 @@ export default async (req, params, {response, services}) => {
 
   args.user_id = req.user.id;
 
-  const createdDoc = await docService.create(args);
+  const createdDoc = await docService.create(args, req.user.id);
 
   const allUnreadReceivers = await services.doc.getUnreadReceivers(createdDoc.id);
 

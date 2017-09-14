@@ -18,9 +18,6 @@ export default async (req, params, {response, services}) => {
   const lastReminder = await services.doc.getLastReminder(args.id);
   if (lastReminder) {
 
-    console.log(parseInt(lastReminder.last_remind_time) + (10 * 60 * 1000), '1')
-    console.log(Date.now(), '2');
-
     if ((parseInt(lastReminder.last_remind_time) + (10 * 60 * 1000)) > Date.now()) {
       return {
         code: response.getErrorCode(),

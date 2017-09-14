@@ -14,6 +14,14 @@ import { randomString } from './utils/utils';
 import Auth from './utils/auth';
 import response from './config/response';
 import {registerService, setDataAccessToService} from './service';
+import bluebird from 'bluebird';
+import redis from 'redis';
+
+// create redis client
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
+
+export const redisClient = redis.createClient();
 
 // mongoose.connect(apiConfig.mongoose.db);
 // mongoose.Promise = Promise;
@@ -134,7 +142,14 @@ app.use((req, res) => {
     const dataAccess = req.dataAccess || [];
     setDataAccessToService(services, dataAccess);
     const checkAccessAlias = async (moduleName, action, throwError=true) => await Auth.checkAccess(req, moduleName, action, device, throwError);
-    action(req, params, {models, device, response, checkAccess: checkAccessAlias, services})
+    action(req, params, {
+      models,
+      device,
+      response,
+      checkAccess: checkAccessAlias,
+      services,
+      redisClient
+    })
       .then((result) => {
         if (result instanceof Function) {
           result(res);

@@ -141,7 +141,7 @@ export default class DocService extends Service {
     return parseInt(total) - parseInt(hasReadTotalByUser);
   }
 
-  async create(args) {
+  async create(args, user_id) {
     const {attach, receivers, ...params} = args;
     const Doc = this.getModel();
 
@@ -161,6 +161,10 @@ export default class DocService extends Service {
         file_size: item.size,
       }));
 
+    }
+
+    if (!receivers.includes(user_id)) {
+      receivers.push(user_id);
     }
 
     if (receivers) {

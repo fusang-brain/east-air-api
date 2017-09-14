@@ -5,7 +5,7 @@ import Auth from '../../utils/auth';
 import {getSuccessCode, getErrorCode} from '../../config/response';
 import models from '../../models';
 
-export default async function (req, params, {device}) {
+export default async function (req, params, {device, redisClient}) {
 
   // password should be hash by sha1 and upper
   const {mobile, password} = req.body;
@@ -52,6 +52,7 @@ export default async function (req, params, {device}) {
 
   const accessToken = Auth.getToken(user.id);
   //todo record token to redis
+  redisClient.set(`ACCESS_TOKEN_${user.id}`, accessToken, 'EX', 7 * 24 * 60 * 60)
 
   user.password = undefined;
 

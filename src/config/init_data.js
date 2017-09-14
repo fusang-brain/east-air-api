@@ -244,6 +244,38 @@ const permissions = [
       },
     ]
   },
+  {
+    name: '技能培训',
+    slug: 'skill_training',
+    permission: [
+      {
+        name: '新增',
+        slug: 'create',
+      },
+      {
+        name: 'export',
+        slug: '导出',
+      },
+      {
+        name: '编辑',
+        slug: 'edit',
+      },
+      {
+        name: '删除',
+        slug: 'delete',
+      }
+    ]
+  },
+  {
+    name: '代办事项',
+    slug: 'todo_list',
+    permission: [
+      {
+        name: '查看',
+        slug: 'view',
+      }
+    ]
+  }
   // {
   //   name: '积分兑换',
   //   slug: 'redeem_integration',

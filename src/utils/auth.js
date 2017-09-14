@@ -7,6 +7,7 @@ import url from 'url';
 import bcrypt from 'bcrypt-nodejs';
 import models from '../models';
 import {getSuccessCode, getErrorCode} from '../config/response';
+import {redisClient} from '../api';
 
 // the private key of jwt
 const jwtSecret = apiConfig.jwt.secret;
@@ -47,7 +48,18 @@ class Auth {
         message: '缺少 access token',
       }
     }
+
+
     const decodedToken = Auth.jwtDecode(token);
+
+    const cacheToken = await redisClient.getAsync(`ACCESS_TOKEN_${decodedToken.iss}`);
+
+    if (cacheToken !== token) {
+      throw {
+        code: getErrorCode('auth'),
+        message: '您的认证已经过期，请重新登录',
+      }
+    }
 
     // found userinfo through decodedToken;
     const user = await models.User.findOne({

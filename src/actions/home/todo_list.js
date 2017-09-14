@@ -4,7 +4,8 @@
  * Date: 2017/8/28
  */
 
-export default async (req, params, {response, services}) => {
+export default async (req, params, {response, services, checkAccess}) => {
+  await checkAccess('todo_list', 'view');
   // todo get abstruct list of todo list
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
@@ -55,7 +56,6 @@ export default async (req, params, {response, services}) => {
   // console.log(list, 'doc list');
   // console.log(total, 'doc total');
 
-  console.log(todoList, ' ====> list');
   // const todoList = [
   //   {
   //     subject: '',

@@ -4,7 +4,7 @@
 import Auth from '../../utils/auth';
 import {getSuccessCode, getErrorCode} from '../../config/response';
 
-export default async function (req, params, {models, device}) {
+export default async function (req, params, {models, device, redisClient}) {
 
   if (device !== 'app') {
     throw {
@@ -61,7 +61,7 @@ export default async function (req, params, {models, device}) {
   resetToken.expired_at = new Date().getTime();
   await resetToken.save();
   await foundUser.save();
-
+  redisClient.set(`ACCESS_TOKEN_${foundUser.id}`, 'quit out', 'EX', 60);
   return {
     code: getSuccessCode('update'),
     message: '密码修改成功!',

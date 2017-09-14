@@ -396,9 +396,12 @@ export default class SatisfactionSurveyService extends Service {
           break;
       }
       let vote_count = resultMapper[key].vote_count;
-      resultMapper[key].very_satisfied_rate = Math.round(resultMapper[key].very_satisfied_count / resultMapper[key].vote_count * 100);
-      resultMapper[key].satisfied_rate = Math.round(resultMapper[key].satisfied_count / vote_count * 100)
-      resultMapper[key].not_satisfied_rate = Math.round(resultMapper[key].not_satisfied_count / vote_count * 100)
+      let verySatisfiedRate = Math.round(resultMapper[key].very_satisfied_count / resultMapper[key].vote_count * 10000) / 100;
+      let satisfiedRate = Math.round(resultMapper[key].satisfied_count / vote_count * 10000) / 100;
+      let notSatisfiedRate = Math.round(resultMapper[key].not_satisfied_count / vote_count * 10000) / 100;
+      resultMapper[key].very_satisfied_rate = verySatisfiedRate;
+      resultMapper[key].satisfied_rate = satisfiedRate;
+      resultMapper[key].not_satisfied_rate = 100 - (verySatisfiedRate + satisfiedRate);
 
     });
 
@@ -506,9 +509,10 @@ export default class SatisfactionSurveyService extends Service {
         weekDistributedRate[key] = Math.round(weekDayMapper[key] / total * 100);
       }
     }
+    let notSatisfiedRate = Math.round(pieChart.not_satisfied.total / total * 100);
     pieChart.satisfied.rate = Math.round(pieChart.satisfied.total / total * 100);
     pieChart.very_satisfied.rate = Math.round(pieChart.very_satisfied.total / total * 100);
-    pieChart.not_satisfied.rate = Math.round(pieChart.not_satisfied.total / total * 100);
+    pieChart.not_satisfied.rate = 100 - (pieChart.satisfied.rate + pieChart.very_satisfied.rate);
     pieChart.total = total;
 
     return {
