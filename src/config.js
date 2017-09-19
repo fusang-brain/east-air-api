@@ -15,10 +15,12 @@ const environment = {
     debug: true,
     isProduction: false,
     aliyun: {
-      accessKeyID: 'LTAI1JfGT656c0Zdkkk',
-      accessKeySecret: 'aQexfzX24BeC8Zx2ZraPF375q5OHMh',
+      accessKeyID: 'LTAI3K9kyKhxejXB',
+      accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
     },
     sms: {
+      SignName: '东航北分工会',
+      TemplateCode: 'SMS_95620114',
       url: 'sapi.253.com/msg/HttpBatchSendSM',
       user: 'huahui-1',
       pwd: 'MhW82916868',
@@ -47,13 +49,15 @@ const environment = {
     }
   },
   production: {
-    debug: true,
+    debug: false,
     isProduction: true,
     aliyun: {
-      accessKeyID: 'LTAI1JfGT656c0Zdkkk',
-      accessKeySecret: 'aQexfzX24BeC8Zx2ZraPF375q5OHMh',
+      accessKeyID: 'LTAI3K9kyKhxejXB',
+      accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
     },
     sms: {
+      SignName: '东航北分工会',
+      TemplateCode: 'SMS_95620114',
       url: 'sapi.253.com/msg/HttpBatchSendSM',
       user: 'huahui-1',
       pwd: 'MhW82916868',

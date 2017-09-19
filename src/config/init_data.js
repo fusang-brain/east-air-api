@@ -40,6 +40,10 @@ const permissions = [
     slug: 'member',
     permission: [
       {
+        name: '查看会员',
+        slug: 'view',
+      },
+      {
         name: '新增会员',
         slug: 'create',
       },
