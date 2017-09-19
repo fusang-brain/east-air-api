@@ -6,6 +6,7 @@
 import { filterParams } from '../../utils/filters'
 import { sendCode } from '../../utils/sms';
 import config from '../../config/api';
+import sysConfig from '../../config';
 
 export default async (req, params, {response, models}) => {
   const args = filterParams(req.body, {
@@ -28,7 +29,7 @@ export default async (req, params, {response, models}) => {
   const res = await sendCode(args.mobile);
 
   if (res) {
-    if (config.debug) {
+    if (sysConfig.debug) {
       return {
         code: response.getSuccessCode(),
         message: '测试模式，给你你的验证码! -----> ' + res,

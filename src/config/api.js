@@ -10,7 +10,7 @@ export default {
     secret: 'its-20160612-uibki131-21nhusfd',
   },
 
-  debug: true,
+  debug: false,
 
   uploadFolder,
 }

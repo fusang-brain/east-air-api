@@ -97,6 +97,6 @@ export async function verifyCode(mobile, code) {
       message: '验证码不存在',
     }
   }
-
+  redisClient.set(mobile, null);
   return +codeOfMobile === +code;
 }
