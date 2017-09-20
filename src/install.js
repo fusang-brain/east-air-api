@@ -106,27 +106,27 @@ async function start() {
   });
   log('>> 管理员创建成功 >>');
 
-  log('>> 创建公司高层会员 >>');
-  let heads = ['dept_master', 'chile_dept_master', 'dept_finance', 'dept_director'];
-  for (let i = 0; i < heads.length; i ++) {
-    let loop = heads[i];
-    sysuser.name = '用户' + Math.round(Math.random() * 10000);
-    sysuser.mobile = (String) (15600000000 + i);
-    sysuser.dept = defaultDept;
-    sysuser.role = defaultRoles[heads[i]].id;
-    await models.User.create(sysuser);
-  }
-  log('>> 公司高层会员创建成功 >>');
-
-  log('>> 批量生成用户 >>');
-  for (let i = 0; i < userTotal; i ++) {
-    sysuser.name = '用户' + Math.round(Math.random() * 10000);
-    sysuser.mobile = (String) (15500000000 + i);
-    sysuser.dept = defaultDept;
-    sysuser.role = defaultRoles['common_member'].id;
-    await models.User.create(sysuser);
-  }
-  log('>> 批量生成用户成功 >>');
+  // log('>> 创建公司高层会员 >>');
+  // let heads = ['dept_master', 'chile_dept_master', 'dept_finance', 'dept_director'];
+  // for (let i = 0; i < heads.length; i ++) {
+  //   let loop = heads[i];
+  //   sysuser.name = '用户' + Math.round(Math.random() * 10000);
+  //   sysuser.mobile = (String) (15600000000 + i);
+  //   sysuser.dept = defaultDept;
+  //   sysuser.role = defaultRoles[heads[i]].id;
+  //   await models.User.create(sysuser);
+  // }
+  // log('>> 公司高层会员创建成功 >>');
+  //
+  // log('>> 批量生成用户 >>');
+  // for (let i = 0; i < userTotal; i ++) {
+  //   sysuser.name = '用户' + Math.round(Math.random() * 10000);
+  //   sysuser.mobile = (String) (15500000000 + i);
+  //   sysuser.dept = defaultDept;
+  //   sysuser.role = defaultRoles['common_member'].id;
+  //   await models.User.create(sysuser);
+  // }
+  // log('>> 批量生成用户成功 >>');
   log('== 初始数据创建成功 ==');
 }
 

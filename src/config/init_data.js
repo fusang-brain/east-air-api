@@ -280,44 +280,6 @@ const permissions = [
       }
     ]
   }
-  // {
-  //   name: '积分兑换',
-  //   slug: 'redeem_integration',
-  //   permission: [
-  //     {
-  //       name: '兑换商品',
-  //       slug: 'redeem_goods',
-  //     },
-  //     {
-  //       name: '查看积分详情',
-  //       slug: 'view_integration_detail',
-  //     },
-  //     {
-  //       name: '上架积分商品',
-  //       slug: 'publish_goods',
-  //     },
-  //     {
-  //       name: '移除积分商品',
-  //       slug: 'remove_goods',
-  //     },
-  //     {
-  //       name: '下架积分商品',
-  //       slug: 'stop_goods',
-  //     },
-  //     {
-  //       name: '新增积分商品',
-  //       slug: 'create_goods',
-  //     },
-  //     {
-  //       name: '查看兑换明细',
-  //       slug: 'view_redeem_detail',
-  //     },
-  //     {
-  //       name: '确认商品兑换',
-  //       slug: 'confirm_redeem',
-  //     },
-  //   ]
-  // },
 ];
 
 function generateRandomString() {
@@ -332,7 +294,7 @@ const sysuser = {
   nickname: '隔壁老王',
   birthday: new Date().getTime(),
   card_num: '--',
-  password: Auth.encodePassword('05B530AD0FB56286FE051D5F8BE5B8453F1CD93F') // 88888888
+  // password: Auth.encodePassword('05B530AD0FB56286FE051D5F8BE5B8453F1CD93F') // 88888888
 };
 
 const roles = [
