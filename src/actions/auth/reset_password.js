@@ -61,7 +61,7 @@ export default async function (req, params, {models, device, redisClient}) {
   resetToken.expired_at = new Date().getTime();
   await resetToken.save();
   await foundUser.save();
-  redisClient.set(`ACCESS_TOKEN_${foundUser.id}`, 'quit out', 'EX', 60);
+  redisClient.set(`ACCESS_TOKEN_${foundUser.id}`, [], 'EX', 60);
   return {
     code: getSuccessCode('update'),
     message: '密码修改成功!',

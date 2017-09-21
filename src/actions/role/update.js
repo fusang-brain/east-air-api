@@ -76,7 +76,7 @@ export default async function (req, params, {models, response, checkAccess, redi
   });
 
   willQuitUser.forEach(user => {
-    redisClient.set(`ACCESS_TOKEN_${user.id}`, 'quit out', 'EX', 60);
+    redisClient.set(`ACCESS_TOKEN_${user.id}`, [], 'EX', 60);
   });
 
   return {

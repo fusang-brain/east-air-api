@@ -51,8 +51,16 @@ export default async function (req, params, {device, redisClient}) {
   }
 
   const accessToken = Auth.getToken(user.id);
-  //todo record token to redis
-  redisClient.set(`ACCESS_TOKEN_${user.id}`, accessToken, 'EX', 7 * 24 * 60 * 60)
+
+  let cacheToken = await redisClient.getAsync(`ACCESS_TOKEN_${user.id}`);
+  if (!cacheToken) {
+    cacheToken = [];
+    cacheToken.push(accessToken);
+    redisClient.set(`ACCESS_TOKEN_${user.id}`, cacheToken, 'EX', 7 * 24 * 60 * 60)
+  } else {
+    cacheToken.push(accessToken);
+    redisClient.set(`ACCESS_TOKEN_${user.id}`, cacheToken, 'EX', 7 * 24 * 60 * 60)
+  }
 
   user.password = undefined;
 
