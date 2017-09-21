@@ -53,7 +53,7 @@ class Auth {
     const decodedToken = Auth.jwtDecode(token);
 
     const cacheToken = await redisClient.getAsync(`ACCESS_TOKEN_${decodedToken.iss}`);
-    if (!cacheToken || !cacheToken.includes(token)) {
+    if (!cacheToken || !cacheToken.split(',').includes(token)) {
       throw {
         code: getErrorCode('auth'),
         message: '您的认证已经过期，请重新登录',

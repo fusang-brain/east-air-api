@@ -94,7 +94,7 @@ export default async function(req, params, {device, models, response, redisClien
     user.update_at = new Date().getTime();
 
     await user.save();
-    redisClient.set(`ACCESS_TOKEN_${user.id}`, [], 'EX', 60);
+    redisClient.set(`ACCESS_TOKEN_${user.id}`, null, 'EX', 60);
     return {
       code: getSuccessCode('update'),
       message: '密码修改成功',

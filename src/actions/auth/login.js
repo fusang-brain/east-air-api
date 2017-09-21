@@ -53,17 +53,13 @@ export default async function (req, params, {device, redisClient}) {
   const accessToken = Auth.getToken(user.id);
 
   let cacheToken = await redisClient.getAsync(`ACCESS_TOKEN_${user.id}`);
-  console.log(cacheToken);
   if (!cacheToken) {
-    cacheToken = [];
-    cacheToken.push(accessToken);
-    redisClient.set(`ACCESS_TOKEN_${user.id}`, cacheToken, 'EX', 7 * 24 * 60 * 60);
+    redisClient.set(`ACCESS_TOKEN_${user.id}`, accessToken, 'EX', 7 * 24 * 60 * 60);
   } else {
-    if (typeof cacheToken === 'string') {
-      cacheToken = [];
-    }
-    cacheToken.push(accessToken);
-    redisClient.set(`ACCESS_TOKEN_${user.id}`, cacheToken, 'EX', 7 * 24 * 60 * 60);
+    const cacheTokenArr = cacheToken.split(',');
+    console.log(cacheTokenArr);
+    cacheTokenArr.push(accessToken);
+    redisClient.set(`ACCESS_TOKEN_${user.id}`, cacheTokenArr.join(','), 'EX', 7 * 24 * 60 * 60);
   }
 
   user.password = undefined;
