@@ -104,6 +104,7 @@ async function start() {
     card_num: '100000000000100000',
     password: Auth.encodePassword('C1508FB3AA5E9F4E49920A9618AA96F5DC287182'), // 'itspeed'
   });
+
   log('>> 管理员创建成功 >>');
 
   // log('>> 创建公司高层会员 >>');
