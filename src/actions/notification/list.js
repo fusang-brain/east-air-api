@@ -4,13 +4,10 @@
  * Date: 2017/8/15
  */
 
-import NotificationService from '../../service/NotificationService';
-const notificationService = new NotificationService();
-
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, services}) {
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
-  const {total, notifications} = await notificationService.notificationList(offset, limit, req.user.dept, req.user.id);
+  const {total, notifications} = await services.notification.notificationList(offset, limit, req.user.dept, req.user.id);
 
   return {
     code: response.getSuccessCode(),

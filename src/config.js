@@ -12,7 +12,19 @@ const compressFolder = path.join(__dirname, '/../storage/compress');
 
 const environment = {
   development: {
+    debug: true,
     isProduction: false,
+    aliyun: {
+      accessKeyID: 'LTAI3K9kyKhxejXB',
+      accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
+    },
+    sms: {
+      SignName: '东航北分工会',
+      TemplateCode: 'SMS_95620114',
+      url: 'sapi.253.com/msg/HttpBatchSendSM',
+      user: 'huahui-1',
+      pwd: 'MhW82916868',
+    },
     auth: {
       jwt_secret: 'its-20160612-uibki131-21nhusfd',
       whitelist: [
@@ -22,6 +34,7 @@ const environment = {
         '/member/export_xlsx',
         '/export_doc/statistics/relax_action',
         '/export_doc/statistics/sympathy',
+        '/sms/send',
       ]
     },
     storage: {
@@ -36,7 +49,40 @@ const environment = {
     }
   },
   production: {
-    isProduction: true
+    debug: false,
+    isProduction: true,
+    aliyun: {
+      accessKeyID: 'LTAI3K9kyKhxejXB',
+      accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
+    },
+    sms: {
+      SignName: '东航北分工会',
+      TemplateCode: 'SMS_95620114',
+      url: 'sapi.253.com/msg/HttpBatchSendSM',
+      user: 'huahui-1',
+      pwd: 'MhW82916868',
+    },
+    auth: {
+      jwtSecret: 'its-20160612-uibki131-21nhusfd',
+      whitelist: [
+        '/auth/forget_password',
+        '/auth/login',
+        '/auth/reset_password',
+        '/member/export_xlsx',
+        '/export_doc/statistics/relax_action',
+        '/export_doc/statistics/sympathy',
+        '/sms/send',
+      ]
+    },
+    storage: {
+      pathFolder,
+      uploadFolder,
+      compressFolder,
+      supportFile: {
+        'act_image': ['jpg', 'png', 'jpeg'],
+        'act_attach': ['pdf'],
+      }
+    },
   }
 }[process.env.NODE_ENV || 'development'];
 
@@ -45,26 +91,6 @@ module.exports = Object.assign({
   port: process.env.PORT,
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
-  auth: {
-    jwtSecret: 'its-20160612-uibki131-21nhusfd',
-    whitelist: [
-      '/auth/forget_password',
-      '/auth/login',
-      '/auth/reset_password',
-      '/member/export_xlsx',
-      '/export_doc/statistics/relax_action',
-      '/export_doc/statistics/sympathy',
-    ]
-  },
-  storage: {
-    pathFolder,
-    uploadFolder,
-    compressFolder,
-    supportFile: {
-      'act_image': ['jpg', 'png', 'jpeg'],
-      'act_attach': ['pdf'],
-    }
-  },
   app: {
     title: 'Eastern air API',
     description: 'All the modern best practices at here.',

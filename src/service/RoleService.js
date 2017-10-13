@@ -13,6 +13,19 @@ export default class RoleService extends Service {
   async checkIsGoodRole(id, deptID = null, userID = null) {
     const Role = this.getModel();
     const User = this.getModel('User');
+    const Dept = this.getModel('Dept');
+    const department = await Dept.findOne({
+      where: {
+        id: deptID,
+      }
+    });
+
+    const checkDepartments = await Dept.all({
+      where: {
+        parent: department.parent,
+      }
+    });
+    const checkDepartmentIDs = checkDepartments.map(looper => looper.id);
     const companyMaster = ['dept_master', 'dept_finance', 'dept_director', 'chile_dept_master'];
     const foundRole = await Role.findOne({where: {id: id}});
     if (!foundRole) {
@@ -37,15 +50,19 @@ export default class RoleService extends Service {
     }
 
     if (deptID && foundRole.role_slug === 'chile_dept_master') {
-      condition.where.dept = deptID;
+      console.log(checkDepartmentIDs,'00000');
+      condition.where.dept = {
+        $in: checkDepartmentIDs,
+      };
     }
 
     const userCount = await User.count(condition);
+    console.log(userCount);
     if (userCount > 0) {
       console.log(userID);
       throw {
         code: Response.getErrorCode(),
-        message: `本部门已经存在一位${foundRole.role_name}`
+        message: `本分会已经存在一位${foundRole.role_name}`
       }
     }
 
@@ -62,7 +79,7 @@ export default class RoleService extends Service {
         message: '非法操作',
       }
     }
-    if (['chile_dept_master', 'common_member', 'dept_finance', 'dept_master', 'dept_director'].includes(foundRole.role_slug)) {
+    if (['root', 'chile_dept_master', 'common_member', 'dept_finance', 'dept_master', 'dept_director'].includes(foundRole.role_slug)) {
       throw {
         code: Response.getErrorCode('remove'),
         message: '系统内置角色，无法删除!',
@@ -78,5 +95,9 @@ export default class RoleService extends Service {
     await Role.destroy({where: {id: id}});
 
     return true;
+  }
+
+  async getMaster(userID) {
+
   }
 }

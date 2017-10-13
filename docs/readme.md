@@ -159,3 +159,40 @@ ea://[module]/[id]
 * [消息列表](./notification/list.md)
 * [消息详情](./notification/details.md)
 
+#### 公文管理
+
+* [新增公文](./doc/create.md)
+* [公文详情](./doc/details.md)
+* [公文列表](./doc/list.md)
+* [公文接收者详情](./doc/receivers.md)
+
+#### 意向征集
+
+* [新增](./intention/create.md)
+* [详情](./intention/details.md)
+* [列表](./intention/list.md)
+* [投票](./intention/vote.md)
+* [终止征集](./intention/stop.md)
+
+#### 满意度调查
+
+* [发起调查](./satisfaction/create.md)
+* [评价](./satisfaction/evaluate.md)
+* [评价人员](./satisfaction/evaluate_person.md)
+* [列表](./satisfaction/list.md)
+* [删除](./satisfaction/remove.md)
+* [修改](./satisfaction/update.md)
+* [统计相关接口](./satisfaction/statistics.md)
+
+#### 技能培训相关接口
+
+* [创建媒体记录](./vod/create.md)
+* [创建并获取视频上传权鉴](./vod/create_upload_video.md)
+* [获取点播媒体详情](./vod/details.md)
+* [获取媒体列表](./vod/list.md)
+* [获取播放历史](./vod/player_history.md)
+* [获取媒体的上次播放记录](./vod/last_play_history.md)
+* [上传或更新媒体播放记录](./vod/upload_history.md)
+* [刷新媒体上传权鉴](./vod/refresh_upload_video.md)
+* [完成媒体播放](./vod/finished_play.md)
+

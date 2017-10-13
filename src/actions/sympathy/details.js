@@ -7,13 +7,14 @@
 import SympathyService from '../../service/SympathyService';
 import ApprovalService from '../../service/ApprovalService';
 import {filterParams} from '../../utils/filters'
-export default async function (req, params, {response, device}) {
+export default async function (req, params, {response, device, checkAccess, services}) {
+  await checkAccess('sympathy', 'view');
   const args = filterParams(req.query, {
     id: ['string', 'required'],
   });
 
-  const sympathyService = new SympathyService();
-  const approvalService = new ApprovalService();
+  const sympathyService = services.sympathy;
+  const approvalService = services.approval;
 
   const details = await sympathyService.details(args.id);
   if (details.state === 0) {

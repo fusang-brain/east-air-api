@@ -7,13 +7,14 @@ import {filterParams} from '../../utils/filters';
 import ApprovalService from '../../service/ApprovalService';
 import GrantApplicationService from '../../service/GrantApplicationService';
 
-export default async function  (req, params, {response, device}) {
+export default async function  (req, params, {response, device, checkAccess, services}) {
+  await checkAccess('grant_application', 'view');
   const args = filterParams(req.query, {
     id: ['string', 'required'],
   });
 
-  const approvalService = new ApprovalService();
-  const grantApplicationService = new GrantApplicationService();
+  const approvalService = services.approval;
+  const grantApplicationService = services.grantApplication;
 
   const details =  await grantApplicationService.details(args.id);
 

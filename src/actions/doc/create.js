@@ -8,7 +8,7 @@ import DocService from '../../service/DocService';
 import {filterParams} from '../../utils/filters'
 const docService = new DocService();
 
-export default async (req, params, {response}) => {
+export default async (req, params, {response, services}) => {
   const args = filterParams(req.body, {
     doc_title: ['string', 'required'],
     doc_type: ['integer', 'required'],
@@ -18,7 +18,26 @@ export default async (req, params, {response}) => {
     attach: ['array']
   });
 
-  const createdDoc = await docService.create(args);
+  args.user_id = req.user.id;
+
+  const createdDoc = await docService.create(args, req.user.id);
+
+  const allUnreadReceivers = await services.doc.getUnreadReceivers(createdDoc.id);
+
+  const unreadReceiverIDs = allUnreadReceivers.map(value => value.receiver_id);
+
+  await services.notification.sendToPeople({
+    title: `【公文】${createdDoc.doc_title}`,
+    body: createdDoc.doc_note || createdDoc.doc_title,
+    sender: null,
+    items: [{
+      subject_id: createdDoc.id,
+      subject_type: 4,
+      is_approval: false,
+    }],
+    receivers: unreadReceiverIDs,
+    template: 'doc',
+  });
 
   return {
     code: response.getSuccessCode(),

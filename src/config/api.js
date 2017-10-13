@@ -5,9 +5,12 @@ import path from 'path';
 const uploadFolder = path.join(__dirname, '../uploads');
 
 export default {
+
   jwt: {
     secret: 'its-20160612-uibki131-21nhusfd',
   },
+
+  debug: false,
 
   uploadFolder,
 }

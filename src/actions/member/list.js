@@ -27,18 +27,25 @@ export default async function(req, params, {models, device}) {
       $ne: 1,
     }
   }
+  condition.name = {
+    $ne: 'root',
+  }
   if (args.search) {
     condition.$or = {
-      ehr: { $like: `%${args.search}%`},
       name: { $like: `%${args.search}%`},
       mobile: { $like: `%${args.search}%`},
     };
   }
   if (args.birthday) {
-    condition.birthday = {
-      $gte: args.birthday[0],
-      $lte: args.birthday[1],
-    };
+    if (args.birthday[0] === args.birthday[1]) {
+      condition.birthday = moment(+args.birthday[0]).valueOf();
+      console.log(condition.birthday);
+    } else {
+      condition.birthday = {
+        $gte: args.birthday[0],
+        $lte: args.birthday[1],
+      };
+    }
   }
   if (args.deadline) {
     const currentTime = Date.now();
@@ -70,6 +77,9 @@ export default async function(req, params, {models, device}) {
     ],
     offset,
     limit,
+    order: [
+      ['create_at', 'DESC'],
+    ]
   });
 
 

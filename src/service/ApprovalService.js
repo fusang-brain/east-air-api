@@ -6,15 +6,24 @@ import ActivityService from './ActivityService';
 import SympathyService from './SympathyService';
 import GrantApplicationService from './GrantApplicationService';
 import NotificationService from './NotificationService';
-import Response from '../config/response'
+import Response from '../config/response';
 
 const notificationService = new NotificationService();
+
+const approvalTypeMapper = [
+  '其他',
+  '活动',
+  '慰问',
+  '经费',
+];
 
 export default class ApprovalService extends Service {
 
   constructor() {
     super();
     this.modelName = 'Approval';
+    this.dataAccess = [];
+    notificationService.dataAccess = this.dataAccess;
   }
 
   async generateApprovalFlowTemp(publishID) {
@@ -56,9 +65,19 @@ export default class ApprovalService extends Service {
           role_slug: 'chile_dept_master',
         }
       });
+
+      const smallDept = await Dept.all({
+        where: {
+          parent: foundUser.department.parent,
+        }
+      });
+
+      const smallDeptIDs = smallDept.map(looper => looper.id);
       let master = await User.findOne({
         where: {
-          dept: foundUser.department.id,
+          dept: {
+            $in: smallDeptIDs,
+          },
           role: chileDeptMasterRole.id,
         },
         include: [
@@ -123,6 +142,7 @@ export default class ApprovalService extends Service {
 
   async generateActApproval(projectID, publishID, approvalType = 1 , {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant}) {
     const Approval = this.getModel();
+
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
     const Dept = this.getModel('Dept');
@@ -167,6 +187,15 @@ export default class ApprovalService extends Service {
     if (!foundUser) {
       return false;
     }
+
+    const childMasterDepts = await Dept.all({
+      where: {
+        parent: foundUser.department.parent,
+      }
+    });
+
+    const childMasterDeptIDs = childMasterDepts.map(item => item.id);
+
     let sortNo = 1;
 
     if (foundUser.user_role.role_slug !== 'chile_dept_master') {
@@ -179,7 +208,9 @@ export default class ApprovalService extends Service {
       let master = await User.findOne({
         where: {
           state: 1,
-          dept: foundUser.department.id,
+          dept: {
+            $in: childMasterDeptIDs,
+          },
           role: chileDeptMasterRole.id,
         }
       });
@@ -193,6 +224,17 @@ export default class ApprovalService extends Service {
         sortNo += 1;
       }
     }
+
+    if (foundUser.user_role.role_slug === 'chile_dept_master' && !has_grant) {
+      await this.getModel('TradeUnionAct').update({
+        state: 2,
+      }, {
+        where: {
+          id: projectID,
+        }
+      });
+    }
+
     if (has_grant) {
       // 找到当前发起人的工会主管（财务，主任，主席）
       for (let i = 0; i < flowMasterRoles.length; i ++) {
@@ -238,8 +280,8 @@ export default class ApprovalService extends Service {
 
       // 发送消息
       await notificationService.sendToPersonal({
-        title: '您有一条新的审批!',
-        body: project_subject,
+        title: `【${approvalTypeMapper[approvalType]}】${project_subject}`,
+        body: project_content,
         sender: '',
         items: [
           {
@@ -249,6 +291,7 @@ export default class ApprovalService extends Service {
           }
         ],
         receiver: ApprovalFlow[0].approval_man_id,
+        template: 'approval',
       })
     }
     return approval;
@@ -281,10 +324,13 @@ export default class ApprovalService extends Service {
     // TODO get project details
     let project = {};
     if (approval.approval_type === 1) {
+      activityService.dataAccess = this.dataAccess;
       project = await activityService.details(approval.project_id);
     } else if (approval.approval_type === 2) {
+      sympathyService.dataAccess = this.dataAccess;
       project = await sympathyService.details(approval.project_id);
     } else if (approval.approval_type === 3) {
+      grantApplicationService.dataAccess = this.dataAccess;
       project = await grantApplicationService.details(approval.project_id);
     } else {
       throw {
@@ -304,13 +350,12 @@ export default class ApprovalService extends Service {
     };
 
     const approvalFlows = await this.approvalFlows(approval.id, publisher);
-
     approval.setDataValue('flows', approvalFlows);
     approval.setDataValue('project', project);
     return approval;
   }
 
-  async getActApprovalDetail(approvalID) {
+  async getActApprovalDetail(approvalID, device='pc') {
     const Approval = this.getModel();
     const User = this.getModel('User');
     const activityService = new ActivityService();
@@ -324,7 +369,7 @@ export default class ApprovalService extends Service {
           model: User,
           as: 'publisher',
           attributes: ['id', 'name', 'avatar'],
-        }
+        },
       ]
     });
 
@@ -433,6 +478,9 @@ export default class ApprovalService extends Service {
     return await Approval.count({
       where: {
         approval_type: approvalType,
+        dept_id: {
+          $in: this.dataAccess,
+        }
       },
       include: [
         {
@@ -449,9 +497,10 @@ export default class ApprovalService extends Service {
     });
   }
 
-  async approvalList({state, search, offset, limit, user_id, type}) {
+  async approvalList({state, search, offset, limit, user_id, type, notLimit}) {
     const Approval = this.getModel();
     const condition = {};
+
     let stateCondition = [0, 1, 2];
     if (state === 'all') {
       stateCondition = [0, 1, 2];
@@ -488,6 +537,9 @@ export default class ApprovalService extends Service {
         $like: `%${search}%`,
       }
     }
+    condition.dept_id = {
+      $in: this.dataAccess,
+    }
 
     const undoTotal = await Approval.count({
       where: {
@@ -506,7 +558,7 @@ export default class ApprovalService extends Service {
           },
           required: true,
         }
-      ]
+      ],
     });
 
     const total = await Approval.count({
@@ -526,6 +578,11 @@ export default class ApprovalService extends Service {
         }
       ]
     });
+
+    if (notLimit) {
+      offset = undefined;
+      limit = undefined;
+    }
 
     const approvals = await Approval.all({
       where: condition,
@@ -548,6 +605,9 @@ export default class ApprovalService extends Service {
           model: this.getModel('Dept'),
           as: 'department',
         }
+      ],
+      order: [
+        ['publish_date', 'DESC'],
       ]
     });
 
@@ -557,6 +617,7 @@ export default class ApprovalService extends Service {
       approvals,
     }
   }
+
 
   async executeApproval({approval_id, result, content, user_id}) {
     const Approval = this.getModel('Approval');
@@ -607,7 +668,8 @@ export default class ApprovalService extends Service {
           id: foundApprovalFlow.approval.project_id,
         }
       });
-      if (act.budget_total === 0) {
+
+      if (+act.budget_total === 0) {
         is_act = true;
       }
     } else if (approvalType === 2) {
@@ -633,9 +695,10 @@ export default class ApprovalService extends Service {
         });
 
         // 通知发起人
+
         await notificationService.sendToPersonal({
-          title: '您的审批已经通过!',
-          body: foundApprovalFlow.approval.project_subject,
+          title: `【${approvalTypeMapper[foundApprovalFlow.approval.approval_type]}】${foundApprovalFlow.approval.project_subject}`,
+          body: foundApprovalFlow.approval.project_content,
           sender: null,
           items: [
             {
@@ -644,7 +707,8 @@ export default class ApprovalService extends Service {
               is_approval: false,
             }
           ],
-          receiver: foundApprovalFlow.approval_man_id,
+          receiver: foundApprovalFlow.approval.publish_id,
+          template: 'approval_success',
         });
 
         return {
@@ -652,6 +716,7 @@ export default class ApprovalService extends Service {
           approval: foundApprovalFlow.approval,
         };
       }
+
       if (foundApprovalFlow.approval_man.user_role.role_slug === 'dept_master') {
         await ProjectModel.update({
           state: 2,
@@ -660,10 +725,12 @@ export default class ApprovalService extends Service {
             id: foundApprovalFlow.approval.project_id
           }
         });
+
         // 通知发起人
+        console.log('通知发起人已经通过');
         await notificationService.sendToPersonal({
-          title: '您的审批已经通过!',
-          body: foundApprovalFlow.approval.project_subject,
+          title: `【${approvalTypeMapper[foundApprovalFlow.approval.approval_type]}】${foundApprovalFlow.approval.project_subject}`,
+          body: foundApprovalFlow.approval.project_content,
           sender: null,
           items: [
             {
@@ -672,13 +739,15 @@ export default class ApprovalService extends Service {
               is_approval: false,
             }
           ],
-          receiver: foundApprovalFlow.approval_man_id,
+          receiver: foundApprovalFlow.approval.publish_id,
+          template: 'approval_success',
         });
         return {
           result: 'success',
           approval: foundApprovalFlow.approval,
         };
       } else {
+
         const flow = await ApprovalFlows.findOne({
           where: {
             approval_id: approval_id,
@@ -702,8 +771,8 @@ export default class ApprovalService extends Service {
 
         // 通知下个审批人
         await notificationService.sendToPersonal({
-          title: '您有一条新的审批!',
-          body: flow.approval.project_subject,
+          title: `【${approvalTypeMapper[flow.approval.approval_type]}】${flow.approval.project_subject}`,
+          body: flow.approval.project_content,
           sender: null,
           items: [
             {
@@ -713,6 +782,7 @@ export default class ApprovalService extends Service {
             }
           ],
           receiver: flow.approval_man_id,
+          template: 'approval',
         });
 
         await ApprovalFlows.update({
@@ -723,10 +793,12 @@ export default class ApprovalService extends Service {
             flow_sort: foundApprovalFlow.flow_sort + 1,
           }
         });
+
         return {
           result: 'next',
           approval: foundApprovalFlow.approval,
         };
+
       }
     }
 
@@ -741,9 +813,10 @@ export default class ApprovalService extends Service {
       });
 
       // 通知审批发起人
+      console.log('通知发起人已经拒绝');
       await notificationService.sendToPersonal({
-        title: '您的审批被拒绝了!',
-        body: foundApprovalFlow.approval.project_subject,
+        title: `【${approvalTypeMapper[foundApprovalFlow.approval.approval_type]}】${foundApprovalFlow.approval.project_subject}`,
+        body: foundApprovalFlow.approval.project_content,
         sender: null,
         items: [
           {
@@ -753,6 +826,7 @@ export default class ApprovalService extends Service {
           }
         ],
         receiver: foundApprovalFlow.approval.publish_id,
+        template: 'approval_refuse',
       });
 
       return {

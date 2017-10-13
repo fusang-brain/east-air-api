@@ -6,7 +6,8 @@ import sha1 from 'crypto-js/sha1';
 import {filterParams} from '../../utils/filters';
 import {DeptService, RoleService} from '../../service';
 
-export default async function (req, params, {models, response}) {
+export default async function (req, params, {models, response, checkAccess}) {
+  await checkAccess('member', 'create');
   const deptService = new DeptService();
   const roleService = new RoleService();
   const args = filterParams(req.body, {
@@ -34,6 +35,14 @@ export default async function (req, params, {models, response}) {
     integration: 'number',
     mark: 'string',
   });
+
+  if (args.name === 'root') {
+    return {
+      code: response.getErrorCode(),
+      message: '无法使用此姓名',
+    }
+  }
+
   if (!await deptService.checkIsAvailableDept(args.dept)) {
     return {
       code: response.getErrorCode(),
@@ -46,6 +55,14 @@ export default async function (req, params, {models, response}) {
   const User = models.User;
   if (!Array.isArray(args.data_access)) {
     args.data_access = [args.dept]
+  } else {
+    const filteredDataAccess = [];
+    args.data_access.forEach(item => {
+      if (!filteredDataAccess.includes(item)) {
+        filteredDataAccess.push(item);
+      }
+    });
+    args.data_access = filteredDataAccess;
   }
   const userCount = await User.count({
     where: {

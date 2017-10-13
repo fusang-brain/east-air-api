@@ -4,7 +4,8 @@
 
 import RoleService from '../../service/RoleService';
 
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, checkAccess}) {
+  await checkAccess('role_permission', 'remove');
   const id = req.body.id;
   const roleService = new RoleService();
 

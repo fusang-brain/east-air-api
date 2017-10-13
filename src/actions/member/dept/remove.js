@@ -2,7 +2,8 @@
  * Created by alixez on 17-7-27.
  */
 
-export default async function (req, params, {models, response}) {
+export default async function (req, params, {models, response, checkAccess}) {
+  await checkAccess('dept', 'remove');
   const {deptID} = req.body;
   if (!deptID) {
     return {

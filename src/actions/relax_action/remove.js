@@ -5,9 +5,8 @@
 import {filterParams} from '../../utils/filters';
 import RelaxActionService from '../../service/RelaxActionService';
 
-const relaxActionService = new RelaxActionService();
-
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, services}) {
+  const relaxActionService = services.relaxAction;
   const args = filterParams(req.body, {
     id: ['string', 'required'],
   });

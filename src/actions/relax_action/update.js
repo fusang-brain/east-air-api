@@ -5,10 +5,10 @@ import RelaxActionService from '../../service/RelaxActionService';
 import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
-const relaxActionService = new RelaxActionService();
 
-export default async function (req, params, {response, models}) {
-
+export default async function (req, params, {response, services, checkAccess}) {
+  await checkAccess('relax_action', 'view');
+  const relaxActionService = services.relaxAction;
   const args = filterParams(req.body, {
     id: ['string', 'required'],
     title: ['string', 'filter_none'],
@@ -19,6 +19,8 @@ export default async function (req, params, {response, models}) {
     place: ['string', 'filter_none'],
     people: ['array'],
   });
+
+  console.log(args);
 
   const saveType = params[0];
   if (!['submit', 'draft'].includes(saveType)) {

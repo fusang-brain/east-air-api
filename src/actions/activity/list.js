@@ -4,30 +4,106 @@
 import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
-export default async function (req, param, {response, models, device}) {
+export default async function (req, param, {response, models, services, device, checkAccess}) {
+  await checkAccess('activity', 'view');
   const params = filterParams(req.query, {
     search: 'string',
     state: 'string',
   });
+
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
-  const condition = {};
+
+  // found all department master
+  // const masters = await services.user.getAllMaster(req.user.dept);
+  // const masterIDs = masters.map(master => master.id);
+
+  const condition = {
+    $or: [
+      // 用户自己发起的活动
+      {
+        user_id: req.user.id,
+      },
+
+      // 数据权限内已通过的活动
+      {
+        user_id: {
+          $ne: req.user.id,
+        },
+        state: 2,
+      },
+
+    ],
+  };
   const ActModel = models.TradeUnionAct;
   let attributes = ['no', 'id', 'subject', 'act_type', 'create_date', 'state', 'start_date', 'end_date'];
   if (device === 'app') {
     attributes.push('process');
   }
+
   if (params.search) {
-    condition.subject = {
+    condition.$or[0].subject = {
+      $like: `%${params.search}%`,
+    };
+    condition.$or[1].subject = {
       $like: `%${params.search}%`,
     };
   }
+
   if (params.state) {
-    condition.state = params.state
+    console.log(params.state, '------');
+    if (+params.state === 2) {
+      condition.$or[0].state = params.state;
+      condition.$or[1].state = params.state;
+    } else {
+      condition.$or[0].state = params.state;
+      condition.$or.splice(1, 1);
+    }
+
   }
-  const total = await ActModel.count({
+
+  const all = await ActModel.all({
     where: condition,
+    include: [
+      {
+        model: models.User,
+        as: 'publisher',
+        required: true,
+        attributes: ['id', 'name', 'avatar']
+      },
+      {
+        model: models.Dept,
+        as: 'department',
+        required: true,
+        attributes: ['id', 'dept_name'],
+      },
+      {
+        model: models.ActEvaluation,
+        as: 'evaluations',
+        where: {
+          user_id: req.user.id,
+        },
+        required: false,
+      },
+      {
+        model: models.TradeUnionActDept,
+        as: 'accept_depts',
+        where: {
+          $or: [
+            {
+              dept_id: req.user.dept,
+            },
+            {
+              dept_id: req.user.department.parent,
+            }
+          ]
+        },
+        required: true,
+      }
+    ],
   });
+
+  const total = all.length;
 
   const acts = await ActModel.all({
     where: condition,
@@ -52,6 +128,21 @@ export default async function (req, param, {response, models, device}) {
           user_id: req.user.id,
         },
         required: false,
+      },
+      {
+        model: models.TradeUnionActDept,
+        as: 'accept_depts',
+        where: {
+          $or: [
+            {
+              dept_id: req.user.dept,
+            },
+            {
+              dept_id: req.user.department.parent,
+            }
+          ]
+        },
+        required: true,
       }
     ],
     order: [
@@ -74,6 +165,7 @@ export default async function (req, param, {response, models, device}) {
     if (Array.isArray(act.evaluations) && act.evaluations.length > 0) {
       has_evaluation = true;
     }
+    // const qodeStr = `eastern://sign_act?act_id=${act.id}`;
     return {
       no: act.no,
       id: act.id,
@@ -88,6 +180,7 @@ export default async function (req, param, {response, models, device}) {
       department: act.department,
       is_end: isEnd,
       has_evaluation,
+      // qode_str: qodeStr,
     }
 
   });

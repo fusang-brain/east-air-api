@@ -10,6 +10,8 @@ export default function (sequelize, DataTypes) {
     act_id: {type: DataTypes.UUID},
     no: {type: DataTypes.STRING, defaultValue: generateNo},
     file_path: {type: DataTypes.STRING, length: 255},
+    size: {type: DataTypes.INTEGER},
+    origin_filename: {type: DataTypes.STRING},
   }, {
     classMethods: {
       associate(models) {

@@ -4,8 +4,8 @@
 
 import {getErrorCode, getSuccessCode} from '../../../config/response';
 
-export default async function(req, params, {models}) {
-
+export default async function(req, params, {models, checkAccess}) {
+  await checkAccess('dept', 'create');
   const {parentID, name} = req.body;
   const DeptModel = models.Dept;
   let treeLevel = 1;

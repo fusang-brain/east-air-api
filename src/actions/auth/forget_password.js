@@ -5,8 +5,9 @@ import {getSuccessCode, getErrorCode} from '../../config/response';
 import Auth from '../../utils/auth';
 import sha1 from 'crypto-js/sha1';
 import moment from 'moment';
+import { verifyCode } from '../../utils/sms';
 
-export default async function(req, params, {device, models}) {
+export default async function(req, params, {device, models, response, redisClient}) {
   if (!device) {
     throw {
       code: getErrorCode(),
@@ -16,7 +17,12 @@ export default async function(req, params, {device, models}) {
   const UserModel = models.User;
   const {mobile, code, password, re_password} = req.body;
 
-  // todo verify code
+  if (! await verifyCode(mobile, code)) {
+    return {
+      code: response.getErrorCode(),
+      message: '您的验证码错误',
+    }
+  }
 
   const user = await UserModel.findOne({where: {
     mobile: mobile
@@ -84,10 +90,11 @@ export default async function(req, params, {device, models}) {
     }
 
     user.password = Auth.encodePassword(password);
+
     user.update_at = new Date().getTime();
 
     await user.save();
-
+    redisClient.set(`ACCESS_TOKEN_${user.id}`, null, 'EX', 60);
     return {
       code: getSuccessCode('update'),
       message: '密码修改成功',

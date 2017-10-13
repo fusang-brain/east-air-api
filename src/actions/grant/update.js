@@ -6,7 +6,8 @@
 import {filterParams} from '../../utils/filters';
 import GrantApplicationService from '../../service/GrantApplicationService';
 import ApprovalService from '../../service/ApprovalService';
-export default async function  (req, params, {response}) {
+export default async function  (req, params, {response, checkAccess, services}) {
+  await checkAccess('grant_application', 'edit');
   const args = filterParams(req.body, {
     id: ['string', 'required'],
     type: ['number'],
@@ -40,15 +41,15 @@ export default async function  (req, params, {response}) {
     delete args.items;
   }
 
-  const grantApplicationService  = new GrantApplicationService();
-  const approvalService = new ApprovalService();
+  const grantApplicationService  = services.grantApplication;
+  const approvalService = services.approval;
   const foundGrant = await grantApplicationService.update(args);
   if (saveType === 'submit') {
     await approvalService.generateApproval(args.id, req.user.id, 3, {
       project_subject: foundGrant.type_string,
       project_type: 10,
       project_purpose: args.purpose || foundGrant.purpose,
-      project_content: args.others || foundGrant.others,
+      project_content: args.purpose || foundGrant.purpose,
       dept_id: args.dept_id || foundGrant.dept_id,
       total_amount: args.cost || foundGrant.cost,
       has_grant: true,

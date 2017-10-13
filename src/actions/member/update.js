@@ -7,7 +7,8 @@ import sha1 from 'crypto-js/sha1';
 import {filterParams} from '../../utils/filters';
 import {DeptService, RoleService} from '../../service';
 
-export default async function (req, params, {models, response}) {
+export default async function (req, params, {models, response, checkAccess}) {
+  await checkAccess('member', 'edit');
   const deptService = new DeptService();
   const roleService = new RoleService();
   const args = filterParams(req.body, {
@@ -36,6 +37,14 @@ export default async function (req, params, {models, response}) {
     integration: 'number',
     mark: 'string',
   });
+
+  if (args.name === 'root') {
+    return {
+      code: response.getErrorCode(),
+      message: '无法使用此姓名',
+    }
+  }
+
   if (!await deptService.checkIsAvailableDept(args.dept)) {
     return {
       code: response.getErrorCode(),
@@ -46,8 +55,27 @@ export default async function (req, params, {models, response}) {
   const values = {...args};
   const User = models.User;
   delete values.user;
+
+  const foundExistUser = await User.findOne({
+    where: {
+      mobile: args.mobile,
+    }
+  });
+
+  if (foundExistUser && foundExistUser.id !== args.user) {
+    return {
+      code: response.getErrorCode('update'),
+      message: '该手机号已经存在',
+    }
+  }
+
   await User.update(values, {
-    where: {id: args.user}
+    where: {
+      id: args.user,
+      name: {
+        $ne: 'root',
+      }
+    }
   });
 
   await models.DataAccess.destroy({
@@ -55,10 +83,17 @@ export default async function (req, params, {models, response}) {
       user_id: args.user,
     }
   });
-  const dataAccess = values.data_access.map(loop => ({
+  const filteredDataAccess = [];
+  args.data_access.forEach(item => {
+    if (!filteredDataAccess.includes(item)) {
+      filteredDataAccess.push(item);
+    }
+  })
+  const dataAccess = filteredDataAccess.map(loop => ({
     user_id: args.user,
     dept_id: loop,
   }));
+
   await models.DataAccess.bulkCreate(dataAccess);
 
   return {

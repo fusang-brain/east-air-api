@@ -6,7 +6,8 @@ import {ApprovalService} from '../../service';
 import {getMasterRole} from '../../config/init_data';
 import Decimal from 'decimal.js';
 
-export default async function (req, param, {response, models}) {
+export default async function (req, param, {response, models, checkAccess}) {
+  await checkAccess('activity', 'create');
   const roles = getMasterRole();
   if (roles.includes(req.user.user_role.role_slug)) {
     return {
@@ -25,6 +26,7 @@ export default async function (req, param, {response, models}) {
     end_date: ['string', 'required'],
     process: ['string', 'required'],
     integration: ['integer'],
+    // dept_ids: ['array', 'required'],
   });
 
   if (req.body.is_draft && req.body.is_draft === true) {
@@ -69,6 +71,23 @@ export default async function (req, param, {response, models}) {
   const budgets = req.body.budgets;
   const images = req.body.images || [];
   const attach = req.body.attach || [];
+  const acceptDeptIDs = req.body.dept_ids || [];
+
+  if (!Array.isArray(acceptDeptIDs)) {
+    return {
+      code: response.getErrorCode(),
+      message: '请上传正确的活动部门',
+    }
+  }
+
+  if (!acceptDeptIDs.includes(req.user.dept)) {
+    acceptDeptIDs.push(req.user.dept);
+  }
+
+  params.accept_depts = acceptDeptIDs.map(deptID => ({
+    dept_id: deptID,
+  }));
+
   if (!budgets) {
     return {
       code: response.getErrorCode(),
@@ -83,16 +102,29 @@ export default async function (req, param, {response, models}) {
   }
   params.budget_total = 0;
   for (let i = 0; i < budgets.length; i ++) {
+    budgets[i].sort = i;
     params.budget_total = Decimal.add(params.budget_total, budgets[i].cost).toNumber();
   }
-
   params.budgets = budgets;
   params.images = images.map(loop => ({
     file_path: loop,
   }));
-  params.attach = attach.map(loop => ({
-    file_path: loop,
+
+  // attach upload changed
+  const allAttachFiles = await models.File.all({
+    where: {
+      path: {
+        $in: attach,
+      }
+    }
+  });
+
+  params.attach = allAttachFiles.map(loop => ({
+    file_path: loop.path,
+    size: loop.size,
+    origin_filename: loop.origin_filename,
   }));
+
   const createdAct = await TradeUnionAct.create(params, {
     include: [
       {
@@ -114,6 +146,9 @@ export default async function (req, param, {response, models}) {
       },{
         model: models.TradeUnionActImage,
         as: 'images',
+      },{
+        model: models.TradeUnionActDept,
+        as: 'accept_depts',
       }
     ]
   });

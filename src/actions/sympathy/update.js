@@ -7,8 +7,8 @@ import {filterParams} from '../../utils/filters';
 import ApprovalService from '../../service/ApprovalService';
 import SympathyService from '../../service/SympathyService';
 
-export default async function (req, params, {response}) {
-
+export default async function (req, params, {response, checkAccess, services}) {
+  await checkAccess('sympathy', 'edit');
   const args = filterParams(req.body, {
     id: ['string', 'required'],
     reason: 'string',
@@ -24,7 +24,7 @@ export default async function (req, params, {response}) {
     delete args.dept_id;
   }
   const saveType = params[0];
-  const sympathyService = new SympathyService();
+  const sympathyService = services.sympathy;
 
   if (saveType === 'submit') {
     args.state = 1;
@@ -40,12 +40,12 @@ export default async function (req, params, {response}) {
   const foundSympathy = await sympathyService.update(args);
 
   if (args.state === 1) {
-    const approvalService = new ApprovalService();
+    const approvalService = services.approval;
     await approvalService.generateApproval(args.id, req.user.id, 2, {
       project_subject: args.reason || foundSympathy.reason,
       project_type: 9,
-      project_content: '无',
-      project_purpose: '无',
+      project_content: args.reason || foundSympathy.reason,
+      project_purpose: args.reason || foundSympathy.reason,
       dept_id: args.dept_id || foundSympathy.dept_id,
       total_amount: args.sympathy_cost || foundSympathy.sympathy_cost,
       has_grant: true,

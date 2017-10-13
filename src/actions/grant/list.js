@@ -6,7 +6,8 @@
 
 import GrantApplicationService from '../../service/GrantApplicationService';
 import {filterParams} from '../../utils/filters'
-export default async function (req, params, {response}) {
+export default async function (req, params, {response, checkAccess, services}) {
+  await checkAccess('grant_application', 'view');
   const args = filterParams(req.query, {
     search: 'string',
     state: 'string',
@@ -14,7 +15,7 @@ export default async function (req, params, {response}) {
 
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
-  const grantApplicationService = new GrantApplicationService();
+  const grantApplicationService = services.grantApplication;
   const res = await grantApplicationService.generateList({offset, limit, search: args.search, state: args.state});
 
   return {

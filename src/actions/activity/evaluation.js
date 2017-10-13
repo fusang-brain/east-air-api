@@ -3,7 +3,8 @@
  */
 import {filterParams} from '../../utils/filters';
 
-export default async function (req, params, {response, models, device}) {
+export default async function (req, params, {response, models, device, checkAccess}) {
+  await checkAccess('activity', 'comment_activity');
   const args = filterParams(req.body, {
     act_id: ['string', 'required'],
     result: ['boolean'],
@@ -18,6 +19,7 @@ export default async function (req, params, {response, models, device}) {
       act_id: actID,
     }
   });
+
   if (actTotal > 0) {
     await ActEvaluation.update(setData, {
       where: {

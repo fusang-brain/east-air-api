@@ -4,10 +4,9 @@ import ApprovalService from '../../service/ApprovalService';
 import {filterParams} from "../../utils/filters"
 import Decimal from 'decimal.js';
 
-const sympathyService = new SympathyService();
-
-export default async function (req, params, {response}) {
-
+export default async function (req, params, {response, checkAccess, services}) {
+  await checkAccess('sympathy', 'start');
+  const sympathyService = services.sympathy;
   const args = filterParams(req.body, {
     reason: ['string', 'required'],
     person: ['string', 'required'],
@@ -35,12 +34,12 @@ export default async function (req, params, {response}) {
   const createdSympathy = await sympathyService.create(args);
 
   if (args.state === 1) {
-    const approvalService = new ApprovalService();
+    const approvalService = services.approval;
     await approvalService.generateApproval(createdSympathy.id, req.user.id, 2, {
       project_subject: createdSympathy.reason,
       project_type: 9,
-      project_content: '无',
-      project_purpose: '无',
+      project_content: createdSympathy.reason,
+      project_purpose: createdSympathy.reason,
       dept_id: createdSympathy.dept_id,
       total_amount: createdSympathy.sympathy_cost,
       has_grant: true,

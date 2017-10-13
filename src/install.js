@@ -3,7 +3,7 @@
  */
 import models from './models';
 import Auth from './utils/auth';
-import {permissions, dept, sysuser, roles} from './config/init_data';
+import {permissions, dept, sysuser, roles, defaultImage, SurveyImages, SatisfactionSurvey} from './config/init_data';
 
 const userTotal = 10;
 
@@ -50,6 +50,7 @@ async function start() {
       let perm = item.permission[j];
       await models.Permission.create({
         module_id: module.id,
+        module_slug: module.slug,
         name: perm.name,
         slug: perm.slug,
       });
@@ -74,44 +75,59 @@ async function start() {
       role_name: roles[i].role_name,
       role_slug: roles[i].role_slug,
       role_description: roles[i].role_description,
+      available: roles[i].available,
     });
     defaultRoles[role.role_slug] = role;
   }
   log('>> 角色创建成功');
 
+  log('>> 创建初始的满意度调查 >>');
+  for (let i = 0; i < SatisfactionSurvey.length; i ++) {
+    await models.SatisfactionSurvey.create(SatisfactionSurvey[i]);
+  }
+  for (let i = 0; i < SurveyImages.length; i ++) {
+    await models.SatisfactionSurveyImage.create(SurveyImages[i]);
+  }
+  for (let i = 0; i < defaultImage.length; i ++) {
+    await models.File.create(defaultImage[i]);
+  }
+  log('>> 满意度调查创建成功 >>');
+
   log('>> 创建系统管理员 >>');
   await models.User.create({
     name: 'root',
-    mobile: '18627894265',
+    mobile: '13100000000',
     nickname: 'root',
     birthday: new Date().getTime(),
     dept: defaultDept,
-    role: defaultRoles['common_member'].id,
-    card_num: '--',
+    role: defaultRoles['root'].id,
+    card_num: '100000000000100000',
     password: Auth.encodePassword('C1508FB3AA5E9F4E49920A9618AA96F5DC287182'), // 'itspeed'
   });
+
   log('>> 管理员创建成功 >>');
 
-  log('>> 创建公司高层会员 >>');
-  let heads = ['dept_master', 'chile_dept_master', 'dept_finance', 'dept_director'];
-  for (let i = 0; i < heads.length; i ++) {
-    let loop = heads[i];
-    sysuser.mobile = (String) (15600000000 + i);
-    sysuser.dept = defaultDept;
-    sysuser.role = defaultRoles[heads[i]].id;
-    await models.User.create(sysuser);
-  }
-  log('>> 公司高层会员创建成功 >>');
-
-  log('>> 批量生成用户 >>');
-  for (let i = 0; i < userTotal; i ++) {
-    sysuser.mobile = (String) (15500000000 + i);
-    sysuser.dept = defaultDept;
-    sysuser.role = defaultRoles['common_member'].id;
-    await models.User.create(sysuser);
-  }
-  log('>> 批量生成用户成功 >>');
-
+  // log('>> 创建公司高层会员 >>');
+  // let heads = ['dept_master', 'chile_dept_master', 'dept_finance', 'dept_director'];
+  // for (let i = 0; i < heads.length; i ++) {
+  //   let loop = heads[i];
+  //   sysuser.name = '用户' + Math.round(Math.random() * 10000);
+  //   sysuser.mobile = (String) (15600000000 + i);
+  //   sysuser.dept = defaultDept;
+  //   sysuser.role = defaultRoles[heads[i]].id;
+  //   await models.User.create(sysuser);
+  // }
+  // log('>> 公司高层会员创建成功 >>');
+  //
+  // log('>> 批量生成用户 >>');
+  // for (let i = 0; i < userTotal; i ++) {
+  //   sysuser.name = '用户' + Math.round(Math.random() * 10000);
+  //   sysuser.mobile = (String) (15500000000 + i);
+  //   sysuser.dept = defaultDept;
+  //   sysuser.role = defaultRoles['common_member'].id;
+  //   await models.User.create(sysuser);
+  // }
+  // log('>> 批量生成用户成功 >>');
   log('== 初始数据创建成功 ==');
 }
 

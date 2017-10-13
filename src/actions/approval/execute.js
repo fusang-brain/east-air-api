@@ -3,55 +3,67 @@
  */
 
 import {filterParams} from '../../utils/filters';
-import ApprovalService from '../../service/ApprovalService';
-import NotificationService from '../../service/NotificationService';
 
-const approvalService = new ApprovalService();
-const notificationService = new NotificationService();
-export default async function (req, params, {response, models}) {
+export default async function (req, params, {response, checkAccess, services}) {
+  await checkAccess('grant_approval', 'activity_funding');
+  await checkAccess('grant_approval', 'apply_funding');
   const args = filterParams(req.body, {
     approval_id: 'string',
     result: 'integer',
     content: 'string',
   });
 
-  const executeResult = await approvalService.executeApproval({
+  const executeResult = await services.approval.executeApproval({
     approval_id: args.approval_id,
     result: args.result,
     content: args.content,
     user_id: req.user.id,
   });
 
-  switch (executeResult.result) {
-    case 'success':
-      await notificationService.sendToPersonal({
-        title: '您的申请已被同意!',
-        body: args.content,
-        sender: null,
-        items: [
-          {
-            subject_id: executeResult.approval.project_id,
-            subject_type: executeResult.approval.approval_type,
-          }
-        ],
-        receiver: executeResult.approval.publish_id,
-      })
-      break;
-    case 'refused':
-      await notificationService.sendToPersonal({
-        title: '您的申请已被拒绝!',
-        body: args.content,
-        sender: null,
-        items: [
-          {
-            subject_id: executeResult.approval.project_id,
-            subject_type: executeResult.approval.approval_type,
-          }
-        ],
-        receiver: executeResult.approval.publish_id,
-      });
-      break;
-  }
+  // switch (executeResult.result) {
+  //   case 'success':
+  //     // await services.notification.sendToPersonal({
+  //     //   title: `【${approvalTypeMapper[foundApprovalFlow.approval.approval_type]}】${foundApprovalFlow.approval.project_subject}`,
+  //     //   body: foundApprovalFlow.approval.project_content,
+  //     //   sender: null,
+  //     //   items: [
+  //     //     {
+  //     //       subject_id: foundApprovalFlow.approval.project_id,
+  //     //       subject_type: foundApprovalFlow.approval.approval_type,
+  //     //       is_approval: false,
+  //     //     }
+  //     //   ],
+  //     //   receiver: foundApprovalFlow.approval_man_id,
+  //     //   template: 'approval_success',
+  //     // });
+  //     await services.notification.sendToPersonal({
+  //       title: '您的申请已被同意!',
+  //       body: args.content,
+  //       sender: null,
+  //       items: [
+  //         {
+  //           subject_id: executeResult.approval.project_id,
+  //           subject_type: executeResult.approval.approval_type,
+  //         }
+  //       ],
+  //       receiver: executeResult.approval.publish_id,
+  //     })
+  //     break;
+  //   case 'refused':
+  //     await services.notification.sendToPersonal({
+  //       title: '您的申请已被拒绝!',
+  //       body: args.content,
+  //       sender: null,
+  //       items: [
+  //         {
+  //           subject_id: executeResult.approval.project_id,
+  //           subject_type: executeResult.approval.approval_type,
+  //         }
+  //       ],
+  //       receiver: executeResult.approval.publish_id,
+  //     });
+  //     break;
+  // }
 
   return {
     code: response.getSuccessCode(),

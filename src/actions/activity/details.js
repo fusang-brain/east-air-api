@@ -2,59 +2,29 @@
  * Created by alixez on 17-7-31.
  */
 import {ApprovalService, ActivityService} from '../../service';
-export default async function (req, params, {response, models, device}) {
+export default async function (req, params, {response, models, device, services}) {
   const actID = req.query.act_id;
-  const ActModel = models.TradeUnionAct;
-  const foundAct = await ActModel.findOne({
-    where: {
-      id: actID,
-    },
-    include: [
-      {
-        model: models.User,
-        as: 'publisher',
-        required: false,
-        attributes: ['id', 'name', 'avatar']
-      },
-      {
-        model: models.Dept,
-        as: 'department',
-        required: false,
-        attributes: ['id', 'dept_name'],
-      },
-      {
-        model: models.GrantApplication,
-        as: 'grant_apply',
-        include: [
-          {
-            model: models.GrantItem,
-            as: 'items'
-          },
-          {
-            model: models.Dept,
-            as: 'dept',
-          }
-        ]
-      },
-      {
-        model: models.TradeUnionActBudget,
-        as: 'budgets',
-      },{
-        model: models.TradeUnionActAttach,
-        as: 'attach',
-      },{
-        model: models.TradeUnionActImage,
-        as: 'images',
-      }
-    ]
-  });
+  const foundAct = await services.activity.details(actID);
+  let depts = null;
+  if (device === 'pc') {
+    depts = foundAct.accept_depts.map(item => item.dept_id);
+    foundAct.setDataValue('accept_dept_ids', depts);
+  } else if (device === 'app') {
+    depts = foundAct.accept_depts.map(item => item.dept_info);
+    foundAct.setDataValue('accept_dept_values', depts);
+  }
+  // delete foundAct.accept_depts;
+  // foundAct.setDataValue('accept_depts', depts);
+  // foundAct.accept_depts = depts;
   const approval = await models.Approval.findOne({
     where: {
       project_id: foundAct.id,
     }
   });
-  const approvalService = new ApprovalService();
-  const activityService = new ActivityService();
+
+  const approvalService = services.approval;
+  const activityService = services.activity;
+
   const approvalDetail = await approvalService.getActApprovalDetail(approval.id);
   let flows = approvalDetail.getDataValue('flows');
   if (device === 'app') {
@@ -64,13 +34,23 @@ export default async function (req, params, {response, models, device}) {
     approval.setDataValue('flows', f);
   }
   const evaluations = await activityService.getEvaluations(foundAct.id);
+  const qrcodeStr = `eastern://sign_act?act_id=${foundAct.id}`;
+
+  let evaluationStatistics = await activityService.getEvaluationStatistics(foundAct.id);
+
+  if (foundAct.end_date <= Date.now()) {
+    // evaluationStatistics = null;
+  }
+
   return {
     code: response.getSuccessCode(),
     message: '获取详情成功',
     data: {
       act: foundAct,
+      qrcode_str: qrcodeStr,
       approval_flow: approvalDetail.getDataValue('flows'),
       evaluations,
+      evaluation_statistics: evaluationStatistics,
     }
   }
 }

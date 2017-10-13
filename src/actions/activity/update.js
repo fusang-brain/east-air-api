@@ -8,8 +8,11 @@
 import {filterParams} from '../../utils/filters';
 import ApprovalService from '../../service/ApprovalService';
 import Decimal from 'decimal.js';
+import TradeUnionActDept from '../../models/TradeUnionActDept'
 
-export default async function (req, param, {response, models}) {
+export default async function (req, param, {response, models, checkAccess}) {
+  await checkAccess('activity', 'edit');
+
   const actID = req.body.act_id;
   const params = filterParams(req.body, {
     act_type: ['integer'],
@@ -23,7 +26,7 @@ export default async function (req, param, {response, models}) {
     integration: ['integer'],
   });
 
-  const foundAct = await models.TradeUnionAct.findOne({where: {id: actID}});
+  const foundAct = await models.TradeUnionAct.findOne({where: {id: actID, dept_id: {$in: req.dataAccess}}});
   if (!foundAct) {
     return {
       code: response.getErrorCode(),
@@ -74,9 +77,37 @@ export default async function (req, param, {response, models}) {
   params.dept_id = req.user.dept;
   const TradeUnionAct = models.TradeUnionAct;
   const budgets = req.body.budgets;
-  const images = req.body.images || [];
-  const attach = req.body.attach || [];
+  const acceptDeptIDs = req.body.dept_ids;
+  const images = req.body.images;
+  const attach = req.body.attach;
 
+  if (acceptDeptIDs) {
+    if (!Array.isArray(acceptDeptIDs)) {
+      return {
+        code: response.getErrorCode(),
+        message: '请上传正确的活动部门',
+      }
+    }
+
+    if (!acceptDeptIDs.includes(req.user.dept)) {
+      acceptDeptIDs.push(req.user.dept);
+    }
+
+    params.accept_depts = acceptDeptIDs.map(dept => ({
+      act_id: actID,
+      dept_id: dept,
+    }));
+
+    if (params.accept_depts.length >= 0 ) {
+      await models.TradeUnionActDept.destroy({
+        where: {
+          act_id: actID,
+        }
+      });
+
+      await models.TradeUnionActDept.bulkCreate(params.accept_depts);
+    }
+  }
   if (budgets) {
     if (!Array.isArray(budgets)) {
       return {
@@ -90,15 +121,62 @@ export default async function (req, param, {response, models}) {
         message: '预算为必填项',
       }
     }
-  }
-  if (budgets) {
+
     params.budget_total = 0;
     for (let i = 0; i < budgets.length; i ++) {
       budgets[i].act_id = actID;
+      budgets[i].sort = i;
       params.budget_total = Decimal.add(params.budget_total, budgets[i].cost).toNumber();
     }
     await models.TradeUnionActBudget.destroy({where:{act_id: actID}});
     await models.TradeUnionActBudget.bulkCreate(budgets);
+  }
+  if (images) {
+    if (!Array.isArray(images)) {
+      return {
+        code: response.getErrorCode(),
+        message: '图片数据格式错误',
+      }
+    }
+    params.images = images.map(loop => ({
+      act_id: actID,
+      file_path: loop,
+      no: 1,
+    }));
+
+    if (params.images.length >= 0) {
+      models.TradeUnionActImage.destroy({where:{act_id: actID}});
+      models.TradeUnionActImage.bulkCreate(params.images);
+    }
+  }
+  if (attach) {
+    if (!Array.isArray(attach)) {
+      return {
+        code: response.getErrorCode(),
+        message: '附件数据格式错误',
+      }
+    }
+
+    const allAttachFiles = await models.File.all({
+      where: {
+        path: {
+          $in: attach,
+        }
+      }
+    });
+
+    params.attach = allAttachFiles.map(loop => ({
+      act_id: actID,
+      file_path: loop.path,
+      no: 1,
+      size: loop.size,
+      origin_filename: loop.origin_filename,
+    }));
+
+    if (params.attach.length >= 0) {
+      models.TradeUnionActAttach.destroy({where:{act_id: actID}});
+      models.TradeUnionActAttach.bulkCreate(params.attach);
+    }
   }
   if (params.grant_apply) {
     params.grant_apply.is_act = true;
@@ -112,24 +190,14 @@ export default async function (req, param, {response, models}) {
     }
   }
 
-  params.images = images.map(loop => ({
-    act_id: actID,
-    file_path: loop,
-    no: 1,
-  }));
-  params.attach = attach.map(loop => ({
-    act_id: actID,
-    file_path: loop,
-    no: 1,
-  }));
-  if (params.images.length > 0) {
-    models.TradeUnionActImage.destroy({where:{act_id: actID}});
-    models.TradeUnionActImage.bulkCreate(params.images);
-  }
-  if (params.attach.length > 0) {
-    models.TradeUnionActAttach.destroy({where:{act_id: actID}});
-    models.TradeUnionActAttach.bulkCreate(params.attach);
-  }
+  // attach upload changed
+  const allAttachFiles = await models.File.all({
+    where: {
+      path: {
+        $in: attach,
+      }
+    }
+  });
 
   const act = await TradeUnionAct.update(params, {
     where: {

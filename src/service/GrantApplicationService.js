@@ -18,7 +18,14 @@ export default class GrantApplicationService extends Service {
   }
 
   async remove(id) {
-    const foundTheGrantApply = await this.GrantApplication.findOne({where: {id}});
+    const foundTheGrantApply = await this.GrantApplication.findOne({
+      where: {
+        id,
+        dept_id: {
+          $in: this.dataAccess,
+        },
+      }
+    });
 
     const Approval = this.getModel('Approval');
     const ApprovalFlows = this.getModel('ApprovalFlows');
@@ -53,7 +60,14 @@ export default class GrantApplicationService extends Service {
     const {id, items, attach, ...args} = params;
     const GrantAttach = this.getModel('GrantAttach');
     const GrantItem = this.getModel('GrantItem');
-    const foundGrant = await this.GrantApplication.findOne({where: {id}});
+    const foundGrant = await this.GrantApplication.findOne({
+      where: {
+        id,
+        dept_id: {
+          $in: this.dataAccess,
+        }
+      }
+    });
     if (!foundGrant) {
       throw {
         code: Response.getErrorCode(),
@@ -88,10 +102,20 @@ export default class GrantApplicationService extends Service {
       args.cost = cost;
     }
 
-    if (attach && attach.length > 0) {
-      let rightAttach = attach.map(loop => ({
+    if (attach && attach.length >= 0) {
+      const allAttachFiles = await this.getModel('File').all({
+        where: {
+          path: {
+            $in: attach,
+          }
+        }
+      });
+
+      let rightAttach = allAttachFiles.map(loop => ({
         grant_application_id: foundGrant.id,
-        file_path: loop,
+        file_path: loop.path,
+        size: loop.size,
+        origin_filename: loop.origin_filename,
       }));
       await GrantAttach.destroy({where: {grant_application_id: foundGrant.id}});
       await GrantAttach.bulkCreate(rightAttach);
@@ -125,12 +149,25 @@ export default class GrantApplicationService extends Service {
     }
 
     if (args.attach && args.attach.length > 0) {
-      args.attach = args.attach.map(loop => ({
-        file_path: loop,
+      const allAttachFiles = await this.getModel('File').all({
+        where: {
+          path: {
+            $in: args.attach,
+          }
+        }
+      })
+
+      args.attach = allAttachFiles.map(loop => ({
+        file_path: loop.path,
+        size: loop.size,
+        origin_filename: loop.origin_filename,
       }));
+
     } else {
       args.attach = [];
     }
+
+    console.log(args.attach);
 
 
     return await this.GrantApplication.create(args, {
@@ -150,6 +187,9 @@ export default class GrantApplicationService extends Service {
   async generateList({offset, limit, state, search}) {
     let condition = {
       is_act: false,
+      dept_id: {
+        $in: this.dataAccess,
+      }
     };
     switch (state) {
       case 'draft':
@@ -179,6 +219,9 @@ export default class GrantApplicationService extends Service {
       where: condition,
       offset,
       limit,
+      order: [
+        ['apply_time', 'DESC']
+      ],
       include: [
         {
           model: this.getModel('GrantItem'),
@@ -212,7 +255,9 @@ export default class GrantApplicationService extends Service {
 
   async details(id) {
     return await this.GrantApplication.findOne({
-      where: {id},
+      where: {
+        id,
+      },
       include: [
         {
           model: this.getModel('GrantItem'),
