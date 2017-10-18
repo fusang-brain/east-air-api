@@ -88,7 +88,7 @@ const permissions = [
     slug: 'satisfaction_degree_investigation',
     permission: [
       {
-        name: '创建',
+        name: '发起调查',
         slug: 'create',
       },
       {
@@ -257,8 +257,8 @@ const permissions = [
         slug: 'create',
       },
       {
-        name: 'export',
-        slug: '导出',
+        name: '导出',
+        slug: 'export',
       },
       {
         name: '编辑',
