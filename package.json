@@ -31,6 +31,8 @@
     "dev": "better-npm-run dev-api",
     "install": "better-npm-run install",
     "db:reinstall": "better-npm-run db-reinstall",
+    "db:superuser": "better-npm-run db-superuser",
+    "db:superuser:dev": "better-npm-run db-superuser-dev",
     "migrate": ""
   },
   "betterScripts": {
@@ -71,6 +73,22 @@
       "env": {
         "NODE_ACTION": "install",
         "NODE_ENV": "production",
+        "APIPORT": 3050
+      }
+    },
+    "db-superuser": {
+      "command": "node ./bin/db_superuser.js",
+      "env": {
+        "NODE_ACTION": "install",
+        "NODE_ENV": "production",
+        "APIPORT": 3050
+      }
+    },
+    "db-superuser-dev": {
+      "command": "node ./bin/db_superuser.js",
+      "env": {
+        "NODE_ACTION": "install",
+        "NODE_ENV": "development",
         "APIPORT": 3050
       }
     }
