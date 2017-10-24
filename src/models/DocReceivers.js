@@ -18,12 +18,14 @@ export default function (sequelize, DataTypes) {
           as: 'doc',
           foreignKey: 'doc_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
 
         this.belongsTo(models.User, {
           as: 'receiver',
           foreignKey: 'receiver_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
       }
     }

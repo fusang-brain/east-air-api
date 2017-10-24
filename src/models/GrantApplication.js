@@ -33,11 +33,13 @@ export default function (sequelize, DataTypes) {
           as: 'dept',
           foreignKey: 'dept_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
         this.belongsTo(models.User, {
           as: 'publisher',
           foreignKey: 'user_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         })
       }
     }

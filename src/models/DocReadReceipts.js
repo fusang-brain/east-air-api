@@ -16,6 +16,7 @@ export default (sequelize, DataTypes) => sequelize.define('DocReadReceipts', {
         as: 'doc',
         foreignKey: 'doc_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
     }
   }
