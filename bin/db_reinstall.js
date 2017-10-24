@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var debug = require('debug')('eastern-ari-api');
+// var debug = require('debug')('eastern-ari-api');
 
 if (process.env.NODE_ENV !== 'production') {
   if (!require('piping')({
