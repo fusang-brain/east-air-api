@@ -186,8 +186,10 @@ if (config.apiPort) {
     if (err) {
       console.error(err);
     }
-    console.info('~)^(~  API is running on port %s', config.apiPort);
-    console.info('~)*.*(~  Send requests to http://%s:%s', config.apiHost, config.apiPort);
+    if (process.env.NODE_ACTION !== 'install') {
+      console.info('~)^(~  API is running on port %s', config.apiPort);
+      console.info('~)*.*(~  Send requests to http://%s:%s', config.apiHost, config.apiPort);
+    }
   });
 
 } else {
