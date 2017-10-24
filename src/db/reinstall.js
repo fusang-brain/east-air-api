@@ -118,7 +118,7 @@ async function start() {
 start().then(res => {
   iLog('* 数据库重置完成');
   iLog('* 键入 ctrl + c 退出安装程序')
-  process.exit(1);
+  process.exit();
 }).catch(err => {
   iLog('======', err);
   process.exit(1);
