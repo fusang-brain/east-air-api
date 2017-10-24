@@ -6,7 +6,7 @@
 export default function (sequelize, DataTypes) {
   return sequelize.define('GrantItem', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
-    grant_apply_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
+    grant_apply_id: {type: DataTypes.UUID},
     name: {type: DataTypes.STRING},
     price: {type: DataTypes.DECIMAL(10,2)},
     count: {type: DataTypes.INTEGER},

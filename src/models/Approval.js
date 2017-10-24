@@ -16,7 +16,7 @@ export default function (sequelize, DataTypes) {
     dept_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},                // 项目发起部门
     total_amount: {type: DataTypes.DECIMAL(10, 2)}, // 总金额
     project_id: {type: DataTypes.UUID},             // 审批项目ID
-    publish_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},             // 发布人ID
+    publish_id: {type: DataTypes.UUID},             // 发布人ID
     publish_date: {type: DataTypes.STRING, defaultValue: Date.now},     // 发布时间
     result: {type: DataTypes.INTEGER},          // 0: 待审核 1: 已审核
   }, {
