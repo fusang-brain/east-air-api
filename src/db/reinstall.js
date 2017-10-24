@@ -87,18 +87,6 @@ async function start() {
   }
   iLog('* 角色创建成功');
 
-  iLog('* 创建初始的满意度调查');
-  for (let i = 0; i < SatisfactionSurvey.length; i ++) {
-    await models.SatisfactionSurvey.create(SatisfactionSurvey[i]);
-  }
-  for (let i = 0; i < SurveyImages.length; i ++) {
-    await models.SatisfactionSurveyImage.create(SurveyImages[i]);
-  }
-  for (let i = 0; i < defaultImage.length; i ++) {
-    await models.File.create(defaultImage[i]);
-  }
-  iLog('* 满意度调查创建成功');
-
   iLog('* 创建系统管理员');
   await models.User.create({
     name: Config.migrations.super_user.name || 'root',
