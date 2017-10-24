@@ -6,6 +6,6 @@
 
 export default (sequelize, DataTypes) => sequelize.define('SatisfactionPollTag', {
   id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
-  survey_poll_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
+  survey_poll_id: {type: DataTypes.UUID},
   tag: {type: DataTypes.STRING},
 });
