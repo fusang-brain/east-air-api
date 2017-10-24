@@ -6,7 +6,7 @@
 
 export default (sequelize, DataTypes) => sequelize.define('SatisfactionSurveyImage', {
   id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
-  survey_id: {type: DataTypes.UUID},
+  survey_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
   file_id: {type: DataTypes.UUID},
   file_path: {type: DataTypes.STRING},
   file_size: {type: DataTypes.STRING},

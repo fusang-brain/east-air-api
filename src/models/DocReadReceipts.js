@@ -6,7 +6,7 @@
 
 export default (sequelize, DataTypes) => sequelize.define('DocReadReceipts', {
   id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
-  doc_id: {type: DataTypes.UUID},
+  doc_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
   user_id: {type: DataTypes.UUID},
   read_time: {type: DataTypes.STRING},
 }, {

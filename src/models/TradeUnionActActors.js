@@ -5,8 +5,8 @@
  */
 export default (sequelize, DataTypes) => sequelize.define('TradeUnionActActors', {
   id: {type: DataTypes.UUID, defaultValue:DataTypes.UUIDV4, primaryKey: true},
-  act_id: {type: DataTypes.UUID},
-  user_id: {type: DataTypes.UUID},
+  act_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
+  user_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
 }, {
   classMethods: {
     associate(models) {

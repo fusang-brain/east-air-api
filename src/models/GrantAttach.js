@@ -10,7 +10,7 @@ import {generateNo} from '../utils/utils';
 export default function (sequelize, DataTypes) {
   return sequelize.define('GrantAttach', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
-    grant_application_id: {type: DataTypes.UUID},
+    grant_application_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
     no: {type: DataTypes.STRING, defaultValue: generateNo},
     file_path: {type: DataTypes.STRING, length: 255},
     size: {type: DataTypes.INTEGER},

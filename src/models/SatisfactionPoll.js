@@ -15,7 +15,7 @@ export default (sequelize, DataTypes) => sequelize.define('SatisfactionPoll', {
   evaluate_week: {type: DataTypes.STRING},
   evaluate_month: {type: DataTypes.STRING},
   evaluate_quarterly: {type: DataTypes.STRING},
-  evaluate_person_id: {type: DataTypes.UUID},
+  evaluate_person_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
 }, {
   classMethods: {
     associate(models) {

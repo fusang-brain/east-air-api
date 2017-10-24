@@ -9,7 +9,7 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('DocAttach', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     doc_id: {type: DataTypes.UUID},
-    file_id: {type: DataTypes.UUID},
+    file_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
     file_path: {type: DataTypes.STRING},
     file_size: {type: DataTypes.STRING},
   }, {

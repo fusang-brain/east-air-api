@@ -7,8 +7,8 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('RelaxAction', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     no: {type: DataTypes.STRING, defaultValue: generateNo},
-    dept_id: {type: DataTypes.UUID},
-    user_id: {type: DataTypes.UUID},
+    dept_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
+    user_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
     title: {type: DataTypes.STRING}, // 主题
     action_type: {type: DataTypes.INTEGER},  // 组织形式 （0-未知 1-自行 2-委托）
     per_capita_budget: {type: DataTypes.DECIMAL(10,2)}, // 人均预算

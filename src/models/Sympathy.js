@@ -3,8 +3,8 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('Sympathy', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     reason: {type: DataTypes.STRING},  // 慰问事由
-    dept_id: {type: DataTypes.UUID},   // 发起部门
-    user_id: {type: DataTypes.UUID},   // 发起人
+    dept_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},   // 发起部门
+    user_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},   // 发起人
     person: {type: DataTypes.STRING},  // 被慰问人
     sympathy_date: {type: DataTypes.STRING}, // 慰问时间
     sympathy_cost: {type: DataTypes.DECIMAL(10, 2)}, // 慰问金额

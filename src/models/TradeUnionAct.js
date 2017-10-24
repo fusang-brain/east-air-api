@@ -18,9 +18,9 @@ export default function (sequelize, DataTypes) {
     budget_total: {type: DataTypes.DECIMAL(10, 2)},   // 预算总额
     integration: {type: DataTypes.INTEGER},           // 奖励积分
     state: {type: DataTypes.INTEGER},                 // 状态 0:草稿 1:待审批 2:已通过 3:未通过
-    dept_id: {type: DataTypes.UUID},                  // 发起工会
-    user_id: {type: DataTypes.UUID},                  // 发布人ID
-    grant_apply_id: {type: DataTypes.UUID},           // 经费审批ID
+    dept_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},                  // 发起工会
+    user_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},                  // 发布人ID
+    grant_apply_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},           // 经费审批ID
     create_date: {type: DataTypes.STRING, defaultValue: Date.now}, //创建时间
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false}, // 是否删除
   }, {

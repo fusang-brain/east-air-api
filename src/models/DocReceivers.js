@@ -8,9 +8,9 @@
 export default function (sequelize, DataTypes) {
   return sequelize.define('DocReceivers', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
-    doc_id: {type: DataTypes.UUID},
+    doc_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
     receiver_type: {type: DataTypes.STRING}, // 'department' or 'personal'
-    receiver_id: {type: DataTypes.UUID}, // 接受者ID
+    receiver_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}}, // 接受者ID
   }, {
     classMethods: {
       associate(models) {

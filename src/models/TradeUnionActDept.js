@@ -7,7 +7,7 @@
 export default (sequelize, DataTypes) => sequelize.define('TradeUnionActDept', {
   id: {type: DataTypes.UUID, defaultValue:DataTypes.UUIDV4, primaryKey: true},
   act_id: {type: DataTypes.UUID},
-  dept_id: {type: DataTypes.UUID},
+  dept_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
 }, {
   classMethods: {
     associate(models) {
