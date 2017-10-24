@@ -13,7 +13,7 @@ export default function (sequelize, DataTypes) {
     project_purpose: {type: DataTypes.STRING},      // 项目目的
     project_content: {type: DataTypes.STRING},      // 项目详情
     project_type: {type: DataTypes.INTEGER},        // 项目类型 0:'职工教育', 1:'文体活动', 2:'宣传活动', 3:'其他活动', 4:'送温暖' , 5:'培训', 6:'会议', 7:'专项会议', 8:'其他业务', 9:'慰问审批', 10:'经费审批'
-    dept_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},                // 项目发起部门
+    dept_id: {type: DataTypes.UUID},                // 项目发起部门
     total_amount: {type: DataTypes.DECIMAL(10, 2)}, // 总金额
     project_id: {type: DataTypes.UUID},             // 审批项目ID
     publish_id: {type: DataTypes.UUID},             // 发布人ID
@@ -32,6 +32,7 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'dept_id',
           sourceKey: 'id',
           as: 'department',
+          onDelete: 'cascade',
         })
 
         this.belongsTo(models.TradeUnionAct, {
@@ -44,6 +45,7 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'project_id',
           constraints: false,
           as: 'sympathy',
+
         });
 
         this.belongsTo(models.GrantApplication, {
@@ -56,6 +58,7 @@ export default function (sequelize, DataTypes) {
           as: 'publisher',
           foreignKey: 'publish_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
       }
     }

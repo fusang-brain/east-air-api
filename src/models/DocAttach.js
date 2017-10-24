@@ -19,6 +19,7 @@ export default function (sequelize, DataTypes) {
           as: 'doc',
           foreignKey: 'doc_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
       }
     }
