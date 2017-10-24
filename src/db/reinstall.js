@@ -4,7 +4,7 @@
  * Date: 2017/10/23
  */
 
-import {iLog} from 'helper';
+import {iLog} from './helper';
 import models from '../models';
 import Auth from '../utils/auth';
 import Config from '../config';
