@@ -30,7 +30,7 @@
     "lint": "eslint -c .eslintrc src",
     "dev": "better-npm-run dev-api",
     "install": "better-npm-run install",
-    "db:reinstall": "better-npm-run reinstall",
+    "db:reinstall": "better-npm-run db-reinstall",
     "migrate": ""
   },
   "betterScripts": {
