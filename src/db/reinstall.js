@@ -31,7 +31,7 @@ async function allDept(children, parent, level) {
       await allDept(deptItem.children, p, level + 1);
     }
 
-    log('OK');
+    iLog('OK');
   }
 }
 
@@ -119,5 +119,5 @@ start().then(res => {
   iLog('* 数据库重置完成');
   iLog('* 键入 ctrl + c 退出安装程序')
 }).catch(err => {
-  console.log('======', err);
+  iLog('======', err);
 })
