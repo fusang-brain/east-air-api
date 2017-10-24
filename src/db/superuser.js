@@ -47,8 +47,8 @@ async function start () {
 
 start().then(() => {
   iLog('* 超级用户创建成功');
-  iLog('* 键入 ctrl + c 退出');
-  process.exit(1);
+  iLog('* 若未退出，键入 ctrl + c 退出');
+  process.exit();
 }).catch((err) => {
   console.log(err);
   process.exit(1);

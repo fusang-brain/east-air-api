@@ -94,7 +94,7 @@ const environment = {
       super_user: {
         name: 'root',
         mobile: '13100000000',
-        nickname: 'root',
+        nickname: 'alixez',
       }
     }
   }
