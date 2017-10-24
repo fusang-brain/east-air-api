@@ -30,6 +30,7 @@
     "lint": "eslint -c .eslintrc src",
     "dev": "better-npm-run dev-api",
     "install": "better-npm-run install",
+    "db:reinstall": "better-npm-run reinstall",
     "migrate": ""
   },
   "betterScripts": {
@@ -41,11 +42,19 @@
         "APIPORT": "3050"
       }
     },
-    "install": {
+    "install-dev": {
       "command": "node ./bin/install.js",
       "env": {
         "NODE_ACTION": "install",
         "NODE_ENV": "development",
+        "APIPORT": 3050
+      }
+    },
+    "install": {
+      "command": "node ./bin/install.js",
+      "env": {
+        "NODE_ACTION": "install",
+        "NODE_ENV": "production",
         "APIPORT": 3050
       }
     },
@@ -55,6 +64,14 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "APIPORT": 3000
+      }
+    },
+    "db-reinstall": {
+      "command": "node ./bin/db_reinstall.js",
+      "env": {
+        "NODE_ACTION": "install",
+        "NODE_ENV": "production",
+        "APIPORT": 3050
       }
     }
   },

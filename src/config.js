@@ -46,6 +46,13 @@ const environment = {
         'act_attach': ['pdf'],
         'doc_attach': ['pdf'],
       }
+    },
+    migrations: {
+      super_user: {
+        name: 'root',
+        mobile: '13100000000',
+        nickname: 'root',
+      }
     }
   },
   production: {
@@ -83,6 +90,13 @@ const environment = {
         'act_attach': ['pdf'],
       }
     },
+    migrations: {
+      super_user: {
+        name: 'root',
+        mobile: '13100000000',
+        nickname: 'root',
+      }
+    }
   }
 }[process.env.NODE_ENV || 'development'];
 

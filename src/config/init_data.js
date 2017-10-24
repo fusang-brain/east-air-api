@@ -62,7 +62,7 @@ const permissions = [
     ]
   },
   {
-    name: '意见征集',
+    name: '意向征集',
     slug: 'opinion_collection',
     permission: [
       {
@@ -345,14 +345,6 @@ const dept = [
     children: [
       {
         name: '飞行部分会',
-        children: [
-          {
-            name: '部门1',
-          },
-          {
-            name: '部门2',
-          }
-        ]
       },
       {
         name: '地服部分会',
