@@ -70,8 +70,9 @@ export default function (sequelize, DataTypes) {
           as: 'user_role',
           foreignKey: 'role',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
-        this.belongsTo(models.Dept, {as: 'department', foreignKey: 'dept', sourceKey: 'id'});
+        this.belongsTo(models.Dept, {as: 'department', foreignKey: 'dept', sourceKey: 'id', onDelete: 'cascade'});
         this.belongsToMany(models.Dept, {
           as: 'data_access',
           through: {

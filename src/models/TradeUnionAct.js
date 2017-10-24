@@ -30,18 +30,21 @@ export default function (sequelize, DataTypes) {
           as: 'department',
           foreignKey: 'dept_id',
           targetKey: 'id',
+          onDelete: 'cascade',
         });
 
         this.belongsTo(models.User, {
           as: 'publisher',
           foreignKey: 'user_id',
           targetKey: 'id',
+          onDelete: 'cascade',
         });
 
         this.belongsTo(models.GrantApplication, {
           as: 'grant_apply',
           foreignKey: 'grant_apply_id',
           targetKey: 'id',
+          onDelete: 'cascade',
         });
 
         this.hasMany(models.TradeUnionActAttach, {

@@ -21,6 +21,7 @@ export default (sequelize, DataTypes) => sequelize.define('Vod', {
         as: 'cover',
         foreignKey: 'cover_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
 
       this.hasMany(models.VodPlayHistory, {

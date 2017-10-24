@@ -29,6 +29,7 @@ export default (sequelize, DataTypes) => sequelize.define('SatisfactionPoll', {
         as: 'evaluate_person',
         foreignKey: 'evaluate_person_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
 
     }

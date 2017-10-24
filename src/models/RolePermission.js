@@ -17,6 +17,7 @@ export default function (sequelize, DataTypes) {
           as: 'permission',
           foreignKey: 'permission_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         })
       }
     }

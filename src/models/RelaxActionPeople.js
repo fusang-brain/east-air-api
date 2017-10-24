@@ -15,6 +15,7 @@ export default function (sequelize, DataTypes) {
         this.belongsTo(models.RelaxAction, {
           foreignKey: 'relax_action_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         })
       }
     }

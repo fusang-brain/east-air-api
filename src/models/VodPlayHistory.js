@@ -17,12 +17,14 @@ export default (sequelize, DataTypes) => sequelize.define('VodPlayHistory', {
         as: 'user',
         foreignKey: 'user_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
 
       this.belongsTo(models.Vod, {
         as: 'vod_file_info',
         foreignKey: 'vod_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
     }
   }

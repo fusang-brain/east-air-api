@@ -15,12 +15,14 @@ export default (sequelize, DataTypes) => sequelize.define('TradeUnionActDept', {
         as: 'activity',
         foreignKey: 'act_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
 
       this.belongsTo(models.Dept, {
         as: 'dept_info',
         foreignKey: 'dept_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
     }
   }

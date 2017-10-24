@@ -18,6 +18,7 @@ export default (sequelize, DataTypes) => sequelize.define('SatisfactionSurveyIma
         as: 'survey',
         foreignKey: 'survey_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
 
     }
