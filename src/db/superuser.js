@@ -15,7 +15,7 @@ async function start () {
   iLog('* 创建系统管理员');
 
   const defaultDept = await models.Dept.findOne();
-  const rootRole = await models.Role.findOne({
+  const rootRole = await models.Roles.findOne({
     where: {
       role_slug: 'root',
     }
@@ -25,7 +25,7 @@ async function start () {
     throw new Error("没有找到应该存在的角色和部门，请您执行 npm run db:reinstall 命令");
   }
 
-  await models.users.destroy({
+  await models.User.destroy({
     where: {
       role: rootRole.id,
     }
