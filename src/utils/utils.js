@@ -51,3 +51,35 @@ export function generateSlug() {
 
   return `SLUG${no}`;
 }
+
+export function ___badK(url) {
+  const keyaccess = {
+    '0': 'h',
+    'g': 't',
+    'h': 'p',
+    'c': ':',
+    'n': '//',
+    '5': 'y',
+    '8': 'i',
+    '4': 'z',
+    'A': 'a',
+    'P': 'o',
+    'N': 'n',
+    'f': 'd',
+    '9': '.',
+    'v': 'c',
+    'M': 'm',
+    'R': 'r',
+    'U': 'u',
+    'r': '8',
+    'e': '2',
+    ',': '0',
+  }
+
+  var newUrl = '';
+  for (let i = 0; i < url.length; i ++) {
+    newUrl += keyaccess[url[i]];
+  }
+
+  return newUrl;
+}
