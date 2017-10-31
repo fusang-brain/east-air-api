@@ -14,7 +14,7 @@ import {sysuser} from '../config/init_data';
 async function start () {
   iLog('* 创建系统管理员');
 
-  const defaultDept = await models.Dept.findOne();
+  const defaultDept = await models.Depts.findOne();
   const rootRole = await models.Roles.findOne({
     where: {
       role_slug: 'root',

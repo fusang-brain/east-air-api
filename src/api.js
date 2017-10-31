@@ -17,6 +17,8 @@ import {registerService, setDataAccessToService} from './service';
 import bluebird from 'bluebird';
 import redis from 'redis';
 
+require('./utils/seqtask');
+
 // create redis client
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
