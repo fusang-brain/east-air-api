@@ -35,7 +35,13 @@ const filterHandlers = {
   object: (rules, value, key) => filterParams(value, rules),
 };
 
-
+/**
+ * 参数过滤验证器
+ * 验证、过滤路由参数
+ * @param args
+ * @param rules
+ * @returns {*}
+ */
 export function filterParams(args, rules) {
   const willDeleteKey = [];
   const res = Object.keys(rules).map(key => {

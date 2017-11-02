@@ -2,6 +2,8 @@
  * Created by alixez on 17-7-31.
  */
 import {ApprovalService, ActivityService} from '../../service';
+
+// 活动详情
 export default async function (req, params, {response, models, device, services}) {
   const actID = req.query.act_id;
   const foundAct = await services.activity.details(actID);

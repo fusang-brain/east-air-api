@@ -6,6 +6,14 @@
 
 import {filterParams} from '../../utils/filters';
 
+/**
+ * 通知详情
+ * @param req
+ * @param params
+ * @param response
+ * @param services
+ * @returns {Promise.<{code: *, message: string, data: {notification: *}}>}
+ */
 export default async function (req, params, {response, services}) {
   const notificationService = services.notification;
   const args = filterParams(req.query, {

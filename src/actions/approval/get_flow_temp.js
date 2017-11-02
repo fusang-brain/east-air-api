@@ -8,6 +8,7 @@ export default async function (req, params, {response}) {
 
   const approvalService = new ApprovalService();
 
+  // 获取审批流程模板
   const temp = await approvalService.generateApprovalFlowTemp(req.user.id);
 
   return {

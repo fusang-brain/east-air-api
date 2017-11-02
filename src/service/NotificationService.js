@@ -26,6 +26,16 @@ export default class NotificationService extends Service {
     }
   }
 
+  /**
+   * 发消息给人们
+   * @param title
+   * @param body
+   * @param sender
+   * @param items
+   * @param receivers
+   * @param template
+   * @returns {Promise.<*>}
+   */
   async sendToPeople({title, body, sender, items, receivers, template}) {
     const msgTemplate = this.template[template];
 
@@ -46,6 +56,16 @@ export default class NotificationService extends Service {
     return await this.sendTo({title, body, sender, items, receivers: executedReceivers});
   }
 
+  /**
+   * 发消息给某人
+   * @param title
+   * @param body
+   * @param sender
+   * @param items
+   * @param receiver
+   * @param template
+   * @returns {Promise.<*>}
+   */
   async sendToPersonal({title, body, sender, items, receiver, template}) {
 
     const msgTemplate = this.template[template];
@@ -69,6 +89,15 @@ export default class NotificationService extends Service {
     return await this.sendTo({title, body, sender, items, receivers});
   }
 
+  /**
+   * 发消息给某个部门（部门下的所有人）
+   * @param title
+   * @param body
+   * @param sender
+   * @param items
+   * @param department
+   * @returns {Promise.<*>}
+   */
   async sendToDepartment({title, body, sender, items, department}) {
     const receivers = [
       {
@@ -80,6 +109,15 @@ export default class NotificationService extends Service {
     return await this.sendTo({title, body, sender, items, receivers});
   }
 
+  /**
+   * 给某个对象发消息
+   * @param title
+   * @param body
+   * @param sender
+   * @param items
+   * @param receivers
+   * @returns {Promise.<*>}
+   */
   async sendTo({title, body, sender, items, receivers}) {
     const Notification = this.getModel();
     const values = {
@@ -111,6 +149,13 @@ export default class NotificationService extends Service {
     })
   }
 
+  /**
+   * 获取通知详情
+   * @param id
+   * @param user_id
+   * @param dept_id
+   * @returns {Promise.<{id, notify_type: (number|*|Notification.notify_type|{type}), title, content, send_time: (*|ActEvaluation.send_time|{type, defaultValue}|Notification.send_time), items}>}
+   */
   async details(id, user_id, dept_id) {
     const Notification = this.getModel();
     const NotificationReaders = this.getModel('NotificationReaders');
@@ -182,6 +227,14 @@ export default class NotificationService extends Service {
     };
   }
 
+  /**
+   * 获取消息通知列表
+   * @param offset
+   * @param limit
+   * @param dept_id
+   * @param user_id
+   * @returns {Promise.<{total: number, notifications}>}
+   */
   async notificationList(offset, limit, dept_id, user_id) {
     const Notification = this.getModel();
     const includeCondition = [
@@ -224,6 +277,7 @@ export default class NotificationService extends Service {
       include: includeCondition,
     });
 
+    // 格式化消息
     const list = notifications.map(notification => {
       let item = {
         id: notification.id,

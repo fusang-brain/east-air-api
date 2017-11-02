@@ -35,6 +35,7 @@ export default async function (req, param, {response, models, services, device, 
 
     ],
   };
+
   const ActModel = models.TradeUnionAct;
   let attributes = ['no', 'id', 'subject', 'act_type', 'create_date', 'state', 'start_date', 'end_date'];
   if (device === 'app') {
