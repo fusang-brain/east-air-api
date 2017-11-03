@@ -9,6 +9,7 @@ import models from '../models';
 import xlsx from 'node-xlsx';
 import moment from 'moment';
 import Auth from '../utils/auth'
+import { dept } from '../config/init_data'
 
 async function start () {
   iLog("* 开始导入用户")
@@ -16,6 +17,19 @@ async function start () {
   const workSheetsFromFile = xlsx.parse(`${__dirname}/user.xlsx`);
   const sheetData = workSheetsFromFile[0].data;
   let total = 0;
+
+  const Depts = await models.Dept.all();
+  const Roles = await models.Role.all();
+  const deptMapper = {};
+  const roleMapper = {};
+
+  Depts.forEach(item => {
+    deptMapper[item.dept_name] = item;
+  });
+
+  Roles.forEach(item => {
+    roleMapper[item.role_name] = item;
+  });
 
   for (let i = 0; i < sheetData.length; i ++) {
     let data = sheetData[i];
@@ -33,17 +47,20 @@ async function start () {
       state: data[5],
       no: data[6],
       type: data[7],
-      qq: data[8],
-      wechat: data[9],
-      degree: data[10],
-      duties: data[11],
-      jobs: data[12],
-      exist_job_level: data[13],
-      now_job_level: data[14],
-      start_work_time: moment(data[15]).valueOf(),
-      join_time: moment(data[16]).valueOf(),
-      integration: data[17],
-      mark: data[18],
+      dept: deptMapper[data[8]] ? deptMapper[data[8]].id : '',
+      role: roleMapper[data[9]] ? deptMapper[data[9]].id : '',
+      qq: data[10],
+      wechat: data[11],
+      degree: data[12],
+      duties: data[13],
+      jobs: data[14],
+      exist_job_level: data[15],
+      now_job_level: data[16],
+      start_work_time: moment(data[17]).valueOf(),
+      join_time: moment(data[18]).valueOf(),
+      integration: data[19],
+      mark: data[20],
+
     });
 
     if (user) {
