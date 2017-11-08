@@ -59,6 +59,8 @@ const environment = {
     debug: false,
     isProduction: true,
     aliyun: {
+      // accessKeyID: 'LTAI3K9kyKhxejXB',
+      // accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
       accessKeyID: 'LTAI3K9kyKhxejXB',
       accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
     },

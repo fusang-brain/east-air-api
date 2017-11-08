@@ -6,10 +6,10 @@
 
 /**
  * 通知列表
- * @param req
- * @param params
- * @param response
- * @param services
+ * @param req          HttpRequest
+ * @param params       The Route path params
+ * @param response     HttpResponse
+ * @param services     Service Array
  * @returns {Promise.<{code: *, message: string, data: {total: *, notifications: *}}>}
  */
 export default async function (req, params, {response, services}) {

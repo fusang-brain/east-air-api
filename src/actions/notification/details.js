@@ -8,10 +8,10 @@ import {filterParams} from '../../utils/filters';
 
 /**
  * 通知详情
- * @param req
- * @param params
- * @param response
- * @param services
+ * @param req          HttpRequest
+ * @param params       The Route path params
+ * @param response     HttpResponse
+ * @param services     Service Array
  * @returns {Promise.<{code: *, message: string, data: {notification: *}}>}
  */
 export default async function (req, params, {response, services}) {

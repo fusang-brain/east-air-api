@@ -28,12 +28,12 @@ export default class NotificationService extends Service {
 
   /**
    * 发消息给人们
-   * @param title
-   * @param body
-   * @param sender
-   * @param items
-   * @param receivers
-   * @param template
+   * @param title    标题
+   * @param body     消息体
+   * @param sender   发送者
+   * @param items    消息附加项目
+   * @param receivers 接受者们
+   * @param template  使用的消息模板
    * @returns {Promise.<*>}
    */
   async sendToPeople({title, body, sender, items, receivers, template}) {
@@ -58,12 +58,12 @@ export default class NotificationService extends Service {
 
   /**
    * 发消息给某人
-   * @param title
-   * @param body
-   * @param sender
-   * @param items
-   * @param receiver
-   * @param template
+   * @param title 标题
+   * @param body  消息体
+   * @param sender 发送者
+   * @param items  消息附加项目
+   * @param receiver 接受者
+   * @param template 模板
    * @returns {Promise.<*>}
    */
   async sendToPersonal({title, body, sender, items, receiver, template}) {
@@ -91,11 +91,11 @@ export default class NotificationService extends Service {
 
   /**
    * 发消息给某个部门（部门下的所有人）
-   * @param title
-   * @param body
-   * @param sender
-   * @param items
-   * @param department
+   * @param title  标题
+   * @param body   消息体
+   * @param sender 发送人
+   * @param items  附加项目
+   * @param department 部门
    * @returns {Promise.<*>}
    */
   async sendToDepartment({title, body, sender, items, department}) {
@@ -111,11 +111,11 @@ export default class NotificationService extends Service {
 
   /**
    * 给某个对象发消息
-   * @param title
-   * @param body
-   * @param sender
-   * @param items
-   * @param receivers
+   * @param title  标题
+   * @param body   消息体
+   * @param sender 发送人
+   * @param items  附加项目
+   * @param receivers 接受者们
    * @returns {Promise.<*>}
    */
   async sendTo({title, body, sender, items, receivers}) {
@@ -151,9 +151,9 @@ export default class NotificationService extends Service {
 
   /**
    * 获取通知详情
-   * @param id
-   * @param user_id
-   * @param dept_id
+   * @param id        通知ID
+   * @param user_id   用户ID
+   * @param dept_id   部门ID
    * @returns {Promise.<{id, notify_type: (number|*|Notification.notify_type|{type}), title, content, send_time: (*|ActEvaluation.send_time|{type, defaultValue}|Notification.send_time), items}>}
    */
   async details(id, user_id, dept_id) {
@@ -229,10 +229,10 @@ export default class NotificationService extends Service {
 
   /**
    * 获取消息通知列表
-   * @param offset
-   * @param limit
-   * @param dept_id
-   * @param user_id
+   * @param offset  数据偏移
+   * @param limit   数据分页
+   * @param dept_id 部门ID
+   * @param user_id 用户ID
    * @returns {Promise.<{total: number, notifications}>}
    */
   async notificationList(offset, limit, dept_id, user_id) {
