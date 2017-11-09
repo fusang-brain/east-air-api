@@ -88,6 +88,6 @@ start().then(err => {
   // console.log(err);
   process.exit();
 }).catch(b => {
-  console.log(b);
+  // console.log(b);
   process.exit(1);
 })

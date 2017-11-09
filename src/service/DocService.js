@@ -135,7 +135,7 @@ export default class DocService extends Service {
       ]
     });
 
-    console.log(total);
+    // console.log(total);
 
     const hasReadTotalByUser = await this.getModel('DocReadReceipts').count({
       where: {

@@ -37,6 +37,13 @@ const environment = {
         '/sms/send',
       ]
     },
+    vod_category: [
+      '分类1',
+      '分类2',
+      '分类3',
+      'cate4',
+      'cate5',
+    ],
     storage: {
       pathFolder,
       uploadFolder,
@@ -83,6 +90,13 @@ const environment = {
         '/sms/send',
       ]
     },
+    vod_category: [
+      '分类1',
+      '分类2',
+      '分类3',
+      'cate4',
+      'cate5',
+    ],
     storage: {
       pathFolder,
       uploadFolder,

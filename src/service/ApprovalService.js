@@ -137,7 +137,7 @@ export default class ApprovalService extends Service {
         sort: sortNo + flowMasterRoles.indexOf(deptHead.user_role.role_slug),
       });
     }
-    console.log(ApprovalFlow);
+    // console.log(ApprovalFlow);
     return ApprovalFlow;
   }
 
@@ -308,7 +308,7 @@ export default class ApprovalService extends Service {
 
     // 生成审批流程
     if (ApprovalFlow.length > 0) {
-      console.log(ApprovalFlow);
+      // console.log(ApprovalFlow);
       await ApprovalFlows.bulkCreate(ApprovalFlow);
 
       // 发送消息

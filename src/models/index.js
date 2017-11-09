@@ -14,7 +14,7 @@ function log(...message) {
   return;
   if (process.env.NODE_ACTION === 'install') return;
   if (env === 'development') {
-    console.log(message);
+    // console.log(message);
   }
   return true;
 }

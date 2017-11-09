@@ -11,4 +11,5 @@ export list from './list';
 export details from './details';
 export upload_history from './upload_history';
 export player_history from './player_history';
+export get_all_category from './get_all_category';
 

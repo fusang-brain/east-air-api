@@ -140,7 +140,7 @@ class Auth {
       return true;
     }
 
-    console.log(platform, '平台');
+    // console.log(platform, '平台');
     const foundPermission = originPermissions.find((permission) => {
       if (permission.module == module && permission.action == action) {
         console.log(permission);

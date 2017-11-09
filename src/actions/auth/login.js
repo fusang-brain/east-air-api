@@ -57,7 +57,7 @@ export default async function (req, params, {device, redisClient}) {
     redisClient.set(`ACCESS_TOKEN_${user.id}`, accessToken, 'EX', 7 * 24 * 60 * 60);
   } else {
     const cacheTokenArr = cacheToken.split(',');
-    console.log(cacheTokenArr);
+    // console.log(cacheTokenArr);
     cacheTokenArr.push(accessToken);
     redisClient.set(`ACCESS_TOKEN_${user.id}`, cacheTokenArr.join(','), 'EX', 7 * 24 * 60 * 60);
   }

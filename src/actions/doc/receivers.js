@@ -64,7 +64,7 @@ function recursiveRenderDept(children, mapper) {
 
       let res = mapper[looper.id];
       if (res) {
-        console.log('---- ', res.people);
+        // console.log('---- ', res.people);
         // looper.setDataValue('members', ['1']);
         looper.dataValues.members = res.people;
         // looper.dataValues.member_total = res.people_total;

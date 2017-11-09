@@ -134,5 +134,5 @@ start().then(res => {
   log('== 系统安装完成 ==');
   log('== 键入 ctrl + c 退出安装程序 ==');
 }).catch(err => {
-  console.log('======', error);
+  // console.log('======', error);
 });

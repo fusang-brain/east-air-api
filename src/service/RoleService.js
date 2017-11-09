@@ -50,16 +50,16 @@ export default class RoleService extends Service {
     }
 
     if (deptID && foundRole.role_slug === 'chile_dept_master') {
-      console.log(checkDepartmentIDs,'00000');
+      // console.log(checkDepartmentIDs,'00000');
       condition.where.dept = {
         $in: checkDepartmentIDs,
       };
     }
 
     const userCount = await User.count(condition);
-    console.log(userCount);
+    // console.log(userCount);
     if (userCount > 0) {
-      console.log(userID);
+      // console.log(userID);
       throw {
         code: Response.getErrorCode(),
         message: `本分会已经存在一位${foundRole.role_name}`

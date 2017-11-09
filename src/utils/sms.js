@@ -38,7 +38,7 @@ async function sendSMSAPI({phone, code}) {
     let {Code} = res
     if (Code === 'OK') {
       //处理返回参数
-      console.log(res);
+      // console.log(res);
       return true;
     }
   } catch (err) {

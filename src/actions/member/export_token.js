@@ -12,7 +12,7 @@ export default async function (req, params, {response, models}) {
     expired_at: Date.now() + 60 * 3,
   });
 
-  console.log(token);
+  // console.log(token);
 
   return {
     code: response.getSuccessCode(),

@@ -147,9 +147,13 @@ export default class VodService extends Service {
         id,
       }
     });
-    const a = 0;
+    const streamTypes = [
+      'video',
+      'audio'
+    ];
+    if (!localVodInfo) return null;
 
-    const remoteVodInfo = await vodApi.getPlayInfo(localVodInfo.aliyun_video_id, 3600, 'mp4');
+    const remoteVodInfo = await vodApi.getPlayInfo(localVodInfo.aliyun_video_id, 3600, 'mp4', streamTypes[localVodInfo.vod_type]);
 
     const playInfo = remoteVodInfo.PlayInfoList.PlayInfo[0];
     const baseInfo = remoteVodInfo.VideoBase;

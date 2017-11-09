@@ -50,6 +50,6 @@ start().then(() => {
   iLog('* 若未退出，键入 ctrl + c 退出');
   process.exit();
 }).catch((err) => {
-  console.log(err);
+  // console.log(err);
   process.exit(1);
 })

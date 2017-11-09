@@ -47,7 +47,7 @@ export default async function(req, params, {device, models, response, redisClien
     const ResetPasswordModel = models.ResetPasswordToken;
     const resetToken = sha1(`${user.id}.${code}.${new Date().getTime()}`).toString();
 
-    console.log(resetToken, '=====');
+    // console.log(resetToken, '=====');
 
     const foundToken = await ResetPasswordModel.findOne({where: {
       user: user.id,
