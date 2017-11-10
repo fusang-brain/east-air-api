@@ -50,17 +50,17 @@ async function start () {
         type: data[8],
         dept: deptMapper[data[9]] ? deptMapper[data[9]].id : '',
         role: roleMapper[data[10]] ? roleMapper[data[10]].id : '',
-        qq: data[11],
-        wechat: data[12],
-        degree: data[13],
-        duties: data[14],
-        jobs: data[15],
-        exist_job_level: data[16],
-        now_job_level: data[17],
-        start_work_time: new Date(data[18]).getTime(),
-        join_time: new Date(data[19]).getTime(),
-        integration: data[20],
-        mark: data[21],
+        qq: data[11] || '',
+        wechat: data[12] || '',
+        degree: data[13] || 0,
+        duties: data[14] || '',
+        jobs: data[15] || '',
+        exist_job_level: data[16] || '',
+        now_job_level: data[17] || '',
+        start_work_time: new Date(data[18]).getTime() || '',
+        join_time: new Date(data[19]).getTime() || '',
+        integration: data[20] || 0,
+        mark: data[21] || '',
       });
 
       if (deptMapper[data[9]] && user) {
@@ -77,6 +77,7 @@ async function start () {
 
     } catch (err) {
       // console.log(err);
+      console.log(err);
       iLog(`  -- 导入用户 ${data[0]} 出现异常 @ ${err.errors[0].message}`);
     }
   }
@@ -88,6 +89,7 @@ start().then(err => {
   // console.log(err);
   process.exit();
 }).catch(b => {
+  console.log(b);
   // console.log(b);
   process.exit(1);
 })
