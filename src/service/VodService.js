@@ -27,6 +27,18 @@ export default class VodService extends Service {
 
   }
 
+  async updateDuration(id, duration) {
+    await this.getModel('Vod').update({
+      duration,
+    }, {
+      where: {
+        id: id,
+      }
+    });
+
+    return true;
+  }
+
   async create(args, level) {
 
     if (level === 'create.level.first') {
@@ -108,11 +120,31 @@ export default class VodService extends Service {
     });
 
     if (!foundHistory) {
+      args.max_play_seed = args.last_play_seed;
       await VodPlayHistory.create(args);
       return true;
     }
 
+    if (parseInt(foundHistory.duration) === 0) {
+      const details = await this.getModel('Vod').findOne({
+        id: vod_id,
+      });
+      if (details) {
+        foundHistory.duration = details.duration;
+      } else {
+        foundHistory.duration = '0';
+      }
+
+    }
     foundHistory.last_play_seed = otherArgs.last_play_seed;
+    if (+otherArgs.last_play_seed > foundHistory.max_play_seed) {
+      foundHistory.max_play_seed = otherArgs.last_play_seed;
+    }
+
+    if (parseInt(foundHistory.last_play_seed) === parseInt(foundHistory.duration)) {
+      foundHistory.is_finished = true;
+    }
+    foundHistory.update_time = Date.now();
     await foundHistory.save();
     return true;
   }
@@ -132,6 +164,19 @@ export default class VodService extends Service {
         code: Response.getErrorCode(),
         message: '找不到该条历史记录',
       }
+    }
+
+
+    if (parseInt(foundHistory.duration) === 0) {
+      const details = await this.getModel('Vod').findOne({
+        id: id,
+      });
+      if (details) {
+        foundHistory.duration = details.duration;
+      } else {
+        foundHistory.duration = '0';
+      }
+
     }
 
     foundHistory.is_finished = true;
@@ -158,6 +203,9 @@ export default class VodService extends Service {
     const playInfo = remoteVodInfo.PlayInfoList.PlayInfo[0];
     const baseInfo = remoteVodInfo.VideoBase;
     // console.log(remoteVodInfo);
+    if (parseInt(localVodInfo.duration) === 0) {
+      await this.updateDuration(id, playInfo.Duration);
+    }
     localVodInfo.setDataValue('play_info', playInfo);
     localVodInfo.setDataValue('base_info', baseInfo);
     return localVodInfo;
@@ -183,10 +231,22 @@ export default class VodService extends Service {
     });
     const playHistory = await VodPlayHistory.all({
       where: {
-        offset,
-        limit,
         user_id: userID,
-      }
+      },
+      offset,
+      limit,
+      include: [
+        {
+          model: this.getModel('Vod'),
+          as: 'vod_file_info',
+          include: [
+            {
+              model: this.getModel('File'),
+              as: 'cover',
+            }
+          ]
+        }
+      ]
     });
 
     return {

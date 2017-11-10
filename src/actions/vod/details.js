@@ -12,6 +12,14 @@ export default async (req, params, {response, services, device}) => {
     id: ['string', 'required'],
   });
   const details = await services.vod.details(args.id);
+  const lastHistory = await services.vod.lastPlayHistory(details.id, req.user.id);
+  details.setDataValue('last_play_seed', '0');
+  details.setDataValue('max_play_seed', '0');
+  if (lastHistory) {
+    details.setDataValue('last_play_seed', lastHistory.last_play_seed);
+    details.setDataValue('max_play_seed', lastHistory.max_play_seed);
+  }
+
 
   return {
     code: response.getSuccessCode(),

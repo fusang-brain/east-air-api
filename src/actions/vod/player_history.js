@@ -17,7 +17,11 @@ export default async (req, params, {response, services}) => {
     message: '历史获取成功',
     data: {
       total,
-      play_history,
+      play_history: play_history.map(_ => {
+        const visiteRate = parseInt(parseInt(_.last_play_seed) / parseInt(_.duration) * 100);
+        _.setDataValue('visite_rate', visiteRate);
+        return _;
+      }),
     }
   }
 }

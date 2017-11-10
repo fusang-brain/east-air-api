@@ -30,6 +30,9 @@ export default async function (req, param, {response, models, services, device, 
         user_id: {
           $ne: req.user.id,
         },
+        dept_id: {
+          $in: req.dataAccess.length > 0 ? req.dataAccess : [],
+        },
         state: 2,
       },
 
@@ -138,8 +141,15 @@ export default async function (req, param, {response, models, services, device, 
             {
               dept_id: req.user.dept,
             },
+
             {
               dept_id: req.user.department.parent,
+            },
+
+            {
+              dept_id: {
+                $in: req.dataAccess.length > 0 ? req.dataAccess : [],
+              }
             }
           ]
         },
