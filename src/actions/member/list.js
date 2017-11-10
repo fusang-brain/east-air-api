@@ -64,16 +64,26 @@ export default async function(req, params, {models, device}) {
     delete condition.integrate;
   }
   const UserModel = models.User;
+  const DeptModel = models.Dept;
+  const allDepts = await DeptModel.all();
+  const allDeptMap = {};
+  allDepts.forEach(_ => {
+    allDeptMap[_.id] = _;
+  })
   const total = await UserModel.count({
     where: condition,
   });
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;
+
   const list = await UserModel.all({
     where: condition,
     attributes: ['id', 'name', 'no', 'birthday', 'ehr', 'gender', 'mobile', 'type', 'state', 'other_status'],
     include: [
-      {model: models.Dept, as:'department'},
+      {
+        model: models.Dept,
+        as:'department',
+      },
     ],
     offset,
     limit,
@@ -82,13 +92,20 @@ export default async function(req, params, {models, device}) {
     ]
   });
 
+  const formatList = list.map(_ => {
+    if (_.department) {
+      _.setDataValue('department', allDeptMap[_.department.parent]);
+    }
+    return _;
+  });
+
 
   return {
     code: getSuccessCode(),
     message: '获取列表成功',
     data: {
       total: total,
-      users: list,
+      users: formatList,
     }
   }
 }
