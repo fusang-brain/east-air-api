@@ -35,6 +35,7 @@ const environment = {
         '/export_doc/statistics/relax_action',
         '/export_doc/statistics/sympathy',
         '/sms/send',
+        '/vod/export_history',
       ]
     },
     vod_category: [
@@ -70,6 +71,7 @@ const environment = {
       // accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
       accessKeyID: 'LTAI3K9kyKhxejXB',
       accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
+
     },
     sms: {
       SignName: '东航北分工会',

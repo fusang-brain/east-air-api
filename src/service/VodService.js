@@ -24,7 +24,13 @@ export default class VodService extends Service {
   }
 
   async update(id, values) {
+    await this.getModel('Vod').update(values, {
+      where: {
+        id,
+      }
+    });
 
+    return true;
   }
 
   async updateDuration(id, duration) {
@@ -34,6 +40,27 @@ export default class VodService extends Service {
       where: {
         id: id,
       }
+    });
+
+    return true;
+  }
+
+  async remove(id) {
+    const foundVOD = await this.getModel('Vod').findOne({
+      where: {
+        id: id,
+      }
+    });
+
+    if (!foundVOD) {
+      return null;
+    }
+
+    await this.getModel('Vod').destroy({
+      where: { id },
+    });
+    await this.getModel('VodPlayHistory').destroy({
+      where: { vod_id: id },
     });
 
     return true;
@@ -87,6 +114,8 @@ export default class VodService extends Service {
       whereCondition.category = +filter.category;
     }
 
+    filter.title && (whereCondition.title = { $like: `%${filter.title}%` });
+
     const total = await Vod.count({
       where: whereCondition,
     });
@@ -95,6 +124,9 @@ export default class VodService extends Service {
       offset,
       limit,
       where: whereCondition,
+      order: [
+        ['create_time', 'DESC'],
+      ],
       include: [
         {
           model: this.getModel('File'),
@@ -136,6 +168,7 @@ export default class VodService extends Service {
       }
 
     }
+
     foundHistory.last_play_seed = otherArgs.last_play_seed;
     if (+otherArgs.last_play_seed > foundHistory.max_play_seed) {
       foundHistory.max_play_seed = otherArgs.last_play_seed;
@@ -185,12 +218,18 @@ export default class VodService extends Service {
     return true;
   }
 
-  async details(id) {
+  async details(id, device) {
     const Vod = this.getModel('Vod');
     const localVodInfo = await Vod.findOne({
       where: {
         id,
-      }
+      },
+      include: [
+        {
+          model: this.getModel('File'),
+          as: 'cover',
+        }
+      ]
     });
     const streamTypes = [
       'video',
@@ -198,16 +237,21 @@ export default class VodService extends Service {
     ];
     if (!localVodInfo) return null;
 
-    const remoteVodInfo = await vodApi.getPlayInfo(localVodInfo.aliyun_video_id, 3600, 'mp4', streamTypes[localVodInfo.vod_type]);
+    if (device === 'app') {
+      let format = ['mp4', 'm3u8'][localVodInfo.vod_type];
+      const remoteVodInfo = await vodApi.getPlayInfo(localVodInfo.aliyun_video_id, 7 * 24 * 3600, format, streamTypes[localVodInfo.vod_type]);
 
-    const playInfo = remoteVodInfo.PlayInfoList.PlayInfo[0];
-    const baseInfo = remoteVodInfo.VideoBase;
-    // console.log(remoteVodInfo);
-    if (parseInt(localVodInfo.duration) === 0) {
-      await this.updateDuration(id, playInfo.Duration);
+      const playInfo = remoteVodInfo.PlayInfoList.PlayInfo[0];
+      const baseInfo = remoteVodInfo.VideoBase;
+      // console.log(remoteVodInfo);
+      if (parseInt(localVodInfo.duration) === 0) {
+        await this.updateDuration(id, playInfo.Duration);
+      }
+      localVodInfo.setDataValue('play_info', playInfo);
+      localVodInfo.setDataValue('base_info', baseInfo);
     }
-    localVodInfo.setDataValue('play_info', playInfo);
-    localVodInfo.setDataValue('base_info', baseInfo);
+
+    localVodInfo.setDataValue('category_string', config.vod_category[localVodInfo.category])
     return localVodInfo;
   }
 
@@ -235,6 +279,9 @@ export default class VodService extends Service {
       },
       offset,
       limit,
+      order: [
+        ['update_time', 'DESC'],
+      ],
       include: [
         {
           model: this.getModel('Vod'),
@@ -253,5 +300,59 @@ export default class VodService extends Service {
       total,
       play_history: playHistory,
     }
+  }
+
+  /**
+   * 获取导出数据
+   * @param ids array
+   * @returns {Promise.<Array>}
+   */
+  async getExportData({ ids }) {
+    const VodPlayHistory = this.getModel('VodPlayHistory');
+    const condition = {};
+    if (ids) {
+      condition.vod_id = {
+        $in: ids,
+      }
+    }
+    const playHistory = await VodPlayHistory.all({
+      where: condition,
+      order: [
+        ['update_time', 'DESC'],
+      ],
+      include: [
+        {
+          model: this.getModel('User'),
+          as: 'user',
+        },
+        {
+          model: this.getModel('Vod'),
+          as: 'vod_file_info',
+          include: [
+            {
+              model: this.getModel('File'),
+              as: 'cover',
+            },
+
+          ]
+        }
+      ]
+    });
+
+    let data = {};
+    playHistory.forEach(_ => {
+      !data[_.vod_id] && (data[_.vod_id] = {
+        id: _.vod_file_info.id,
+        vod_type: _.vod_file_info.vod_type,
+        category: _.vod_file_info.category,
+        title: _.vod_file_info.title,
+        description: _.vod_file_info.description,
+        duration: _.vod_file_info.duration,
+        users: [],
+      });
+      data[_.vod_id].users.push(_.user);
+    });
+
+    return Object.values(data);
   }
 }

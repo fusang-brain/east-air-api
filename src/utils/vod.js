@@ -165,7 +165,7 @@ export class ALIYunAPI {
     const queryParams = {
       Action: 'GetPlayInfo',
       VideoId: videoID,
-      Formats: _formats,
+      // Formats: _formats,
       AuthTimeout: authTimeout,
       StreamType: streamType,
       ...this.__getCommonParams(),
@@ -181,9 +181,10 @@ export class ALIYunAPI {
       }
     } catch (err) {
       // console.log(err);
+      console.log(err.response.data.Message);
       throw {
         code: Response.getErrorCode(),
-        message: err.response.data.Message,
+        message: '该视频正在转码中...',
       }
     }
 

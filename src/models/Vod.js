@@ -15,6 +15,7 @@ export default (sequelize, DataTypes) => sequelize.define('Vod', {
   description: {type: DataTypes.TEXT},                     // 描述
   enable: {type: DataTypes.BOOLEAN},                       // 已启用
   duration: {type: DataTypes.STRING, defaultValue: '0'},   // 视频长度
+  create_time: {type: DataTypes.STRING, defaultValue: Date.now}, // 创建时间
 }, {
   classMethods: {
     associate(models) {
