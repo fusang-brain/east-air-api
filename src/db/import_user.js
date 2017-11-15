@@ -41,7 +41,7 @@ async function start () {
         name: data[0],
         mobile: data[1],
         gender: data[2],
-        birthday: new Date(data[3]).getTime(),
+        birthday: moment(data[3]).valueOf(),
         password: Auth.encodePassword('05B530AD0FB56286FE051D5F8BE5B8453F1CD93F'), // 88888888
         card_num: data[4],
         ehr: data[5],
