@@ -6,3 +6,4 @@
 
 export list from './list';
 export details from './details';
+export checkit from './checkit';

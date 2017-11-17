@@ -268,6 +268,7 @@ export default class NotificationService extends Service {
       }
     ]
 
+
     const notifications = await Notification.all({
       offset,
       limit,
