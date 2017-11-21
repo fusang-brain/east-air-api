@@ -35,6 +35,7 @@
     "db:superuser:dev": "better-npm-run db-superuser-dev",
     "db:backup": "better-npm-run db-backup",
     "db:import:user": "better-npm-run db-import-user",
+    "db:clear": "better-npm-run db-clear",
     "migrate": ""
   },
   "betterScripts": {
@@ -99,6 +100,14 @@
       "env": {
         "NODE_ACTION": "install",
         "NODE_ENV": "production",
+        "APIPORT": 3050
+      }
+    },
+    "db-clear": {
+      "command": "node ./bin/db_clear.js",
+      "env": {
+        "NODE_ACTION": "install",
+        "NODE_ENV": "development",
         "APIPORT": 3050
       }
     },

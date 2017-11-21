@@ -63,6 +63,14 @@ export default async function(req, params, {models, device}) {
     };
     delete condition.integrate;
   }
+
+  // set data access to list
+  if (device !== 'app') {
+    req.dataAccess.push(req.user.department.parent);
+    condition.dept =  {
+      $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
+    };
+  }
   const UserModel = models.User;
   const DeptModel = models.Dept;
   const allDepts = await DeptModel.all();
