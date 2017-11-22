@@ -65,8 +65,9 @@ export default async function(req, params, {models, device}) {
   }
 
   // set data access to list
-  if (device !== 'app') {
+  if (device !== 'app' && req.user.user_role.role_slug !== 'root') {
     req.dataAccess.push(req.user.department.parent);
+    req.dataAccess.push(req.user.department.id);
     condition.dept =  {
       $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
     };
