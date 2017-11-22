@@ -111,7 +111,7 @@ export default async function(req, params, {models, response}) {
       moment(+item.birthday).format('YYYY-MM-DD'),
       item.mobile,
       typeMapper[+item.type],
-      item.department.dept_name,
+      item.department ? item.department.dept_name : '-',
       status,
     ]
   });

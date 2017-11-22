@@ -17,6 +17,8 @@ import {registerService, setDataAccessToService} from './service';
 import bluebird from 'bluebird';
 import redis from 'redis';
 
+require('./utils/seqtask');
+
 // create redis client
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
@@ -186,8 +188,10 @@ if (config.apiPort) {
     if (err) {
       console.error(err);
     }
-    console.info('~)^(~  API is running on port %s', config.apiPort);
-    console.info('~)*.*(~  Send requests to http://%s:%s', config.apiHost, config.apiPort);
+    if (process.env.NODE_ACTION !== 'install') {
+      console.info('~)^(~  API is running on port %s', config.apiPort);
+      console.info('~)*.*(~  Send requests to http://%s:%s', config.apiHost, config.apiPort);
+    }
   });
 
 } else {

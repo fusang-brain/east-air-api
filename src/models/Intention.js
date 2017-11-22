@@ -23,12 +23,14 @@ export default function (sequelize, DataTypes) {
           as: 'votes',
           foreignKey: 'intention_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
 
         this.belongsTo(models.User, {
           as: 'publisher',
           foreignKey: 'user_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         })
       }
     }

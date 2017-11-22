@@ -241,7 +241,7 @@ export default class RelaxActionService extends Service {
       //"LEFT JOIN `" + this.getModel('Dept').tableName+"` as dept ON dept.id = ra.dept_id " +
       "GROUP BY ra.dept_id) res";
 
-    console.log(queryStr, '-=-=-=-=')
+    // console.log(queryStr, '-=-=-=-=')
     return await this.connect.query(queryStr, {
       type: this.sequelize.QueryTypes.SELECT,
     });

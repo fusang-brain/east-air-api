@@ -33,6 +33,7 @@ export default function (sequelize, DataTypes) {
           as: 'publisher',
           foreignKey: 'user_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         })
       }
     }

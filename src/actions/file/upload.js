@@ -17,7 +17,7 @@ export default async function (req, params, {response, models}) {
   const File = models.File;
   const file = req.file;
   if (!Array.isArray(file)) {
-    console.log(file);
+    // console.log(file);
     const ext = file.mimetype.split('/')[1];
     if (supportFile.indexOf(ext) < 0) {
       fs.unlinkSync(file.path);

@@ -44,9 +44,9 @@ export class ALIYunAPI {
 
     let canonicalizedQueryString = this.__queryToSortedString(params);
     canonicalizedQueryString = canonicalizedQueryString.replace(/\*/, '%2A').replace(/%7E/, '~').replace('/\+/', '%20');
-    console.log(canonicalizedQueryString, '标准化的querystring');
+    // console.log(canonicalizedQueryString, '标准化的querystring');
     const stringToSign = httpMethod + "&" + encodeURIComponent('/') + "&" + encodeURIComponent(canonicalizedQueryString);
-    console.log(stringToSign, '签名字符串');
+    // console.log(stringToSign, '签名字符串');
     let signature = Base64.stringify(hmacSHA1(stringToSign, this.accessKeySecret + "&"));
     // signature = signature.replace(/\*/, '%2A').replace(/%7E/, '~').replace(/\+/, '%20');
     return signature;
@@ -149,7 +149,7 @@ export class ALIYunAPI {
     return false;
   }
 
-  async getPlayInfo(videoID, authTimeout=3600, formats='mp4') {
+  async getPlayInfo(videoID, authTimeout=3600, formats='mp4', streamType = 'video') {
     this.__initialTimestamp();
 
     let _formats = 'mp4';
@@ -165,8 +165,9 @@ export class ALIYunAPI {
     const queryParams = {
       Action: 'GetPlayInfo',
       VideoId: videoID,
-      Formats: _formats,
+      // Formats: _formats,
       AuthTimeout: authTimeout,
+      StreamType: streamType,
       ...this.__getCommonParams(),
     };
 
@@ -179,10 +180,11 @@ export class ALIYunAPI {
         return resp.data;
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      console.log(err.response.data.Message);
       throw {
         code: Response.getErrorCode(),
-        message: err.response.data.Message,
+        message: '该视频正在转码中...',
       }
     }
 

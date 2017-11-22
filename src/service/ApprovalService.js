@@ -26,6 +26,11 @@ export default class ApprovalService extends Service {
     notificationService.dataAccess = this.dataAccess;
   }
 
+  /**
+   * 生成审批流程模板
+   * @param publishID
+   * @returns {Promise.<*>}
+   */
   async generateApprovalFlowTemp(publishID) {
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
@@ -132,14 +137,42 @@ export default class ApprovalService extends Service {
         sort: sortNo + flowMasterRoles.indexOf(deptHead.user_role.role_slug),
       });
     }
-    console.log(ApprovalFlow);
+    // console.log(ApprovalFlow);
     return ApprovalFlow;
   }
 
+  /**
+   * 生成审批
+   * @param projectID
+   * @param publishID
+   * @param approvalType
+   * @param project_subject
+   * @param project_content
+   * @param project_purpose
+   * @param project_type
+   * @param dept_id
+   * @param total_amount
+   * @param has_grant
+   * @returns {Promise.<*>}
+   */
   async generateApproval(projectID, publishID, approvalType, {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant}) {
     return await this.generateActApproval(projectID, publishID, approvalType, {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant});
   }
 
+  /**
+   * 生成活动审批
+   * @param projectID
+   * @param publishID
+   * @param approvalType
+   * @param project_subject
+   * @param project_content
+   * @param project_purpose
+   * @param project_type
+   * @param dept_id
+   * @param total_amount
+   * @param has_grant
+   * @returns {Promise.<*>}
+   */
   async generateActApproval(projectID, publishID, approvalType = 1 , {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant}) {
     const Approval = this.getModel();
 
@@ -275,7 +308,7 @@ export default class ApprovalService extends Service {
 
     // 生成审批流程
     if (ApprovalFlow.length > 0) {
-      console.log(ApprovalFlow);
+      // console.log(ApprovalFlow);
       await ApprovalFlows.bulkCreate(ApprovalFlow);
 
       // 发送消息
@@ -297,6 +330,11 @@ export default class ApprovalService extends Service {
     return approval;
   }
 
+  /**
+   * 获取审批详情
+   * @param approvalID
+   * @returns {Promise.<*>}
+   */
   async getApprovalDetail(approvalID) {
     const Approval = this.getModel();
     const User = this.getModel('User');
@@ -321,7 +359,7 @@ export default class ApprovalService extends Service {
       }
     }
 
-    // TODO get project details
+    // get project details
     let project = {};
     if (approval.approval_type === 1) {
       activityService.dataAccess = this.dataAccess;
@@ -355,6 +393,12 @@ export default class ApprovalService extends Service {
     return approval;
   }
 
+  /**
+   * 获取活动审批详情
+   * @param approvalID
+   * @param device
+   * @returns {Promise.<*>}
+   */
   async getActApprovalDetail(approvalID, device='pc') {
     const Approval = this.getModel();
     const User = this.getModel('User');
@@ -392,6 +436,12 @@ export default class ApprovalService extends Service {
     return approval;
   }
 
+  /**
+   * 审批流程
+   * @param approval_id
+   * @param publisher
+   * @returns {Promise.<[null]>}
+   */
   async approvalFlows(approval_id, publisher=null) {
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
@@ -459,6 +509,11 @@ export default class ApprovalService extends Service {
     return flows;
   }
 
+  /**
+   * 通过项目ID 获取 审批ID
+   * @param projectID
+   * @returns {Promise.<boolean>}
+   */
   async getApprovalIDByProjectID(projectID) {
     const approval = await this.getModel().findOne({
       where: {project_id: projectID},
@@ -471,6 +526,12 @@ export default class ApprovalService extends Service {
     return approval.id;
   }
 
+  /**
+   * 获取待处理任务数
+   * @param approvalType
+   * @param userID
+   * @returns {Promise.<*>}
+   */
   async waitCount(approvalType=1, userID) {
     const Approval = this.getModel();
     const ApprovalFlows = this.getModel('ApprovalFlows');
@@ -497,6 +558,17 @@ export default class ApprovalService extends Service {
     });
   }
 
+  /**
+   * 获取审批列表
+   * @param state
+   * @param search
+   * @param offset
+   * @param limit
+   * @param user_id
+   * @param type
+   * @param notLimit
+   * @returns {Promise.<{undo_total: *, total: *, approvals: *}>}
+   */
   async approvalList({state, search, offset, limit, user_id, type, notLimit}) {
     const Approval = this.getModel();
     const condition = {};
@@ -618,7 +690,14 @@ export default class ApprovalService extends Service {
     }
   }
 
-
+  /**
+   * 处理审批
+   * @param approval_id
+   * @param result
+   * @param content
+   * @param user_id
+   * @returns {Promise.<*>}
+   */
   async executeApproval({approval_id, result, content, user_id}) {
     const Approval = this.getModel('Approval');
     const User = this.getModel('User');

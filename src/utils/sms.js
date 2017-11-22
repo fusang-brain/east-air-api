@@ -38,7 +38,7 @@ async function sendSMSAPI({phone, code}) {
     let {Code} = res
     if (Code === 'OK') {
       //处理返回参数
-      console.log(res);
+      // console.log(res);
       return true;
     }
   } catch (err) {
@@ -97,6 +97,11 @@ export async function verifyCode(mobile, code) {
       message: '验证码不存在',
     }
   }
+
+  if (parseInt(codeOfMobile) !== parseInt(code)) {
+    return false;
+  }
+
   redisClient.set(mobile, null);
-  return +codeOfMobile === +code;
+  return true;
 }

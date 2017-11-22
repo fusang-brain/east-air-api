@@ -2,6 +2,8 @@
  * Created by alixez on 17-8-2.
  */
 
+
+// get the evaluation of activity
 export default async function (req, params, {response, models, device, checkAccess}) {
   await checkAccess('activity', 'view')
   const user = req.user;

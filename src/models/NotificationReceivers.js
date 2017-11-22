@@ -17,6 +17,7 @@ export default function (sequelize, DataTypes) {
           as: 'notify',
           foreignKey: 'notify_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         })
       }
     }

@@ -17,8 +17,7 @@ async function allDept(children, parent, level) {
     let p = await models.Dept.create({
       tree_level: level,
       parent: parent.id,
-      dept_name:
-      deptItem.name,
+      dept_name: deptItem.name,
     });
     if (level === 3) {
       defaultDept = p.id;
@@ -135,5 +134,5 @@ start().then(res => {
   log('== 系统安装完成 ==');
   log('== 键入 ctrl + c 退出安装程序 ==');
 }).catch(err => {
-  console.log('======', error);
+  // console.log('======', error);
 });

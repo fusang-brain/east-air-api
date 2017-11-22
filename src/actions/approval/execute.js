@@ -4,6 +4,7 @@
 
 import {filterParams} from '../../utils/filters';
 
+// execute some approval
 export default async function (req, params, {response, checkAccess, services}) {
   await checkAccess('grant_approval', 'activity_funding');
   await checkAccess('grant_approval', 'apply_funding');
@@ -13,6 +14,7 @@ export default async function (req, params, {response, checkAccess, services}) {
     content: 'string',
   });
 
+  // 处理审批
   const executeResult = await services.approval.executeApproval({
     approval_id: args.approval_id,
     result: args.result,

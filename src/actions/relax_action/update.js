@@ -20,7 +20,7 @@ export default async function (req, params, {response, services, checkAccess}) {
     people: ['array'],
   });
 
-  console.log(args);
+  // console.log(args);
 
   const saveType = params[0];
   if (!['submit', 'draft'].includes(saveType)) {

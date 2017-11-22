@@ -18,6 +18,7 @@ export default function (sequelize, DataTypes) {
           as: 'grant_apply',
           foreignKey: 'grant_apply_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         })
       }
     },

@@ -19,6 +19,7 @@ export default function (sequelize, DataTypes) {
           as: 'trade_union_act',
           foreignKey: 'act_id',
           targetKey: 'id',
+          onDelete: 'cascade',
         });
       },
     }

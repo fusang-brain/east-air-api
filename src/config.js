@@ -35,8 +35,16 @@ const environment = {
         '/export_doc/statistics/relax_action',
         '/export_doc/statistics/sympathy',
         '/sms/send',
+        '/vod/export_history',
       ]
     },
+    vod_category: [
+      '分类1',
+      '分类2',
+      '分类3',
+      'cate4',
+      'cate5',
+    ],
     storage: {
       pathFolder,
       uploadFolder,
@@ -46,14 +54,24 @@ const environment = {
         'act_attach': ['pdf'],
         'doc_attach': ['pdf'],
       }
+    },
+    migrations: {
+      super_user: {
+        name: 'root',
+        mobile: '13100000000',
+        nickname: 'root',
+      }
     }
   },
   production: {
     debug: false,
     isProduction: true,
     aliyun: {
+      // accessKeyID: 'LTAI3K9kyKhxejXB',
+      // accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
       accessKeyID: 'LTAI3K9kyKhxejXB',
       accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
+
     },
     sms: {
       SignName: '东航北分工会',
@@ -74,6 +92,13 @@ const environment = {
         '/sms/send',
       ]
     },
+    vod_category: [
+      '分类1',
+      '分类2',
+      '分类3',
+      'cate4',
+      'cate5',
+    ],
     storage: {
       pathFolder,
       uploadFolder,
@@ -83,6 +108,13 @@ const environment = {
         'act_attach': ['pdf'],
       }
     },
+    migrations: {
+      super_user: {
+        name: 'root',
+        mobile: '13100000000',
+        nickname: '超级用户',
+      }
+    }
   }
 }[process.env.NODE_ENV || 'development'];
 

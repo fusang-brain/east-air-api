@@ -32,6 +32,7 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'dept_id',
           sourceKey: 'id',
           as: 'department',
+          onDelete: 'cascade',
         })
 
         this.belongsTo(models.TradeUnionAct, {
@@ -44,6 +45,7 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'project_id',
           constraints: false,
           as: 'sympathy',
+
         });
 
         this.belongsTo(models.GrantApplication, {
@@ -56,6 +58,7 @@ export default function (sequelize, DataTypes) {
           as: 'publisher',
           foreignKey: 'publish_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
       }
     }

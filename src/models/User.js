@@ -7,8 +7,8 @@ export default function (sequelize, DataTypes) {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     serial_no: {type: DataTypes.STRING, defaultValue: generateNo},
     name: {type: DataTypes.STRING, allowNull: false},
-    no: {type: DataTypes.STRING, allowNull: false, defaultValue: '0'},  // 卡号
-    birthday: {type: DataTypes.STRING, allowNull: false},                // 时间毫秒数
+    no: {type: DataTypes.STRING, allowNull: false, defaultValue: '0'},  // 卡号ß
+    birthday: {type: DataTypes.BIGINT, allowNull: false},                // 时间毫秒数
     card_num: {type: DataTypes.STRING, allowNull: false},                // 身份证号
     mobile: {type: DataTypes.STRING, length: 11, unique: true},
     // nickname: {type: DataTypes.STRING, defaultValue: ''},
@@ -70,8 +70,9 @@ export default function (sequelize, DataTypes) {
           as: 'user_role',
           foreignKey: 'role',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
-        this.belongsTo(models.Dept, {as: 'department', foreignKey: 'dept', sourceKey: 'id'});
+        this.belongsTo(models.Dept, {as: 'department', foreignKey: 'dept', sourceKey: 'id', onDelete: 'cascade'});
         this.belongsToMany(models.Dept, {
           as: 'data_access',
           through: {

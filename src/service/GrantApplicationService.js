@@ -167,7 +167,7 @@ export default class GrantApplicationService extends Service {
       args.attach = [];
     }
 
-    console.log(args.attach);
+    // console.log(args.attach);
 
 
     return await this.GrantApplication.create(args, {

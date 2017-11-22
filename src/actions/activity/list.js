@@ -30,11 +30,15 @@ export default async function (req, param, {response, models, services, device, 
         user_id: {
           $ne: req.user.id,
         },
+        dept_id: {
+          $in: req.dataAccess.length > 0 ? req.dataAccess : [],
+        },
         state: 2,
       },
 
     ],
   };
+
   const ActModel = models.TradeUnionAct;
   let attributes = ['no', 'id', 'subject', 'act_type', 'create_date', 'state', 'start_date', 'end_date'];
   if (device === 'app') {
@@ -51,7 +55,7 @@ export default async function (req, param, {response, models, services, device, 
   }
 
   if (params.state) {
-    console.log(params.state, '------');
+    // console.log(params.state, '------');
     if (+params.state === 2) {
       condition.$or[0].state = params.state;
       condition.$or[1].state = params.state;
@@ -137,8 +141,15 @@ export default async function (req, param, {response, models, services, device, 
             {
               dept_id: req.user.dept,
             },
+
             {
               dept_id: req.user.department.parent,
+            },
+
+            {
+              dept_id: {
+                $in: req.dataAccess.length > 0 ? req.dataAccess : [],
+              }
             }
           ]
         },

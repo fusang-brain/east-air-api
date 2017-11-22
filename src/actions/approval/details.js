@@ -4,6 +4,7 @@
 
 import {ApprovalService} from '../../service';
 
+// get approval details
 export default async function (req, params, {response, device, services}) {
   const approval_id = req.query.approval_id;
   const approvalService = services.approval;

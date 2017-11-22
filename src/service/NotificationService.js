@@ -26,6 +26,16 @@ export default class NotificationService extends Service {
     }
   }
 
+  /**
+   * 发消息给人们
+   * @param title    标题
+   * @param body     消息体
+   * @param sender   发送者
+   * @param items    消息附加项目
+   * @param receivers 接受者们
+   * @param template  使用的消息模板
+   * @returns {Promise.<*>}
+   */
   async sendToPeople({title, body, sender, items, receivers, template}) {
     const msgTemplate = this.template[template];
 
@@ -46,6 +56,16 @@ export default class NotificationService extends Service {
     return await this.sendTo({title, body, sender, items, receivers: executedReceivers});
   }
 
+  /**
+   * 发消息给某人
+   * @param title 标题
+   * @param body  消息体
+   * @param sender 发送者
+   * @param items  消息附加项目
+   * @param receiver 接受者
+   * @param template 模板
+   * @returns {Promise.<*>}
+   */
   async sendToPersonal({title, body, sender, items, receiver, template}) {
 
     const msgTemplate = this.template[template];
@@ -69,6 +89,15 @@ export default class NotificationService extends Service {
     return await this.sendTo({title, body, sender, items, receivers});
   }
 
+  /**
+   * 发消息给某个部门（部门下的所有人）
+   * @param title  标题
+   * @param body   消息体
+   * @param sender 发送人
+   * @param items  附加项目
+   * @param department 部门
+   * @returns {Promise.<*>}
+   */
   async sendToDepartment({title, body, sender, items, department}) {
     const receivers = [
       {
@@ -80,6 +109,15 @@ export default class NotificationService extends Service {
     return await this.sendTo({title, body, sender, items, receivers});
   }
 
+  /**
+   * 给某个对象发消息
+   * @param title  标题
+   * @param body   消息体
+   * @param sender 发送人
+   * @param items  附加项目
+   * @param receivers 接受者们
+   * @returns {Promise.<*>}
+   */
   async sendTo({title, body, sender, items, receivers}) {
     const Notification = this.getModel();
     const values = {
@@ -111,6 +149,13 @@ export default class NotificationService extends Service {
     })
   }
 
+  /**
+   * 获取通知详情
+   * @param id        通知ID
+   * @param user_id   用户ID
+   * @param dept_id   部门ID
+   * @returns {Promise.<{id, notify_type: (number|*|Notification.notify_type|{type}), title, content, send_time: (*|ActEvaluation.send_time|{type, defaultValue}|Notification.send_time), items}>}
+   */
   async details(id, user_id, dept_id) {
     const Notification = this.getModel();
     const NotificationReaders = this.getModel('NotificationReaders');
@@ -182,6 +227,14 @@ export default class NotificationService extends Service {
     };
   }
 
+  /**
+   * 获取消息通知列表
+   * @param offset  数据偏移
+   * @param limit   数据分页
+   * @param dept_id 部门ID
+   * @param user_id 用户ID
+   * @returns {Promise.<{total: number, notifications}>}
+   */
   async notificationList(offset, limit, dept_id, user_id) {
     const Notification = this.getModel();
     const includeCondition = [
@@ -215,6 +268,7 @@ export default class NotificationService extends Service {
       }
     ]
 
+
     const notifications = await Notification.all({
       offset,
       limit,
@@ -224,6 +278,7 @@ export default class NotificationService extends Service {
       include: includeCondition,
     });
 
+    // 格式化消息
     const list = notifications.map(notification => {
       let item = {
         id: notification.id,
@@ -235,13 +290,13 @@ export default class NotificationService extends Service {
       };
 
       item.has_read = false;
-      console.log(notification.readers, '=====读者');
+      // console.log(notification.readers, '=====读者');
 
       if (Array.isArray(notification.readers) && notification.readers.length > 0) {
         item.has_read = true;
       }
 
-      console.log(item);
+      // console.log(item);
 
       // const item = {...notification};
 

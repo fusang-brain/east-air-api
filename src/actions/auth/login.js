@@ -57,7 +57,7 @@ export default async function (req, params, {device, redisClient}) {
     redisClient.set(`ACCESS_TOKEN_${user.id}`, accessToken, 'EX', 7 * 24 * 60 * 60);
   } else {
     const cacheTokenArr = cacheToken.split(',');
-    console.log(cacheTokenArr);
+    // console.log(cacheTokenArr);
     cacheTokenArr.push(accessToken);
     redisClient.set(`ACCESS_TOKEN_${user.id}`, cacheTokenArr.join(','), 'EX', 7 * 24 * 60 * 60);
   }
@@ -66,6 +66,7 @@ export default async function (req, params, {device, redisClient}) {
 
   const permissions = user.user_role.permissions;
 
+  // get permission with current role
   const originPermissions = await models.RolePermission.all({
     where: {
       role_id: user.role
@@ -86,6 +87,7 @@ export default async function (req, params, {device, redisClient}) {
     device = 'web';
   }
 
+  // generate permissions scope
   for (let i = 0; i < originPermissions.length; i ++) {
     let item = originPermissions[i];
     if (item.platform !== device) {

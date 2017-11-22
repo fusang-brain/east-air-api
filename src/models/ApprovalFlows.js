@@ -24,6 +24,7 @@ export default function (sequelize, DataTypes) {
           as: 'approval_man',
           foreignKey: 'approval_man_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
       }
     }

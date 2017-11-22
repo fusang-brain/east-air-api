@@ -9,10 +9,13 @@ export default (sequelize, DataTypes) => sequelize.define('Vod', {
   vod_type: {type: DataTypes.INTEGER, defaultValue: 0}, // 0: 视频 1: 音频
   category: {type: DataTypes.INTEGER, defaultValue: 0}, // 0: 分类1 ---- 4: 分类5
   aliyun_video_id: {type: DataTypes.STRING},               // 阿里云的视频ID
-  cover_id: {type: DataTypes.UUID},                        // 封面文件ID
+  // aliyun_video_cover: { type: DataTypes.STRING},           // 阿里云视频封面
+  cover_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},                        // 封面文件ID
   title: {type: DataTypes.STRING},                         // 标题
   description: {type: DataTypes.TEXT},                     // 描述
   enable: {type: DataTypes.BOOLEAN},                       // 已启用
+  duration: {type: DataTypes.STRING, defaultValue: '0'},   // 视频长度
+  create_time: {type: DataTypes.STRING, defaultValue: Date.now}, // 创建时间
 }, {
   classMethods: {
     associate(models) {
@@ -21,6 +24,7 @@ export default (sequelize, DataTypes) => sequelize.define('Vod', {
         as: 'cover',
         foreignKey: 'cover_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
 
       this.hasMany(models.VodPlayHistory, {

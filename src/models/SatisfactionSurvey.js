@@ -40,12 +40,14 @@ export default (sequelize, DataTypes) => sequelize.define('SatisfactionSurvey', 
         as: 'survey_user',
         foreignKey: 'survey_user_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
 
       this.belongsTo(models.User, {
         as: 'publisher',
         foreignKey: 'user_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
     }
   }

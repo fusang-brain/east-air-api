@@ -116,6 +116,11 @@ export default class DocService extends Service {
     }
   }
 
+  /**
+   * 未读总数
+   * @param userID
+   * @returns {Promise.<number>}
+   */
   async unreadTotal(userID) {
     const total = await this.getModel('Docs').count({
       include: [
@@ -130,7 +135,7 @@ export default class DocService extends Service {
       ]
     });
 
-    console.log(total);
+    // console.log(total);
 
     const hasReadTotalByUser = await this.getModel('DocReadReceipts').count({
       where: {
@@ -141,6 +146,12 @@ export default class DocService extends Service {
     return parseInt(total) - parseInt(hasReadTotalByUser);
   }
 
+  /**
+   * 新增公文
+   * @param args
+   * @param user_id
+   * @returns {Promise.<*>}
+   */
   async create(args, user_id) {
     const {attach, receivers, ...params} = args;
     const Doc = this.getModel();
@@ -188,6 +199,12 @@ export default class DocService extends Service {
     });
   }
 
+  /**
+   * 将公文标记未已读
+   * @param docID
+   * @param userID
+   * @returns {Promise.<*>}
+   */
   async markedRead(docID, userID) {
     const DocReadReceipts = this.getModel('DocReadReceipts');
     let docReadReceipts = await DocReadReceipts.findOne({
@@ -211,6 +228,11 @@ export default class DocService extends Service {
 
   }
 
+  /**
+   * 文档详情
+   * @param id
+   * @returns {Promise.<*>}
+   */
   async details(id) {
     const Doc = this.getModel();
     const doc = await Doc.findOne({
@@ -250,6 +272,11 @@ export default class DocService extends Service {
     return doc;
   }
 
+  /**
+   * 公文接受者总数
+   * @param id
+   * @returns {Promise.<*>}
+   */
   async docReceiverTotal(id) {
     const DocReceivers = this.getModel('DocReceivers');
     return await DocReceivers.count({
@@ -259,6 +286,11 @@ export default class DocService extends Service {
     });
   }
 
+  /**
+   * 公文已读总数
+   * @param id
+   * @returns {Promise.<*>}
+   */
   async docHasReadTotal(id) {
     const DocReadReceipts = this.getModel('DocReadReceipts');
     return await DocReadReceipts.count({
@@ -268,6 +300,11 @@ export default class DocService extends Service {
     })
   }
 
+  /**
+   * 获取唯独详情
+   * @param id
+   * @returns {Promise.<{result: Array, resultMapper: {}}>}
+   */
   async getUnreadDetails(id) {
     const DocReceivers = this.getModel('DocReceivers');
     const DocReadReceipts = this.getModel('DocReadReceipts');
@@ -344,6 +381,11 @@ export default class DocService extends Service {
     };
   }
 
+  /**
+   * 获取未读公文的接收者
+   * @param id
+   * @returns {Promise.<*>}
+   */
   async getUnreadReceivers(id) {
     const DocReceivers = this.getModel('DocReceivers');
     const DocReadReceipts = this.getModel('DocReadReceipts');
@@ -386,6 +428,11 @@ export default class DocService extends Service {
     });
   }
 
+  /**
+   * 获取上次提醒
+   * @param id
+   * @returns {Promise.<*>}
+   */
   async getLastReminder(id) {
     return await this.getModel('DocReminder').findOne({
       where: {
@@ -394,6 +441,11 @@ export default class DocService extends Service {
     });
   }
 
+  /**
+   * 设置提醒者
+   * @param id
+   * @returns {Promise.<*>}
+   */
   async setReminder(id) {
     const foundReminder = await this.getModel('DocReminder').findOne({
       where: {

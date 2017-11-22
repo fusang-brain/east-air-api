@@ -7,7 +7,7 @@
 export default (sequelize, DataTypes) => sequelize.define('TradeUnionActDept', {
   id: {type: DataTypes.UUID, defaultValue:DataTypes.UUIDV4, primaryKey: true},
   act_id: {type: DataTypes.UUID},
-  dept_id: {type: DataTypes.UUID},
+  dept_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
 }, {
   classMethods: {
     associate(models) {
@@ -15,12 +15,14 @@ export default (sequelize, DataTypes) => sequelize.define('TradeUnionActDept', {
         as: 'activity',
         foreignKey: 'act_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
 
       this.belongsTo(models.Dept, {
         as: 'dept_info',
         foreignKey: 'dept_id',
         sourceKey: 'id',
+        onDelete: 'cascade',
       });
     }
   }

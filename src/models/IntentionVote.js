@@ -17,6 +17,7 @@ export default function (sequelize, DataTypes) {
         this.belongsTo(models.Intention, {
           foreignKey: 'intention_id',
           sourceKey: 'id',
+          onDelete: 'cascade',
         });
       }
     }

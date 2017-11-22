@@ -4,6 +4,14 @@
  * Date: 2017/8/15
  */
 
+/**
+ * 通知列表
+ * @param req          HttpRequest
+ * @param params       The Route path params
+ * @param response     HttpResponse
+ * @param services     Service Array
+ * @returns {Promise.<{code: *, message: string, data: {total: *, notifications: *}}>}
+ */
 export default async function (req, params, {response, services}) {
   const offset = parseInt(req.query.offset) || 0;
   const limit = parseInt(req.query.limit) || 20;

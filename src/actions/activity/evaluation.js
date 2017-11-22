@@ -3,6 +3,7 @@
  */
 import {filterParams} from '../../utils/filters';
 
+// activity evaluation
 export default async function (req, params, {response, models, device, checkAccess}) {
   await checkAccess('activity', 'comment_activity');
   const args = filterParams(req.body, {

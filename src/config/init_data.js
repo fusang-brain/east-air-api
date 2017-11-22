@@ -62,7 +62,7 @@ const permissions = [
     ]
   },
   {
-    name: '意见征集',
+    name: '意向征集',
     slug: 'opinion_collection',
     permission: [
       {
@@ -88,7 +88,7 @@ const permissions = [
     slug: 'satisfaction_degree_investigation',
     permission: [
       {
-        name: '创建',
+        name: '发起调查',
         slug: 'create',
       },
       {
@@ -257,8 +257,8 @@ const permissions = [
         slug: 'create',
       },
       {
-        name: 'export',
-        slug: '导出',
+        name: '导出',
+        slug: 'export',
       },
       {
         name: '编辑',
@@ -345,14 +345,6 @@ const dept = [
     children: [
       {
         name: '飞行部分会',
-        children: [
-          {
-            name: '部门1',
-          },
-          {
-            name: '部门2',
-          }
-        ]
       },
       {
         name: '地服部分会',

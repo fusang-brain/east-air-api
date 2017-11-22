@@ -36,6 +36,7 @@ export default async function (req, param, {response, models, checkAccess}) {
   }
   if (req.body.grant_apply) {
 
+    // execute the grant of activity
     params.grant_apply = filterParams(req.body.grant_apply, {
       type: ['number'],
       dept_id: ['string'],
