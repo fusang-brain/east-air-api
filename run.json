@@ -8,7 +8,7 @@
       "env": {
         "NODE_ENV": "production",
         "APIPORT": 3000,
-        "NODE_PATH": "./src",
+        "NODE_PATH": "./src"
       }
     }
   ]

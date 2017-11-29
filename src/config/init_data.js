@@ -106,7 +106,7 @@ const permissions = [
     ]
   },
   {
-    name: '疗养休',
+    name: '疗休养',
     slug: 'relax_action',
     permission: [
       {
@@ -213,15 +213,15 @@ const permissions = [
     ]
   },
   {
-    name: '经费审批',
+    name: '审批管理',
     slug: 'grant_approval',
     permission: [
       {
-        name: '活动经费',
+        name: '活动审批',
         slug: 'activity_funding',
       },
       {
-        name: '经费审批',
+        name: '经费申请审批',
         slug: 'apply_funding',
       },
     ]

@@ -28,7 +28,7 @@ export default async function (req, params, {models, device}) {
     if (device === 'app' || renderType === 'with_member') {
       includeArgs = [
         {model: models.Dept, as: 'children'},
-        {model: models.User, as: 'members', where: {state: {$in: [0, 1]}}, required: false, attributes: ['id', 'name', 'avatar']}
+        {model: models.User, as: 'members', where: {state: {$in: [0, 1]}, name: {$ne: 'root'}}, required: false, attributes: ['id', 'name', 'avatar']}
       ];
     } else {
       includeArgs = [

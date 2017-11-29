@@ -13,6 +13,9 @@ export default async function (req, params, {models, response}) {
     offset,
     limit,
   };
+  options.where = {
+    name: { $ne: 'root' },
+  };
   if (search) {
     options.where = {
       name: {
@@ -20,6 +23,14 @@ export default async function (req, params, {models, response}) {
       }
     };
   }
+
+  req.dataAccess.push(req.user.department.parent);
+  req.dataAccess.push(req.user.department.id);
+
+  options.where.dept =  {
+    $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
+  };
+
   const list = await UserModel.all(options);
   return {
     code: response.getSuccessCode(),

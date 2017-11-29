@@ -162,12 +162,11 @@ export default async function (req, param, {response, models, services, device, 
     offset,
     limit,
   });
-  const todayStart = moment().startOf('day');
-
+  const todayStart = moment();
   const list = acts.map(act => {
     let endDateStart = moment(+act.end_date).add(1, 'day').startOf('day');
     let isEnd = false;
-    if (endDateStart.toDate().getTime() <= todayStart.toDate().getTime()) {
+    if (endDateStart.valueOf() < todayStart.valueOf()) {
       isEnd = true;
     }
 

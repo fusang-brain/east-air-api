@@ -14,6 +14,7 @@ const excludeArgs = [
   'Role',
   'RolePermission',
   'Permission',
+  'Module',
   'Dept',
   'DataAccess',
 ]
@@ -21,11 +22,12 @@ const excludeArgs = [
 async function start () {
 
   for (let i in models) {
-    if (excludeArgs.includes(i)) continue;
-    iLog(`清空业务表 - ${i}`);
-    await models[i].destroy({
-      where: {},
-    });
+    if (!excludeArgs.includes(i)) {
+      iLog(`清空业务表 - ${i}`);
+      await models[i].destroy({
+        where: {},
+      });
+    };
   }
 
   iLog('^ 处理完成 ');

@@ -278,6 +278,13 @@ export default class NotificationService extends Service {
       include: includeCondition,
     });
 
+
+    const total = await Notification.count({
+      include: includeCondition,
+    })
+
+    let unreadCount = total;
+
     // 格式化消息
     const list = notifications.map(notification => {
       let item = {
@@ -294,6 +301,7 @@ export default class NotificationService extends Service {
 
       if (Array.isArray(notification.readers) && notification.readers.length > 0) {
         item.has_read = true;
+        unreadCount -= 1;
       }
 
       // console.log(item);
@@ -307,13 +315,16 @@ export default class NotificationService extends Service {
       return item;
     });
 
-    const total = await Notification.count({
-      include: includeCondition,
-    })
+
 
     return {
       total: +total,
+      unreadCount,
       notifications: list,
     };
+  }
+
+  async unreadCount() {
+
   }
 }

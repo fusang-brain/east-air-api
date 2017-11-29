@@ -107,14 +107,12 @@ export default async function(req, params, {models, device}) {
     }
     return _;
   });
-
-
   return {
     code: getSuccessCode(),
     message: '获取列表成功',
     data: {
       total: total,
-      users: formatList,
+      users: formatList.filter(_ => _.name !== 'root'),
     }
   }
 }
