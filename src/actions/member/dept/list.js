@@ -26,9 +26,22 @@ export default async function (req, params, {models, device}) {
   const getIncludeArgs = (times) => {
     let includeArgs = [];
     if (device === 'app' || renderType === 'with_member') {
+      const condition = {
+        state: {
+          $in: [0, 1]
+        },
+
+        name: {$ne: 'root'}
+      };
+
+      req.dataAccess.push(req.user.department.parent);
+      req.dataAccess.push(req.user.department.id);
+      // condition.dept =  {
+      //   $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
+      // };
       includeArgs = [
         {model: models.Dept, as: 'children'},
-        {model: models.User, as: 'members', where: {state: {$in: [0, 1]}, name: {$ne: 'root'}}, required: false, attributes: ['id', 'name', 'avatar']}
+        {model: models.User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar']}
       ];
     } else {
       includeArgs = [
@@ -54,7 +67,7 @@ export default async function (req, params, {models, device}) {
   if (device === 'app') {
     for (let i = 0; i < list.length; i ++) {
       let item = list[i];
-      item.dataValues.member_total = recursiveMemberCount(item.children) + item.members.length;
+      item.dataValues.member_total = recursiveMemberCount(item.children, req.dataAccess) + item.members.length;
     }
 
     return {
@@ -111,17 +124,19 @@ function recursiveRenderDept(children) {
   })
 }
 
-function recursiveMemberCount(children) {
+function recursiveMemberCount(children, dataAccess) {
   let count = 0;
   for (let i = 0; i < children.length; i ++) {
     let item = children[i];
     if (item.children.length > 0) {
-      item.dataValues.member_total = recursiveMemberCount(item.children) + item.members.length;
+      item.dataValues.member_total = recursiveMemberCount(item.children, dataAccess) + item.members.length;
 
     } else {
       item.dataValues.member_total = item.members.length;
     }
-
+    if (!dataAccess.includes(item.id)) {
+      item.dataValues.members = [];
+    }
     count += item.dataValues.member_total;
   }
 
