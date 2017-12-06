@@ -39,11 +39,11 @@ const environment = {
       ]
     },
     vod_category: [
-      '分类1',
-      '分类2',
-      '分类3',
-      'cate4',
-      'cate5',
+      '员工服务',
+      '业务',
+      '管理',
+      '入职指南',
+      '综合',
     ],
     storage: {
       pathFolder,
@@ -93,11 +93,11 @@ const environment = {
       ]
     },
     vod_category: [
-      '分类1',
-      '分类2',
-      '分类3',
-      'cate4',
-      'cate5',
+      '员工服务',
+      '业务',
+      '管理',
+      '入职指南',
+      '综合',
     ],
     storage: {
       pathFolder,
