@@ -1,6 +1,9 @@
 .idea
 node_modules
 logs/*
+!storage/origin/EasternDefaultCanteen.png
+!storgae/origin/EasternDefaultOffice.png
+!storage/origin/EasternDefaultServiceCenter.png
 !storage/origin/.gitkeep
 storage
 
