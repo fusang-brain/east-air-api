@@ -34,7 +34,8 @@ export default class RelaxActionService extends Service {
     }
     args.people_number = peopleNumber;
     const dailyTotal = Decimal.mul(args.per_capita_budget, args.people_number).toNumber();
-    args.total = Decimal.mul(dailyTotal, args.days).toNumber();
+    // args.total = Decimal.mul(dailyTotal, args.days).toNumber();
+    args.total = dailyTotal;
     args.apply_time = Date.now();
     return await RelaxAction.create(args, {
       include: [
