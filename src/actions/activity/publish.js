@@ -48,7 +48,8 @@ export default async function (req, param, {response, models, checkAccess}) {
     });
     params.grant_apply.is_act = true;
     if (!params.grant_apply.dept_id) {
-      params.grant_apply.dept_id = req.user.dept;
+      // params.grant_apply.dept_id = req.user.dept;
+      params.grant_apply.dept_id = req.user.parentDept;
     }
     if (!params.grant_apply.type) {
       params.grant_apply.type = 0;
@@ -66,7 +67,8 @@ export default async function (req, param, {response, models, checkAccess}) {
     }
   }
   params.user_id = req.user.id;
-  params.dept_id = req.user.dept;
+  // params.dept_id = req.user.dept;
+  params.dept_id = req.user.parentDept;
   const TradeUnionAct = models.TradeUnionAct;
 
   const budgets = req.body.budgets;

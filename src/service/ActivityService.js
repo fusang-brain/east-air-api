@@ -11,6 +11,11 @@ export default class ActivityService extends Service {
     this.dataAccess = [];
   }
 
+  /**
+   * 通过ID删除活动
+   * @param id
+   * @returns {Promise.<*>}
+   */
   async remove(id) {
     const TradeUnionAct = this.getModel();
     const Approval = this.getModel('Approval');
@@ -23,12 +28,34 @@ export default class ActivityService extends Service {
         message: '没有找到您要删除的活动',
       }
     }
-    if (![0, 3].includes(foundAct.state)) {
+
+    // if (![0, 3].includes(foundAct.state)) {
+    //   return {
+    //     code: Response.getErrorCode('remove'),
+    //     // message: '此活动无法删除',
+    //     message: '该活动已经审批无法删除',
+    //   }
+    // }
+
+    // 判断活动状态
+    if (+foundAct.state !== 3) {
       return {
         code: Response.getErrorCode('remove'),
-        message: '此活动无法删除',
+        message: '该活动无法删除',
       }
     }
+
+    // 判断活动是否在审批流程中
+    if (foundApproval) {
+      const count = await ApprovalFlows.count({ where: { approval_id: foundApproval.id, result: { $in: [1, 2] } }});
+      if (count > 0) {
+        return {
+          code: Response.getErrorCode('remove'),
+          message: '该活动已经审批无法删除',
+        }
+      }
+    }
+
     await Approval.destroy({where: {project_id: id}});
     if (foundApproval) {
       await ApprovalFlows.destroy({where: {approval_id: foundApproval.id}});

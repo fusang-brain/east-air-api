@@ -14,10 +14,10 @@ export default function (sequelize, DataTypes) {
     per_capita_budget: {type: DataTypes.DECIMAL(10,2)}, // 人均预算
     people_number: {type: DataTypes.INTEGER}, // 人数
     total: {type: DataTypes.DECIMAL(10,2)}, // 合计
-    days: {type: DataTypes.INTEGER}, // 疗休养天数
-    date: {type: DataTypes.STRING}, // 疗休养时间 开始时间
-    place: {type: DataTypes.STRING}, // 疗休养地点
-    state: {type: DataTypes.INTEGER}, // 0:草稿 1:已提交(待处理)
+    days: {type: DataTypes.INTEGER},      // 疗休养天数
+    date: {type: DataTypes.STRING},       // 疗休养时间 开始时间
+    place: {type: DataTypes.STRING},      // 疗休养地点
+    state: {type: DataTypes.INTEGER},     // 0:草稿 1:已提交(待处理)
     apply_time: {type: DataTypes.STRING}, // 申请时间
   }, {
     classMethods: {

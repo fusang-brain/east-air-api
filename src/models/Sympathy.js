@@ -1,4 +1,5 @@
 
+// 慰问表
 export default function (sequelize, DataTypes) {
   return sequelize.define('Sympathy', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},

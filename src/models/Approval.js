@@ -8,7 +8,7 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('Approval', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     approval_no: {type: DataTypes.STRING, defaultValue: generateNo},
-    approval_type: {type: DataTypes.INTEGER},  // 审批类型 1:活动 2:慰问 3:经费
+    approval_type: {type: DataTypes.INTEGER},       // 审批类型 1:活动 2:慰问 3:经费
     project_subject: {type: DataTypes.STRING},      // 项目主题
     project_purpose: {type: DataTypes.STRING},      // 项目目的
     project_content: {type: DataTypes.STRING},      // 项目详情
@@ -18,7 +18,7 @@ export default function (sequelize, DataTypes) {
     project_id: {type: DataTypes.UUID},             // 审批项目ID
     publish_id: {type: DataTypes.UUID},             // 发布人ID
     publish_date: {type: DataTypes.STRING, defaultValue: Date.now},     // 发布时间
-    result: {type: DataTypes.INTEGER},          // 0: 待审核 1: 已审核
+    result: {type: DataTypes.INTEGER},              // 0: 待审核 1: 已审核
   }, {
     classMethods: {
       associate(models) {

@@ -90,6 +90,11 @@ export default class SympathyService extends Service {
 
   }
 
+  /**
+   * 删除慰问
+   * @param id
+   * @returns {Promise.<boolean>}
+   */
   async remove(id) {
     const foundTheSympathy = await this.Sympathy.findOne({
       where: {
@@ -106,14 +111,35 @@ export default class SympathyService extends Service {
       }
     }
 
-    if (![0, 3].includes(foundTheSympathy.state)) {
+    // if (![0, 3].includes(foundTheSympathy.state)) {
+    //   throw {
+    //     code: Response.getErrorCode(),
+    //     message: '本资源不可被删除',
+    //   }
+    // }
+
+    if (foundTheSympathy.state !== 3) {
       throw {
-        code: Response.getErrorCode(),
-        message: '本资源不可被删除',
+        code: Response.getErrorCode('remove'),
+        message: '该资源无法删除',
       }
     }
 
+
+
     const foundApproval = await Approval.findOne({where: {project_id: foundTheSympathy.id}});
+
+    // 判断活动是否在审批流程中
+    if (foundApproval) {
+      const count = await ApprovalFlows.count({where: {approval_id: foundApproval.id, result: { $in: [1, 2]}}});
+
+      if (count > 0) {
+        throw {
+          code: Response.getErrorCode('remove'),
+          message: '该活动已经审批无法删除',
+        }
+      }
+    }
 
     await this.Sympathy.destroy({where: {id: id}});
     await Approval.destroy({where: {project_id: id}});

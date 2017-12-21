@@ -4,11 +4,13 @@
 import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
+// List Activity
 export default async function (req, param, {response, models, services, device, checkAccess}) {
   await checkAccess('activity', 'view');
   const params = filterParams(req.query, {
     search: 'string',
     state: 'string',
+    kind: 'string',
   });
 
   const offset = parseInt(req.query.offset) || 0;
@@ -20,6 +22,7 @@ export default async function (req, param, {response, models, services, device, 
 
   const condition = {
     $or: [
+
       // 用户自己发起的活动
       {
         user_id: req.user.id,
@@ -63,7 +66,22 @@ export default async function (req, param, {response, models, services, device, 
       condition.$or[0].state = params.state;
       condition.$or.splice(1, 1);
     }
+  }
 
+  if (params.kind) {
+    if (params.kind === 'PeiXun') {
+      condition.$or[0].act_type = { $in: [0, 5]};
+      condition.$or[1].act_type = { $in: [0, 5]};
+    } else if (params.kind === 'HuiYi') {
+      condition.$or[0].act_type = 7;
+      condition.$or[1].act_type = 7;
+    } else if (params.kind === 'SongWenNuan') {
+      condition.$or[0].act_type = 4;
+      condition.$or[1].act_type = 4;
+    } else if (params.kind === 'GeLeiHuoDong') {
+      condition.$or[0].act_type = { $in: [1, 2 ,3, 8] };
+      condition.$or[1].act_type = { $in: [1, 2 ,3, 8] };
+    }
   }
 
   const all = await ActModel.all({

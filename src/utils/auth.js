@@ -125,6 +125,11 @@ class Auth {
       dataAccess = depts.map(value => value.id);
     }
     req.user = user;
+    req.user.parentDept = user.department.parent;
+
+    // version 3 update
+    req.user.dept = user.department.parent;
+
     req.permissions = permissions;
     req.dataAccess = dataAccess;
     return true;
