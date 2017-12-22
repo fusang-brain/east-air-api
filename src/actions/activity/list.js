@@ -73,8 +73,8 @@ export default async function (req, param, {response, models, services, device, 
       condition.$or[0].act_type = { $in: [0, 5]};
       condition.$or[1].act_type = { $in: [0, 5]};
     } else if (params.kind === 'HuiYi') {
-      condition.$or[0].act_type = 7;
-      condition.$or[1].act_type = 7;
+      condition.$or[0].act_type = { $in: [6, 7] };
+      condition.$or[1].act_type = { $in: [6, 7] };
     } else if (params.kind === 'SongWenNuan') {
       condition.$or[0].act_type = 4;
       condition.$or[1].act_type = 4;
@@ -193,7 +193,9 @@ export default async function (req, param, {response, models, services, device, 
     if (Array.isArray(act.evaluations) && act.evaluations.length > 0) {
       has_evaluation = true;
     }
+
     // const qodeStr = `eastern://sign_act?act_id=${act.id}`;
+
     return {
       no: act.no,
       id: act.id,
@@ -208,6 +210,7 @@ export default async function (req, param, {response, models, services, device, 
       department: act.department,
       is_end: isEnd,
       has_evaluation,
+      canUpdateOrDelete: services.activity.isActivityCanUpdateOrDelete(act.id),
       // qode_str: qodeStr,
     }
 

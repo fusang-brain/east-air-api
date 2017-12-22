@@ -4,14 +4,18 @@
 
 import ActivityService from '../../service/ActivityService';
 
-export default async function (req, params, {response, checkAccess, services}) {
-  await checkAccess('activity', 'remove');
+export default async function (req, params, {response, checkAccess, services, device}) {
+  if (device === 'web') {
+    await checkAccess('activity', 'remove');
+  }
+
   const actID = req.body.act_id;
   // const activityService = new ActivityService();
-  await services.activity.remove(actID, req.dataAccess);
+  await services.activity.remove(actID, req.user.id);
 
   return {
     code: response.getSuccessCode('remove'),
+    data: {},
     message: '删除成功',
   }
 }

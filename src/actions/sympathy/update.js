@@ -20,6 +20,9 @@ export default async function (req, params, {response, checkAccess, services}) {
     sympathy_type: 'integer',
     person_num: 'integer',
   });
+  // todo check is can't update
+
+
   if (!args.dept_id) {
     delete args.dept_id;
   }

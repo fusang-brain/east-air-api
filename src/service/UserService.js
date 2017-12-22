@@ -10,6 +10,32 @@ export default class UserService extends Service {
     this.modelName = 'User';
   }
 
+  async getParentDepartment(id) {
+    const User = this.getModel('User');
+    const Dept = this.getModel('Dept');
+    const foundUser = await User.findOne({
+      where: {
+        id,
+      },
+      include: [
+        {
+          model: Dept,
+          as: 'department',
+        }
+      ]
+    });
+
+    if (!foundUser) {
+      return false;
+    }
+
+    return await Dept.findOne({
+      where: {
+        id: foundUser.department.parent,
+      }
+    });
+  }
+
   async getAllMaster(deptID) {
     const Dept = this.getModel('Dept');
     const User = this.getModel('User');

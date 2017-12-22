@@ -427,6 +427,7 @@ export default class ApprovalService extends Service {
       avatar: approval.publisher.avatar,
       desc: '发起申请',
       time: approval.publish_date,
+      role: '',
       state: 1,
       sort: 0,
     };
@@ -453,6 +454,12 @@ export default class ApprovalService extends Service {
         {
           model: User,
           as: 'approval_man',
+          include: [
+            {
+              model: this.getModel('Role'),
+              as: 'user_role',
+            }
+          ]
         },
       ],
       order: [
@@ -477,6 +484,7 @@ export default class ApprovalService extends Service {
         name: approval.publisher.name,
         avatar: approval.publisher.avatar,
         desc: '发起申请',
+        role: {},
         time: approval.publish_date,
         state: 1,
         sort: 0,
@@ -492,7 +500,7 @@ export default class ApprovalService extends Service {
       if (+item.flow_sort !== sort[i]) {
         continue;
       }
-
+      const role = item.approval_man.user_role;
       flows.push({
         user_id: item.approval_man.id,
         name: item.approval_man.name,
@@ -503,6 +511,7 @@ export default class ApprovalService extends Service {
         sort: i + 1,
         result: item.result,
         available: item.available,
+        role,
       });
     }
 

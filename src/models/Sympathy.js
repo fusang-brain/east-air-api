@@ -32,6 +32,13 @@ export default function (sequelize, DataTypes) {
           targetKey: 'id',
           onDelete: 'cascade',
         });
+
+        this.hasMany(models.SympathyAttach, {
+          as: 'attach',
+          foreignKey: 'sympathy_id',
+          sourceKey: 'id',
+        });
+
       }
     }
   });

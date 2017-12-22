@@ -15,7 +15,6 @@ export default async function (req, params, { response, services, redisClient })
   if (!idsCached) {
     return 'Not Found!'
   }
-  console.log(idsCached);
   if (idsCached !== 'all') {
     ids = idsCached.split(',');
   }

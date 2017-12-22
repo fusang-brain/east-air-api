@@ -14,18 +14,29 @@ export default class ActivityService extends Service {
   /**
    * 通过ID删除活动
    * @param id
+   * @param userID
    * @returns {Promise.<*>}
    */
-  async remove(id) {
+  async remove(id, userID) {
     const TradeUnionAct = this.getModel();
     const Approval = this.getModel('Approval');
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const foundAct = await TradeUnionAct.findOne({where: {id: id, dept_id: {$in: this.dataAccess}}});
     const foundApproval = await Approval.findOne({where: {project_id: id}});
     if (!foundAct) {
-      return {
-        code: Response.getSuccessCode(),
+
+      throw {
+        code: Response.getErrorCode('remove'),
+        data: {},
         message: '没有找到您要删除的活动',
+      }
+    }
+
+    if (foundAct.user_id !== userID) {
+      throw {
+        code: Response.getErrorCode(),
+        data: {},
+        message: '您无法删除该活动'
       }
     }
 
@@ -38,19 +49,22 @@ export default class ActivityService extends Service {
     // }
 
     // 判断活动状态
-    if (+foundAct.state !== 3) {
-      return {
-        code: Response.getErrorCode('remove'),
-        message: '该活动无法删除',
-      }
-    }
+    // if (+foundAct.state === 3) {
+    //   console.log(Response.getErrorCode('remove'));
+    //   throw {
+    //     code: Response.getErrorCode('remove'),
+    //     data: {},
+    //     message: '该活动无法删除',
+    //   }
+    // }
 
     // 判断活动是否在审批流程中
     if (foundApproval) {
       const count = await ApprovalFlows.count({ where: { approval_id: foundApproval.id, result: { $in: [1, 2] } }});
-      if (count > 0) {
-        return {
+      if (count > 0 && foundAct.state !== 3) {
+        throw {
           code: Response.getErrorCode('remove'),
+          data: {},
           message: '该活动已经审批无法删除',
         }
       }
@@ -60,11 +74,17 @@ export default class ActivityService extends Service {
     if (foundApproval) {
       await ApprovalFlows.destroy({where: {approval_id: foundApproval.id}});
     }
-    await TradeUnionAct.destroy({where: {id: id}});
+    console.log('活动 === ', id);
+    await TradeUnionAct.destroy({where: { id: id }});
 
     return true;
   }
 
+  /**
+   * 获取活动详情
+   * @param id
+   * @returns {Promise.<*>}
+   */
   async details(id) {
     const User = this.getModel('User');
     const Dept = this.getModel('Dept');
@@ -90,7 +110,7 @@ export default class ActivityService extends Service {
           model: Dept,
           as: 'department',
           required: false,
-          attributes: ['id', 'dept_name'],
+          attributes: ['id', 'dept_name' ],
         },
         {
           model: GrantApplication,

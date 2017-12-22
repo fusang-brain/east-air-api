@@ -42,7 +42,7 @@ export default class DeptService extends Service {
       }
     }
 
-    return department.tree_level === 3;
+    return department.tree_level >= 2;
   }
 
   async deptStruct() {

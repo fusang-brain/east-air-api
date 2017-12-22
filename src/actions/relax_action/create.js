@@ -19,10 +19,12 @@ export default async function (req, params, {response, device, services, checkAc
     place: ['string', 'required'],
     dept_id: ['string'],
     people: ['array', 'required'],
+    people_number: ['number', 'required'],
   });
 
   if (!args.dept_id) {
-    args.dept_id = req.user.dept;
+    // args.dept_id = req.user.dept;
+    args.dept_id = req.user.parentDept;
   }
 
   if (!await deptService.checkIsAvailableDept(args.dept_id)) {

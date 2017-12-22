@@ -15,11 +15,15 @@ export default async function (req, params, {response, checkAccess, services}) {
     sympathy_cost: ['number', 'required'],
     sympathy_good_cost: ['number', 'required'],
     sympathy_type: ['integer', 'required'],
-    person_num: ['integer', 'required']
+    person_num: ['integer', 'required'],
+    note: ['string'],
+    attach: ['array'],
   });
+  console.log(args.attach, '==weiwen==')
 
   if (!args.dept_id) {
-    args.dept_id = req.user.dept;
+    // args.dept_id = req.user.dept;
+    args.dept_id = req.user.parentDept;
   }
 
   args.user_id = req.user.id;
@@ -29,7 +33,7 @@ export default async function (req, params, {response, checkAccess, services}) {
     args.state = 0;
   } else if (state === 'submit') {
     args.state = 1;
-}
+  }
 
   const createdSympathy = await sympathyService.create(args);
 

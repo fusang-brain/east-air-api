@@ -224,7 +224,19 @@ export default class DocService extends Service {
     return docReadReceipts;
   }
 
-  async remove(id) {
+  async remove(id, userID) {
+    const Doc = this.getModel('Docs');
+
+    const foundDoc = await Doc.findOne({ where: { id }});
+
+    if (foundDoc.user_id !== userID) {
+      throw {
+        code: Response.getErrorCode('remove'),
+        message: '您无法删除该公文',
+      }
+    }
+
+    await Doc.destroy({ where: { id }});
 
   }
 
@@ -257,7 +269,7 @@ export default class DocService extends Service {
     if (!doc) {
       throw {
         code: Response.getErrorCode(),
-        message: '没有该公文',
+        message: '该公文不存在',
       }
     }
 

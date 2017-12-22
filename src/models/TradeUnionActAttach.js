@@ -3,7 +3,7 @@
  */
 
 import {generateNo} from '../utils/utils';
-// 活动附件
+// 活动附件(活动、慰问)
 export default function (sequelize, DataTypes) {
   return sequelize.define('TradeUnionActAttach', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
@@ -21,6 +21,7 @@ export default function (sequelize, DataTypes) {
           targetKey: 'id',
           onDelete: 'cascade',
         });
+
       },
     }
   });

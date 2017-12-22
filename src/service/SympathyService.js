@@ -9,29 +9,99 @@ export default class SympathyService extends Service {
     super();
     this.modelName = 'Sympathy';
     this.Sympathy = this.getModel();
+    this.File = this.getModel('File');
+    this.SympathyAttach = this.getModel('SympathyAttach');
   }
 
+  /**
+   * Create sympathy
+   * @param args
+   * @returns {Promise.<*>}
+   */
   async create(args) {
+    console.log(args);
+    const { attach, ...otherArgs } = args;
+    console.log(attach);
+    otherArgs.sympathy_cost = new Decimal(+args.sympathy_cost).toNumber();
+    otherArgs.sympathy_good_cost = new Decimal(+args.sympathy_good_cost).toNumber();
+    otherArgs.apply_time = Date.now().toString();
 
-    args.sympathy_cost = new Decimal(+args.sympathy_cost).toNumber();
-    args.sympathy_good_cost = new Decimal(+args.sympathy_good_cost).toNumber();
-    args.apply_time = Date.now().toString();
-    return await this.Sympathy.create(args);
+    // attach upload changed
+    const allAttachFiles = await this.File.all({
+      where: {
+        $or: [
+          {
+            id: {
+              $in: attach || [],
+            }
+          },
+          {
+            path: {
+              $in: attach || [],
+            }
+          }
+        ],
+      }
+    });
+
+    otherArgs.attach = allAttachFiles.map(loop => ({
+      file_path: loop.path,
+      size: loop.size,
+      origin_filename: loop.origin_filename,
+    }));
+
+
+    return await this.Sympathy.create(otherArgs, {
+      include: [
+        {
+          model: this.SympathyAttach,
+          as: 'attach',
+        }
+      ]
+    });
   }
 
+  /**
+   * update sympathy
+   * @param params
+   * @returns {Promise.<*>}
+   */
   async update(params) {
     const {id, ...args} = params;
 
     const foundSympathy = await this.Sympathy.findOne({where: {id, dept_id: {$in: this.dataAccess}}});
-    if (![0, 3].includes(foundSympathy.state)) {
+    const Approval = this.getModel('Approval');
+    const ApprovalFlows = this.getModel('ApprovalFlows');
+    // if (![0, 3].includes(foundSympathy.state)) {
+    //   throw {
+    //     code: Response.getErrorCode(),
+    //     message: '本资源不能被修改',
+    //   }
+    // }
+
+    if (foundSympathy.state === 3) {
       throw {
-        code: Response.getErrorCode(),
-        message: '本资源不能被修改',
+        code: Response.getErrorCode('update'),
+        message: '本资源不能修改',
+      }
+    }
+
+    const foundApproval = await Approval.findOne({where: {project_id: id}});
+
+    // 判断活动是否在审批流程中
+    if (foundApproval) {
+      const count = await ApprovalFlows.count({ where: { approval_id: foundApproval.id, result: { $in: [1, 2] } }});
+      if (count > 0) {
+        throw {
+          code: Response.getErrorCode('update'),
+          message: '该活动已经审批无法修改',
+        }
       }
     }
 
     args.sympathy_cost = new Decimal(+args.sympathy_cost).toNumber();
     args.sympathy_good_cost = new Decimal(+args.sympathy_good_cost).toNumber();
+
     const updatedSympathy = await this.Sympathy.update(args, {
       where: {id},
     });
@@ -39,7 +109,7 @@ export default class SympathyService extends Service {
     return foundSympathy
   }
 
-  async generateList({offset, limit, state, reason}) {
+  async generateList({offset, limit, state, reason, sympathyType}) {
     let condition = {
       dept_id: {
         $in: this.dataAccess,
@@ -67,11 +137,15 @@ export default class SympathyService extends Service {
       }
     }
 
+    if (sympathyType) {
+      condition.sympathy_type = sympathyType;
+    }
+
     const total = await this.Sympathy.count({
       where: condition,
     });
     const list = await this.Sympathy.all({
-      attributes: ['id', 'reason', 'person', 'sympathy_date', 'apply_time', 'state', 'person_num', 'sympathy_cost', 'sympathy_type'],
+      attributes: ['id', 'reason', 'person', 'sympathy_date', 'apply_time', 'state', 'person_num', 'sympathy_cost', 'sympathy_good_cost', 'sympathy_type'],
       where: condition,
       offset,
       limit,
@@ -95,18 +169,28 @@ export default class SympathyService extends Service {
    * @param id
    * @returns {Promise.<boolean>}
    */
-  async remove(id) {
+  async remove(id, userID) {
     const foundTheSympathy = await this.Sympathy.findOne({
       where: {
         id: id,
       }
     });
+
+    if (foundTheSympathy.user_id !== userID) {
+      throw {
+        code: Response.getErrorCode('remove'),
+        data: {},
+        message: '您无法删除该慰问',
+      }
+    }
+
     const Approval = this.getModel('Approval');
     const ApprovalFlows = this.getModel('ApprovalFlows');
 
     if (!foundTheSympathy) {
       throw {
         code: Response.getErrorCode(),
+        data: {},
         message: '该资源不存在',
       }
     }
@@ -118,12 +202,13 @@ export default class SympathyService extends Service {
     //   }
     // }
 
-    if (foundTheSympathy.state !== 3) {
-      throw {
-        code: Response.getErrorCode('remove'),
-        message: '该资源无法删除',
-      }
-    }
+    // if (foundTheSympathy.state === 3) {
+    //   throw {
+    //     code: Response.getErrorCode('remove'),
+    //     data: {},
+    //     message: '该资源无法删除',
+    //   }
+    // }
 
 
 
@@ -133,9 +218,10 @@ export default class SympathyService extends Service {
     if (foundApproval) {
       const count = await ApprovalFlows.count({where: {approval_id: foundApproval.id, result: { $in: [1, 2]}}});
 
-      if (count > 0) {
+      if (count > 0 && foundTheSympathy.state !== 3) {
         throw {
           code: Response.getErrorCode('remove'),
+          data: {},
           message: '该活动已经审批无法删除',
         }
       }
@@ -165,6 +251,10 @@ export default class SympathyService extends Service {
         {
           model: this.getModel('Dept'),
           as: 'department',
+        },
+        {
+          model: this.SympathyAttach,
+          as: 'attach',
         }
       ]
     });

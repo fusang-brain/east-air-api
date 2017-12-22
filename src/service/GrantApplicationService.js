@@ -17,7 +17,7 @@ export default class GrantApplicationService extends Service {
     this.GrantItem = this.getModel('GrantItem');
   }
 
-  async remove(id) {
+  async remove(id, userID) {
     const foundTheGrantApply = await this.GrantApplication.findOne({
       where: {
         id,
@@ -27,24 +27,46 @@ export default class GrantApplicationService extends Service {
       }
     });
 
+    if (foundTheGrantApply.user_id !== userID) {
+      throw {
+        code: Response.getErrorCode('remove'),
+        data: {},
+        message: '您无法删除该经费申请',
+      }
+    }
+
     const Approval = this.getModel('Approval');
     const ApprovalFlows = this.getModel('ApprovalFlows');
 
     if (!foundTheGrantApply) {
       throw {
         code: Response.getErrorCode(),
+        data: {},
         message: '该资源不存在',
       }
     }
 
-    if (![0, 3, 4].includes(foundTheGrantApply.state)) {
-      throw {
-        code: Response.getErrorCode(),
-        message: '本资源不可被删除',
+    // if (![0, 3, 4].includes(foundTheGrantApply.state)) {
+    //   throw {
+    //     code: Response.getErrorCode(),
+    //     message: '本资源不可被删除',
+    //   }
+    // }
+
+    const foundApproval = await Approval.findOne({where: {project_id: foundTheGrantApply.id}});
+
+    // 判断活动是否在审批流程中
+    if (foundApproval) {
+      const count = await ApprovalFlows.count({ where: { approval_id: foundApproval.id, result: { $in: [1, 2] } }});
+      if (count > 0 && foundTheGrantApply.state !== 3) {
+        throw {
+          code: Response.getErrorCode('remove'),
+          data: {},
+          message: '该活动已经审批无法删除',
+        }
       }
     }
 
-    const foundApproval = await Approval.findOne({where: {project_id: foundTheGrantApply.id}});
     await this.GrantApplication.destroy({where: {id}});
     await this.GrantAttach.destroy({where: {grant_application_id:id}});
     await this.GrantItem.destroy({where: {grant_apply_id: id}});
@@ -71,12 +93,14 @@ export default class GrantApplicationService extends Service {
     if (!foundGrant) {
       throw {
         code: Response.getErrorCode(),
+        data: {},
         message: '该资源不存在',
       }
     }
     if (![0, 3, 4].includes(foundGrant.state)) {
       throw {
         code: Response.getErrorCode(),
+        data: {},
         message: '本资源不可修改',
       }
     }
@@ -246,10 +270,17 @@ export default class GrantApplicationService extends Service {
         }
       ]
     });
+    const nList = [];
+    for (let i = 0; i < list.length; i ++) {
+      let l = list[i];
+      const s = await this.isActivityCanUpdateOrDelete(l.id);
+      l.setDataValue('canUpdateOrDelete', s);
+      nList.push(l);
+    }
 
     return {
       total,
-      list,
+      list: nList,
     }
   }
 
@@ -274,7 +305,7 @@ export default class GrantApplicationService extends Service {
         {
           model: this.getModel('User'),
           as: 'publisher',
-          attributes: ['id', 'name', 'avatar']
+          attributes: ['id', 'name', 'avatar', 'mobile']
         }
       ]
     })

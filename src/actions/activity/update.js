@@ -1,6 +1,3 @@
-/**
- * Created by alixez on 17-7-29.
- */
 
 /**
  * Created by alixez on 17-7-26.
@@ -8,6 +5,7 @@
 import {filterParams} from '../../utils/filters';
 import ApprovalService from '../../service/ApprovalService';
 import Decimal from 'decimal.js';
+import Response from '../../config/response';
 import TradeUnionActDept from '../../models/TradeUnionActDept'
 
 export default async function (req, param, {response, models, checkAccess}) {
@@ -33,10 +31,36 @@ export default async function (req, param, {response, models, checkAccess}) {
       message: '没有找到该活动',
     }
   }
-  if (![0, 3].includes(foundAct.state)) {
+
+
+  // if (![0, 3].includes(foundAct.state)) {
+  //   return {
+  //     code: response.getErrorCode('remove'),
+  //     message: '此活动无法修改',
+  //   }
+  // }
+
+  // 判断活动状态
+  if (+foundAct.state !== 3) {
     return {
-      code: response.getErrorCode('remove'),
-      message: '此活动无法修改',
+      code: Response.getErrorCode('update'),
+      data: {},
+      message: '该活动无法修改',
+    }
+  }
+  const Approval = models.Approval;
+  const ApprovalFlows = models.ApprovalFlows;
+  const foundApproval = await Approval.findOne({where: {project_id: actID}});
+
+  // 判断活动是否在审批流程中
+  if (foundApproval) {
+    const count = await ApprovalFlows.count({ where: { approval_id: foundApproval.id, result: { $in: [1, 2] } }});
+    if (count > 0) {
+      return {
+        code: Response.getErrorCode('update'),
+        data: {},
+        message: '该活动已经审批无法修改',
+      }
     }
   }
 
@@ -231,6 +255,7 @@ export default async function (req, param, {response, models, checkAccess}) {
 
   return {
     code: response.getSuccessCode('update'),
+    data: {},
     message: '修改成功'
   }
 }

@@ -68,9 +68,26 @@ export default async function(req, params, {models, device}) {
   if (device !== 'app' && req.user.user_role.role_slug !== 'root') {
     req.dataAccess.push(req.user.department.parent);
     req.dataAccess.push(req.user.department.id);
-    condition.dept =  {
-      $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
-    };
+    // const dept = condition.dept;
+    condition.dept = {
+      $and: [
+        {
+          $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
+        }
+      ]
+    }
+    if (args.dept) {
+      condition.dept.$and.push({
+        $eq: args.dept,
+      });
+    }
+
+    // if (condition.dept) {
+    //
+    // }
+    // condition.dept =  {
+    //   $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
+    // };
   }
   const UserModel = models.User;
   const DeptModel = models.Dept;

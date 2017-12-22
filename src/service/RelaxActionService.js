@@ -32,7 +32,7 @@ export default class RelaxActionService extends Service {
       let item = people[i];
       peopleNumber = peopleNumber + parseInt(item.people_number);
     }
-    args.people_number = peopleNumber;
+    !args.people_number && (args.people_number = peopleNumber);
     const dailyTotal = Decimal.mul(args.per_capita_budget, args.people_number).toNumber();
     // args.total = Decimal.mul(dailyTotal, args.days).toNumber();
     args.total = dailyTotal;
@@ -48,7 +48,9 @@ export default class RelaxActionService extends Service {
 
   }
 
-  async remove(id) {
+  async remove(id, userID) {
+    const Approval = this.getModel('Approval');
+    const ApprovalFlows = this.getModel('ApprovalFlows');
     const relaxAction = await this.RelaxAction.findOne({
       where:{
         id,
@@ -57,12 +59,34 @@ export default class RelaxActionService extends Service {
     if (!relaxAction) {
       return;
     }
-    if (relaxAction.state !== 0) {
+    // if (relaxAction.state !== 0) {
+    //   throw {
+    //     code: Response.getErrorCode(),
+    //     message: '只有草稿可以删除!',
+    //   }
+    // }
+
+    if (relaxAction.user_id !== userID) {
       throw {
-        code: Response.getErrorCode(),
-        message: '只有草稿可以删除!',
+        code: Response.getErrorCode('remove'),
+        data: {},
+        message: '该活动不是由您发起的，无法删除'
       }
     }
+
+    const foundApproval = await Approval.findOne({where: {project_id: id}});
+    // 判断活动是否在审批流程中
+    if (foundApproval) {
+      const count = await ApprovalFlows.count({ where: { approval_id: foundApproval.id, result: { $in: [1, 2] } }});
+      if (count > 0) {
+        throw {
+          code: Response.getErrorCode('remove'),
+          data: {},
+          message: '该活动已经审批无法删除',
+        }
+      }
+    }
+
     await this.RelaxAction.destroy({
       where: {
         id: id,

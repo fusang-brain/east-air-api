@@ -5,7 +5,7 @@ import Auth from '../../utils/auth';
 import {getSuccessCode, getErrorCode} from '../../config/response';
 import models from '../../models';
 
-export default async function (req, params, {device, redisClient}) {
+export default async function (req, params, {device, redisClient, services}) {
 
   // password should be hash by sha1 and upper
   const {mobile, password} = req.body;
@@ -104,6 +104,24 @@ export default async function (req, params, {device, redisClient}) {
 
   user.user_role.setDataValue('permissions', undefined);
 
+  if (user.user_role.role_slug === 'root') {
+    return {
+      code: getSuccessCode(),
+      message: '登录成功！',
+      data: {
+        user,
+        access_token: accessToken,
+        scope: {
+          modules: [ "member" ],
+          permissions: {
+            member: ["create", "edit", "mark_difficult", "view", "mark_retirement"],
+          },
+        }
+      }
+    }
+  }
+  const parentDepartment = await services.user.getParentDepartment(user.id);
+  user.setDataValue('org', parentDepartment);
   return {
     code: getSuccessCode(),
     message: '登录成功!',

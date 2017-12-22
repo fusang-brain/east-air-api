@@ -10,7 +10,9 @@ export default async function (req, params, {response, models, device, services}
   let depts = null;
   if (device === 'pc') {
     depts = foundAct.accept_depts.map(item => item.dept_id);
+    const deptsInfo = foundAct.accept_depts.map(item => item.dept_info);
     foundAct.setDataValue('accept_dept_ids', depts);
+    foundAct.setDataValue('accept_dept_values', deptsInfo)
   } else if (device === 'app') {
     depts = foundAct.accept_depts.map(item => item.dept_info);
     foundAct.setDataValue('accept_dept_values', depts);

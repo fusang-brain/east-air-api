@@ -33,7 +33,8 @@ export default async function  (req, params, {response, checkAccess, services}) 
     }
   }
   if (!args.dept_id) {
-    args.dept_id = req.user.dept;
+    // args.dept_id = req.user.dept;
+    args.dept_id = req.user.parentDept;
   }
   args.user_id = req.user.id;
 

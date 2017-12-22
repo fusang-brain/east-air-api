@@ -124,13 +124,21 @@ class Auth {
 
       dataAccess = depts.map(value => value.id);
     }
+
     req.user = user;
-    req.user.parentDept = user.department.parent;
-
+    req.user.parentDept = user.department && user.department.parent;
+    dataAccess.push(req.user.parentDept);
     // version 3 update
-    req.user.dept = user.department.parent;
-
+    // req.user.dept = user.department.parent;
+    // console.log(req.user.dept, '====');
+    // console.log(user.department.parent, '=====');
+    // console.log(req.user.parentDept, '00000==-=-=-=');
+    // if (user.user_role.role_slug === 'root') {
+    //   req.permissions = permissions;
+    // } else {
     req.permissions = permissions;
+    //}
+
     req.dataAccess = dataAccess;
     return true;
   }
