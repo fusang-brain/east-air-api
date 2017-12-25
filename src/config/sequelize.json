@@ -2,16 +2,16 @@
 {
   "development": {
     "username": "root",
-    "password": "root",
-    "database": "eastern_air",
+    "password": "donghang2017",
+    "database": "eastern",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
 
   "test": {
     "username": "root",
-    "password": "root",
-    "database": "eastern_air",
+    "password": "donghang2017",
+    "database": "eastern",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
