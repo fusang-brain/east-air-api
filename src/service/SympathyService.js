@@ -19,9 +19,7 @@ export default class SympathyService extends Service {
    * @returns {Promise.<*>}
    */
   async create(args) {
-    console.log(args);
     const { attach, ...otherArgs } = args;
-    console.log(attach);
     otherArgs.sympathy_cost = new Decimal(+args.sympathy_cost).toNumber();
     otherArgs.sympathy_good_cost = new Decimal(+args.sympathy_good_cost).toNumber();
     otherArgs.apply_time = Date.now().toString();

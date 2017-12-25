@@ -4,6 +4,7 @@ import ApprovalService from '../../service/ApprovalService';
 import {filterParams} from "../../utils/filters"
 import Decimal from 'decimal.js';
 
+// 慰问
 export default async function (req, params, {response, checkAccess, services}) {
   await checkAccess('sympathy', 'start');
   const sympathyService = services.sympathy;
@@ -19,7 +20,6 @@ export default async function (req, params, {response, checkAccess, services}) {
     note: ['string'],
     attach: ['array'],
   });
-  console.log(args.attach, '==weiwen==')
 
   if (!args.dept_id) {
     // args.dept_id = req.user.dept;

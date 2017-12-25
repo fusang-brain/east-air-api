@@ -33,6 +33,7 @@ export default class RelaxActionService extends Service {
       peopleNumber = peopleNumber + parseInt(item.people_number);
     }
     !args.people_number && (args.people_number = peopleNumber);
+    console.log(args.people_number);
     const dailyTotal = Decimal.mul(args.per_capita_budget, args.people_number).toNumber();
     // args.total = Decimal.mul(dailyTotal, args.days).toNumber();
     args.total = dailyTotal;
