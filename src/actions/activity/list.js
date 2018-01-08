@@ -69,19 +69,19 @@ export default async function (req, param, {response, models, services, device, 
   }
   // 活动分类： 0: 培训 1: 会议 2: 送温暖 3: 送清凉 4: 各类活动
   if (params.kind) {
-    if (params.kind === 'PeiXun') {
+    if (params.kind == 'PeiXun') {
       condition.$or[0].act_type = 0;
       condition.$or[1].act_type = 0;
-    } else if (params.kind === 'HuiYi') {
+    } else if (params.kind == 'HuiYi') {
       condition.$or[0].act_type = 1;
       condition.$or[1].act_type = 1;
-    } else if (params.kind === 'SongWenNuan') {
+    } else if (params.kind == 'SongWenNuan') {
       condition.$or[0].act_type = 2;
       condition.$or[1].act_type = 2;
-    } else if (params.kind === 'GeLeiHuoDong') {
+    } else if (params.kind == 'GeLeiHuoDong') {
       condition.$or[0].act_type = 4;
       condition.$or[1].act_type = 4;
-    } else if (params.kind === 'SongQingLiang') {
+    } else if (params.kind == 'SongQingLiang') {
       condition.$or[0].act_type = 3;
       condition.$or[1].act_type = 3;
     }
