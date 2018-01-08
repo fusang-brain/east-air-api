@@ -34,7 +34,7 @@ export default async function (req, param, {response, models, checkAccess}) {
   } else {
     params.state = 1;
   }
-  if (req.body.grant_apply || (req.body.grant_apply && Object.keys(req.body.grant_apply).length > 0)) {
+  if (req.body.grant_apply && Object.keys(req.body.grant_apply).length > 0) {
 
     // execute the grant of activity
     params.grant_apply = filterParams(req.body.grant_apply, {
