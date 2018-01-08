@@ -39,7 +39,7 @@ export default async function  (req, params, {response, checkAccess, services}) 
   }
   args.user_id = req.user.id;
 
-  if (args.type !== 7) {
+  if (args.type !== 2) {
     delete args.items;
   }
 
