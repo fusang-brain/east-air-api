@@ -182,6 +182,17 @@ export default class SatisfactionSurveyService extends Service {
     });
   }
 
+  async hasEvaluated(userID, surveyID) {
+    const SatisfactionPoll = this.getModel('SatisfactionPoll');
+    const pollCount = await SatisfactionPoll.count({ where: { survey_id: surveyID, evaluate_person_id: userID } });
+
+    if (pollCount > 0) {
+      return true;
+    }
+
+    return false;
+  }
+
   async generateSiteList({limit, offset}) {
 
     const total = await this.getModel().count({

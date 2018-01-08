@@ -208,7 +208,7 @@ export default class GrantApplicationService extends Service {
     });
   }
 
-  async generateList({offset, limit, state, search}) {
+  async generateList({offset, limit, state, search, kind}) {
     let condition = {
       is_act: false,
       dept_id: {
@@ -230,6 +230,10 @@ export default class GrantApplicationService extends Service {
         break;
       default:
         break;
+    }
+
+    if (kind) {
+      condition.type = kind;
     }
 
     if (search) {

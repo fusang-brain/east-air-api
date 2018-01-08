@@ -7,7 +7,8 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('TradeUnionAct', {
     id: {type: DataTypes.UUID, defaultValue:DataTypes.UUIDV4, primaryKey: true},
     no: {type: DataTypes.STRING, defaultValue: generateNo},
-    act_type: {type: DataTypes.INTEGER},              // 活动分类 0: 职工教育 1:文体活动 2:宣传活动 3:其他活动 4:送温暖 5:培训 6:会议 7:专项会议 8:其他业务
+    // 活动分类： 0: 培训 1: 会议 2: 送温暖 3: 送清凉 4: 各类活动
+    act_type: {type: DataTypes.INTEGER},              // 活动分类(old) 0: 职工教育 1:文体活动 2:宣传活动 3:其他活动 4:送温暖 5:培训 6:会议 7:专项会议 8:其他业务
     subject: {type: DataTypes.STRING, length: 200},   // 活动主题
     purpose: {type: DataTypes.TEXT},                  // 活动目的
     target: {type: DataTypes.STRING, length: 100},    // 活动对象

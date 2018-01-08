@@ -5,6 +5,7 @@
 export default function (sequelize, DataTypes) {
   return sequelize.define('GrantApplication', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
+    // 分类修改: 0: 疗休养, 1: 小额物品采购 2: 固定资产 3: 其他
     type: {type: DataTypes.INTEGER}, // 1:慰问困难、生病员工 2:慰问一线员工 3:文体活动 4:疗养休费 5:培训费 6:会务费 7:固定资产 8:其他 0: 未知
     type_string: {type: DataTypes.STRING},
     dept_id: {type: DataTypes.UUID, references:{onDelete: 'cascade'}},
