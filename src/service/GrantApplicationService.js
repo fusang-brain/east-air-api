@@ -54,7 +54,7 @@ export default class GrantApplicationService extends Service {
     //   }
     // }
 
-    const foundApproval = await Approval.findOne({where: {project_id: foundTheGrantApply.id}});
+    const foundApproval = await Approval.findOne({where: { project_id: foundTheGrantApply.id }});
 
     // 判断活动是否在审批流程中
     if (foundApproval) {

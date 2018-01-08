@@ -41,7 +41,7 @@ export default async function (req, param, {response, models, checkAccess}) {
   // }
 
   // 判断活动状态
-  if (+foundAct.state !== 3) {
+  if ([1 , 2].includes(+foundAct.state) || foundAct.user_id !== req.user.id) {
     return {
       code: Response.getErrorCode('update'),
       data: {},
