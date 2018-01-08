@@ -200,7 +200,7 @@ export default class SatisfactionSurveyService extends Service {
         survey_id: surveyID,
         evaluate_person_id: userID,
       },
-      order: ['evaluate_time', 'DESC'],
+      order: [['evaluate_time', 'DESC']],
     })
 
     if (poll) {
