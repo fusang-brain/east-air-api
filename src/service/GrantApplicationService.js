@@ -11,7 +11,8 @@ export default class GrantApplicationService extends Service {
   constructor() {
     super();
     this.modelName = 'GrantApplication';
-    this.typeMapper = ['未知', '慰问困难、生病员工', '慰问一线员工', '文体活动', '疗养休费', '培训费', '会务费', '固定资产', '其他']
+    this.typeMapper = ['疗休养', '小额物品采购', '固定资产', '其他']
+    // this.typeMapper = ['未知', '慰问困难、生病员工', '慰问一线员工', '文体活动', '疗养休费', '培训费', '会务费', '固定资产', '其他']
     this.GrantApplication = this.getModel('GrantApplication');
     this.GrantAttach = this.getModel('GrantAttach');
     this.GrantItem = this.getModel('GrantItem');
