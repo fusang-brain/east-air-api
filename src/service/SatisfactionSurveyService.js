@@ -204,7 +204,7 @@ export default class SatisfactionSurveyService extends Service {
     })
 
     if (poll) {
-      if (moment().format("YYYY-MM-DD") === moment(Number(poll.evaluate_time)).format("YYYY-MM-DD")) {
+      if (moment().format("YYYY-MM-DD") !== moment(Number(poll.evaluate_time)).format("YYYY-MM-DD")) {
         return false;
       }
       return true;
