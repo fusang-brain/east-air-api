@@ -116,6 +116,7 @@ export default class SatisfactionSurveyService extends Service {
 
   async evaluate_person(args, currentUser) {
     const {person_id, ...otherArgs} = args;
+    const SatisfactionPoll = this.getModel('SatisfactionPoll');
 
     const foundUser = await this.getModel('User').findOne({
       where: {
@@ -148,6 +149,15 @@ export default class SatisfactionSurveyService extends Service {
     }
     otherArgs.survey_dept = foundUser.dept;
     otherArgs.survey_id = foundSurvey.id;
+
+    const hasEvaluate = await this.hasEvaluated(currentUser, foundSurvey.id);
+    if (hasEvaluate) {
+      throw {
+        code: 2000,
+        message: '你今日已经评价！'
+      }
+    }
+
     return await this.evaluate(otherArgs);
   }
 
@@ -184,12 +194,21 @@ export default class SatisfactionSurveyService extends Service {
 
   async hasEvaluated(userID, surveyID) {
     const SatisfactionPoll = this.getModel('SatisfactionPoll');
-    const pollCount = await SatisfactionPoll.count({ where: { survey_id: surveyID, evaluate_person_id: userID } });
+    // const poll = await SatisfactionPoll.count({ where: { survey_id: surveyID, evaluate_person_id: userID } });
+    const poll = await SatisfactionPoll.findOne({
+      where: {
+        survey_id: surveyID,
+        evaluate_person_id: userID,
+      },
+      order: ['evaluate_time', 'DESC'],
+    })
 
-    if (pollCount > 0) {
+    if (poll) {
+      if (moment().format("YYYY-MM-DD") === moment(Number(poll.evaluate_time)).format("YYYY-MM-DD")) {
+        return false;
+      }
       return true;
     }
-
     return false;
   }
 
