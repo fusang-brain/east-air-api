@@ -207,10 +207,10 @@ export default async function (req, param, {response, models, checkAccess}) {
     await models.GrantApplication.update(params.grant_apply, {where: {id: foundAct.grant_apply_id}});
 
     if (params.grant_apply.items && params.grant_apply.items.length > 0) {
-
       await models.GrantItem.destroy({where: {grant_apply_id: foundAct.grant_apply_id}});
-
       await models.GrantItem.bulkCreate(params.grant_apply.items);
+    } else {
+      await models.GrantItem.destroy({ where: {grant_apply_id: foundAct.grant_apply_id} });
     }
   }
 
