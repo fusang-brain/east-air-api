@@ -75,9 +75,9 @@ export default async function (req, param, {response, models, checkAccess}) {
     params.grant_apply = filterParams(req.body.grant_apply, {
       type: ['integer', 'required'],
       dept_id: ['string', 'required'],
-      cost: ['number'],
+      cost: ['keep'],
       purpose: ['string'],
-      people_count: ['integer'],
+      people_count: ['keep'],
       items: ['array'],
       others: ['string'],
     });
