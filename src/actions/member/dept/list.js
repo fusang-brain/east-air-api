@@ -8,7 +8,7 @@ export default async function (req, params, {models, device}) {
   if (device == 'web' || device == 'pc') {
     flag = 'more';
   }
-
+  console.log('list flag', flag);
   const DeptModel = models.Dept.scope('list');
   const deptCount = await DeptModel.count();
   if (deptCount === 0) {
@@ -22,7 +22,7 @@ export default async function (req, params, {models, device}) {
   }
 
   let renderType = params[0];
-
+  console.log('render type', renderType);
   const deepDeptLevel = await DeptModel.findOne({
       attributes: [[models.sequelize.fn('MAX', models.sequelize.col('tree_level')), 'max_tree_level']],
     });
@@ -83,7 +83,7 @@ export default async function (req, params, {models, device}) {
       }
     }
   }
-
+  console.log("returned .... ");
   if (renderType === 'with_member') {
     return {
       code: getSuccessCode(),
