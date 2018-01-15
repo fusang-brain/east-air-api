@@ -83,6 +83,8 @@ export default class GrantApplicationService extends Service {
     const {id, items, attach, ...args} = params;
     const GrantAttach = this.getModel('GrantAttach');
     const GrantItem = this.getModel('GrantItem');
+    const Approval = this.getModel('Approval');
+    const ApprovalFlows = this.getModel('ApprovalFlows');
     const foundGrant = await this.GrantApplication.findOne({
       where: {
         id,
@@ -98,14 +100,28 @@ export default class GrantApplicationService extends Service {
         message: '该资源不存在',
       }
     }
-    if (![0, 3, 4].includes(foundGrant.state)) {
-      throw {
-        code: Response.getErrorCode(),
-        data: {},
-        message: '本资源不可修改',
+    // if (![0, 3, 4].includes(foundGrant.state)) {
+    //   throw {
+    //     code: Response.getErrorCode(),
+    //     data: {},
+    //     message: '本资源不可修改',
+    //   }
+    // }
+
+    const foundApproval = await Approval.findOne({where: { project_id: foundTheGrantApply.id }});
+
+    // 判断活动是否在审批流程中
+    if (foundApproval) {
+      const count = await ApprovalFlows.count({ where: { approval_id: foundApproval.id, result: { $in: [1, 2] } }});
+      if (count > 0 && foundGrant.state !== 3) {
+        throw {
+          code: Response.getErrorCode(),
+          data: {},
+          message: '该活动已经审批无法修改',
+        }
       }
     }
-
+    
     if (args.type) {
       args.type_string = this.typeMapper[+args.type];
       foundGrant.type_string = args.type_string;

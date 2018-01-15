@@ -4,7 +4,10 @@
 import {getSuccessCode, getErrorCode} from '../../../config/response';
 
 export default async function (req, params, {models, device}) {
-  const flag = req.query.flag;
+  let flag = req.query.flag;
+  if (device === 'web') {
+    flag = 'more';
+  }
 
   const DeptModel = models.Dept.scope('list');
   const deptCount = await DeptModel.count();
