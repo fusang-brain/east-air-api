@@ -37,10 +37,8 @@ export default async function (req, params, {models, device}) {
         state: {
           $in: [0, 1]
         },
-
         name: {$ne: 'root'}
       };
-
 
       // condition.dept =  {
       //   $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
@@ -90,7 +88,8 @@ export default async function (req, params, {models, device}) {
       code: getSuccessCode(),
       message: '查看成功',
       data: {
-        depts: recursiveRenderDept(list[0].children)
+        // depts: recursiveRenderDept(list[0].children)
+        depts: list,
       }
     }
   }
