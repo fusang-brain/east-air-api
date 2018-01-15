@@ -5,7 +5,7 @@ import {getSuccessCode, getErrorCode} from '../../../config/response';
 
 export default async function (req, params, {models, device}) {
   let flag = req.query.flag;
-  if (device === 'web') {
+  if (device == 'web' || device == 'pc') {
     flag = 'more';
   }
 
