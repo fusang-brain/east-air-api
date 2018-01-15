@@ -27,7 +27,7 @@ export default async function (req, params, {models, device}) {
       attributes: [[models.sequelize.fn('MAX', models.sequelize.col('tree_level')), 'max_tree_level']],
     });
 
-
+  console.log('dept level ', deepDeptLevel);
   const getIncludeArgs = (times) => {
     let includeArgs = [];
     if (device === 'app' || renderType === 'with_member') {
@@ -63,12 +63,12 @@ export default async function (req, params, {models, device}) {
   };
 
   const includeArgs = getIncludeArgs(deepDeptLevel.dataValues.max_tree_level);
-
+  console.log('returned ...', includeArgs);
   const list = await DeptModel.findAll({
     where: {tree_level: 1},
     include: includeArgs,
   });
-
+  console.log("returned .... ", list);
   if (device === 'app') {
     for (let i = 0; i < list.length; i ++) {
       let item = list[i];
