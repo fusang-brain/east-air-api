@@ -45,7 +45,7 @@ export default async function (req, params, {models, device}) {
       // };
       includeArgs = [
         { model: Dept, as: 'children' },
-        { model: User, as: 'members', where: condition, attributes: ['id', 'name', 'avatar'] },
+        { model: User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar'] },
       ];
     } else {
       includeArgs = [
