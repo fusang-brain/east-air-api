@@ -108,7 +108,7 @@ export default class GrantApplicationService extends Service {
     //   }
     // }
 
-    const foundApproval = await Approval.findOne({where: { project_id: foundTheGrantApply.id }});
+    const foundApproval = await Approval.findOne({where: { project_id: foundGrant.id }});
 
     // 判断活动是否在审批流程中
     if (foundApproval) {
@@ -121,7 +121,7 @@ export default class GrantApplicationService extends Service {
         }
       }
     }
-    
+
     if (args.type) {
       args.type_string = this.typeMapper[+args.type];
       foundGrant.type_string = args.type_string;

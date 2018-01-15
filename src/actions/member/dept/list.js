@@ -22,12 +22,12 @@ export default async function (req, params, {models, device}) {
   }
 
   let renderType = params[0];
-  console.log('render type', renderType);
   const deepDeptLevel = await DeptModel.findOne({
       attributes: [[models.sequelize.fn('MAX', models.sequelize.col('tree_level')), 'max_tree_level']],
     });
 
-  console.log('dept level ', deepDeptLevel);
+  const Dept = models.Dept;
+  const User = models.User;
   req.dataAccess.push(req.user.department.parent);
   req.dataAccess.push(req.user.department.id);
   const getIncludeArgs = (times) => {
@@ -44,17 +44,17 @@ export default async function (req, params, {models, device}) {
       //   $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
       // };
       includeArgs = [
-        {model: models.Dept, as: 'children'},
-        {model: models.User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar']}
+        { model: Dept, as: 'children' },
+        { model: User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar'] },
       ];
     } else {
       includeArgs = [
-        {model: models.Dept, as: 'children'},
+        {model: Dept, as: 'children'},
       ]
     }
 
     times -= 1;
-    if (times !== 0) {
+    if (times > 0) {
       includeArgs[0].include = getIncludeArgs(times);
     }
 
