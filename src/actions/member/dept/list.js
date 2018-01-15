@@ -45,7 +45,7 @@ export default async function (req, params, {models, device}) {
       // };
       includeArgs = [
         { model: Dept, as: 'children' },
-        { model: User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar'] },
+        { model: User, as: 'members', where: condition, attributes: ['id', 'name', 'avatar'] },
       ];
     } else {
       includeArgs = [
@@ -63,6 +63,7 @@ export default async function (req, params, {models, device}) {
 
   const includeArgs = getIncludeArgs(deepDeptLevel.dataValues.max_tree_level);
   console.log('returned ...', includeArgs);
+  console.log('hello');
   const list = await DeptModel.findAll({
     where: {tree_level: 1},
     include: includeArgs,
