@@ -8,7 +8,6 @@ export default async function (req, params, {models, device}) {
   if (device == 'web' || device == 'pc') {
     flag = 'more';
   }
-  console.log('list flag', flag);
   const DeptModel = models.Dept.scope('list');
   const deptCount = await DeptModel.count();
   if (deptCount === 0) {
@@ -45,7 +44,7 @@ export default async function (req, params, {models, device}) {
       // };
       includeArgs = [
         { model: Dept, as: 'children' },
-        { model: User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar'] },
+        // { model: User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar'] },
       ];
     } else {
       includeArgs = [
@@ -62,13 +61,23 @@ export default async function (req, params, {models, device}) {
   };
 
   const includeArgs = getIncludeArgs(deepDeptLevel.dataValues.max_tree_level);
-  console.log('returned ...', includeArgs);
-  console.log('hello');
+  console.log('include args', includeArgs[0].include);
+  if (device === 'app' || renderType === 'with_member') {
+    const condition = {
+      state: {
+        $in: [0, 1]
+      },
+      name: {$ne: 'root'}
+    };
+    includeArgs[0].include[0].include.push({ model: User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar'] });
+    includeArgs[0].include.push({ model: User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar'] });
+
+  }
   const list = await DeptModel.findAll({
     where: {tree_level: 1},
     include: includeArgs,
   });
-  console.log("returned .... ", list);
+  // console.log("returned .... ", list);
   if (device === 'app') {
     for (let i = 0; i < list.length; i ++) {
       let item = list[i];
@@ -83,14 +92,13 @@ export default async function (req, params, {models, device}) {
       }
     }
   }
-  console.log("returned .... ");
   if (renderType === 'with_member') {
     return {
       code: getSuccessCode(),
       message: '查看成功',
       data: {
-        // depts: recursiveRenderDept(list[0].children)
-        depts: list,
+        depts: recursiveRenderDept(list[0].children)
+        // depts: list,
       }
     }
   }
