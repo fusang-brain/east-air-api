@@ -28,6 +28,8 @@ export default async function (req, params, {models, device}) {
     });
 
   console.log('dept level ', deepDeptLevel);
+  req.dataAccess.push(req.user.department.parent);
+  req.dataAccess.push(req.user.department.id);
   const getIncludeArgs = (times) => {
     let includeArgs = [];
     if (device === 'app' || renderType === 'with_member') {
@@ -39,8 +41,7 @@ export default async function (req, params, {models, device}) {
         name: {$ne: 'root'}
       };
 
-      req.dataAccess.push(req.user.department.parent);
-      req.dataAccess.push(req.user.department.id);
+
       // condition.dept =  {
       //   $in: req.dataAccess.length > 0 ? req.dataAccess : [req.user.department.parent],
       // };
