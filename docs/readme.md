@@ -63,11 +63,7 @@ setHeaders('EA-DEVICE', 'pc')
 setHeaders('EA-DEVICE', 'app')
 ```
 
-消息跳转协议
-
-ea://[module]/[id]
-
-## 接口索引
+## 接口说明
 
 #### 认证模块
 

@@ -4,7 +4,15 @@
 
 import {filterParams} from '../../utils/filters';
 
-// execute some approval
+/**
+ * 处理审批流程
+ * @param req HttpRequest object
+ * @param param Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param checkAccess Check access function
+ * @returns Object The response object
+ */
 export default async function (req, params, {response, checkAccess, services}) {
   await checkAccess('grant_approval', 'activity_funding');
   await checkAccess('grant_approval', 'apply_funding');

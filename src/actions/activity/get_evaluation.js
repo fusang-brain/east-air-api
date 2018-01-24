@@ -3,7 +3,17 @@
  */
 
 
-// get the evaluation of activity
+
+/**
+ * get the evaluation of activity
+ * @param req HttpRequest object
+ * @param params Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param device The device of user
+ * @param services Mapper of services
+ * @returns Object Response Object
+ */
 export default async function (req, params, {response, models, device, checkAccess}) {
   await checkAccess('activity', 'view')
   const user = req.user;

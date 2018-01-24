@@ -3,7 +3,16 @@
  */
 import {filterParams} from '../../utils/filters';
 
-// activity evaluation
+/**
+ * 评价活动
+ * @param req HttpRequest object
+ * @param params Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param device The device of user
+ * @param services Mapper of services
+ * @returns Object Response Object
+ */
 export default async function (req, params, {response, models, device, checkAccess}) {
   await checkAccess('activity', 'comment_activity');
   const args = filterParams(req.body, {

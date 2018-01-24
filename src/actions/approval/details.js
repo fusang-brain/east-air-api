@@ -4,7 +4,16 @@
 
 import {ApprovalService} from '../../service';
 
-// get approval details
+
+/**
+ * 获取审批详情
+ * @param req HttpRequest object
+ * @param param Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param checkAccess Check access function
+ * @returns Object The response object
+ */
 export default async function (req, params, {response, device, services}) {
   const approval_id = req.query.approval_id;
   const approvalService = services.approval;

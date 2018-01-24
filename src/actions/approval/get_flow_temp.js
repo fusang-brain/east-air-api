@@ -4,6 +4,13 @@
 
 import {ApprovalService} from '../../service';
 
+/**
+ * 获取审批流程模板
+ * @param req HttpRequest object
+ * @param params HttpRequest params
+ * @param response Response object
+ * @returns {Promise.<{code: *, message: string, data: {temp: *}}>} The API response object
+ */
 export default async function (req, params, {response}) {
 
   const approvalService = new ApprovalService();

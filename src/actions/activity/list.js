@@ -5,6 +5,17 @@ import {filterParams} from '../../utils/filters';
 import moment from 'moment';
 
 // List Activity
+
+/**
+ * List activity
+ * @param req HttpRequest object
+ * @param params Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param device The device of user
+ * @param services Mapper of services
+ * @returns Object Response Object
+ */
 export default async function (req, param, {response, models, services, device, checkAccess}) {
   await checkAccess('activity', 'view');
   const params = filterParams(req.query, {

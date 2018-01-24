@@ -2,6 +2,15 @@
  * Created by alixez on 17-8-3.
  */
 
+/**
+ *
+ * @param req HttpRequest object
+ * @param params HttpParams
+ * @param response Response object
+ * @param checkAccess the function to check access
+ * @param services Mapper services
+ * @returns Object API Response object
+ */
 export default async function (req, params, {response, checkAccess, services}) {
   // state:all 全部 state:pending 待处理 state:success 已同意 state:failed 已拒绝 state:finished 已处理
   const state = req.query.state || 'all';

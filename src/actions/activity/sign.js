@@ -6,6 +6,16 @@
 
 import { filterParams } from '../../utils/filters'
 
+/**
+ * 活动签到
+ * @param req HttpRequest object
+ * @param params Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param device The device of user
+ * @param services Mapper of services
+ * @returns Object Response Object
+ */
 export default async (req, params, {response, models, services}) => {
   const args = filterParams(req.body, {
     act_id: ['string', 'required'],

@@ -4,6 +4,14 @@
 
 import {getErrorCode, getSuccessCode} from '../../../config/response';
 
+/**
+ *
+ * @param req HttpRequest
+ * @param params RequestParams
+ * @param models Model object
+ * @param checkAccess Access check function
+ * @returns Object API response promise object
+ */
 export default async function(req, params, {models, checkAccess}) {
   await checkAccess('dept', 'create');
   const {parentID, name} = req.body;

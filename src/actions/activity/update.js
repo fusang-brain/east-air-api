@@ -8,6 +8,15 @@ import Decimal from 'decimal.js';
 import Response from '../../config/response';
 import TradeUnionActDept from '../../models/TradeUnionActDept'
 
+/**
+ * Update activity
+ * @param req HttpRequest object
+ * @param param Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param checkAccess Check access function
+ * @returns Object The response object
+ */
 export default async function (req, param, {response, models, checkAccess}) {
   await checkAccess('activity', 'edit');
 

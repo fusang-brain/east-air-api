@@ -81,7 +81,8 @@ export default async function (req, params, {models, device}) {
   if (device === 'app') {
     for (let i = 0; i < list.length; i ++) {
       let item = list[i];
-      item.dataValues.member_total = recursiveMemberCount(item.children, req.dataAccess, flag) + item.members.length;
+
+      item.dataValues.member_total = recursiveMemberCount(item.children, req.dataAccess, flag) + (item.members ? item.members.length : 0);
     }
 
     return {

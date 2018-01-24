@@ -3,7 +3,16 @@
  */
 import {ApprovalService, ActivityService} from '../../service';
 
-// 活动详情
+/**
+ * 活动详情
+ * @param req HttpRequest object
+ * @param params Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param device The device of user
+ * @param services Mapper of services
+ * @returns Object Response Object
+ */
 export default async function (req, params, {response, models, device, services}) {
   const actID = req.query.act_id;
   const foundAct = await services.activity.details(actID);
@@ -50,10 +59,15 @@ export default async function (req, params, {response, models, device, services}
     code: response.getSuccessCode(),
     message: '获取详情成功',
     data: {
+      // 活动详情
       act: foundAct,
+      // 活动二维码
       qrcode_str: qrcodeStr,
+      // 审批流程
       approval_flow: approvalDetail.getDataValue('flows'),
+      // 评价
       evaluations,
+      // 评价统计
       evaluation_statistics: evaluationStatistics,
     }
   }

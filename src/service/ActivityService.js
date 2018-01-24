@@ -153,6 +153,11 @@ export default class ActivityService extends Service {
     return actDetails;
   }
 
+  /**
+   * 获取所有评价
+   * @param act_id
+   * @returns {Promise.<*>}
+   */
   async getEvaluations(act_id) {
     const ActEvaluation = this.getModel('ActEvaluation');
 
@@ -170,6 +175,13 @@ export default class ActivityService extends Service {
     })
   }
 
+  /**
+   * 活动签到
+   * @param id
+   * @param dept_id
+   * @param user_id
+   * @returns {Promise.<{hasSigned: boolean, act_name: (TradeUnionAct.subject|{type, length}|*|Array), total_integration: *, current_integration: number}>}
+   */
   async sign(id, dept_id, user_id) {
     const foundAct = await this.getModel().findOne({
       where: {
@@ -238,6 +250,11 @@ export default class ActivityService extends Service {
     };
   }
 
+  /**
+   * 获取活动统计
+   * @param act_id
+   * @returns {Promise.<{total_actor: *, total_people: *, total: *, satisfied_rate: number}>}
+   */
   async getEvaluationStatistics(act_id) {
 
     const foundAct = await this.getModel('TradeUnionAct').findOne({
@@ -315,10 +332,10 @@ export default class ActivityService extends Service {
     });
 
     return {
-      total_actor: totalActor,
-      total_people: totalUser,
-      total: evaluatePeopleCount,
-      satisfied_rate: Math.round(satisfiedPeopleCount / evaluatePeopleCount * 100) || 0,
+      total_actor: totalActor, // 总参与者
+      total_people: totalUser, // 总人数
+      total: evaluatePeopleCount, // 总数
+      satisfied_rate: Math.round(satisfiedPeopleCount / evaluatePeopleCount * 100) || 0, // 满意率
     }
   }
 }

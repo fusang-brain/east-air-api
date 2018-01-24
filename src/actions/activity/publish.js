@@ -6,6 +6,17 @@ import {ApprovalService} from '../../service';
 import {getMasterRole} from '../../config/init_data';
 import Decimal from 'decimal.js';
 
+
+/**
+ * Publish Activity
+ * @param req HttpRequest object
+ * @param params Request params
+ * @param response Response class
+ * @param models Mapper of models
+ * @param device The device of user
+ * @param services Mapper of services
+ * @returns Object Response Object
+ */
 export default async function (req, param, {response, models, checkAccess}) {
   await checkAccess('activity', 'create');
   const roles = getMasterRole();
