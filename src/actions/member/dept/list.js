@@ -77,7 +77,8 @@ export default async function (req, params, {models, device}) {
 
   }
   // console.log(DeptModel.cache());
-  var cacheObj = (device === 'app' ? DeptModel : cacher(models.sequelize, rc).model(DeptModel.name).ttl(15 * 60));
+  // var cacheObj = (device === 'app' ? DeptModel : cacher(models.sequelize, rc).model(DeptModel.name).ttl(15 * 60));
+  var cacheObj = cacher(models.sequelize, rc).model(DeptModel.name).ttl(15 * 60);
   const list = await cacheObj.findAll({
     where: {tree_level: 1},
     include: includeArgs,
@@ -86,8 +87,11 @@ export default async function (req, params, {models, device}) {
   if (device === 'app') {
     for (let i = 0; i < list.length; i ++) {
       let item = list[i];
-
-      item.dataValues.member_total = recursiveMemberCount(item.children, req.dataAccess, flag) + (item.members ? item.members.length : 0);
+      if (item.dataValues) {
+        item.dataValues.member_total = recursiveMemberCount(item.children, req.dataAccess, flag) + (item.members ? item.members.length : 0);
+      } else {
+        item.member_total = recursiveMemberCount(item.children, req.dataAccess, flag) + (item.members ? item.members.length : 0);
+      }
     }
 
     return {
@@ -148,19 +152,38 @@ function recursiveMemberCount(children, dataAccess, flag) {
   let count = 0;
   for (let i = 0; i < children.length; i ++) {
     let item = children[i];
+    console.log(item);
     if (item.children.length > 0) {
-      item.dataValues.member_total = recursiveMemberCount(item.children, dataAccess, flag) + (item.members ? item.members.length : 0);
+      if (item.dataValues) {
+        item.dataValues.member_total = recursiveMemberCount(item.children, dataAccess, flag) + (item.members ? item.members.length : 0);
+      } else {
+        item.member_total = recursiveMemberCount(item.children, dataAccess, flag) + (item.members ? item.members.length : 0);
+      }
 
     } else {
-      item.dataValues.member_total = (item.members ? item.members.length : 0);
+      if (item.dataValues) {
+        item.dataValues.member_total = (item.members ? item.members.length : 0);
+      } else {
+        item.member_total = (item.members ? item.members.length : 0);
+      }
+
     }
     if (flag !== 'more') {
       if (!dataAccess.includes(item.id)) {
-        item.dataValues.members = [];
+        if (item.dataValues) {
+          item.dataValues.members = [];
+        } else {
+          item.members = [];
+        }
+
       }
     }
+    if (item.dataValues) {
+      count += item.dataValues.member_total ? item.dataValues.member_total : 0;
+    } else {
+      count += item.member_total;
+    }
 
-    count += item.dataValues.member_total;
   }
 
 
