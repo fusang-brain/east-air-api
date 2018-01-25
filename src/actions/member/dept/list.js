@@ -77,7 +77,7 @@ export default async function (req, params, {models, device}) {
 
   }
   // console.log(DeptModel.cache());
-  var cacheObj = cacher(models.sequelize, rc).model(DeptModel.name).ttl(15 * 60);
+  var cacheObj = (device === 'app' ? DeptModel : cacher(models.sequelize, rc).model(DeptModel.name).ttl(15 * 60));
   const list = await cacheObj.findAll({
     where: {tree_level: 1},
     include: includeArgs,
@@ -149,10 +149,10 @@ function recursiveMemberCount(children, dataAccess, flag) {
   for (let i = 0; i < children.length; i ++) {
     let item = children[i];
     if (item.children.length > 0) {
-      item.dataValues.member_total = recursiveMemberCount(item.children, dataAccess, flag) + item.members.length;
+      item.dataValues.member_total = recursiveMemberCount(item.children, dataAccess, flag) + (item.members ? item.members.length : 0);
 
     } else {
-      item.dataValues.member_total = item.members.length;
+      item.dataValues.member_total = (item.members ? item.members.length : 0);
     }
     if (flag !== 'more') {
       if (!dataAccess.includes(item.id)) {
