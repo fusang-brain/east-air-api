@@ -77,7 +77,7 @@ export default async function (req, params, {models, device}) {
 
   }
   // console.log(DeptModel.cache());
-  var cacheObj = cacher(models.sequelize, rc).model(DeptModel.name).ttl(5);
+  var cacheObj = cacher(models.sequelize, rc).model(DeptModel.name).ttl(60);
   const list = await cacheObj.findAll({
     where: {tree_level: 1},
     include: includeArgs,
