@@ -10,3 +10,4 @@ export list_person from './list_person';
 export statistics from './statistics';
 export week_statistics from './week_statistics';
 export evaluate_list from './evaluate_list';
+export export_sur from './export_sur';

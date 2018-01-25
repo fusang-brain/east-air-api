@@ -599,6 +599,32 @@ export default class SatisfactionSurveyService extends Service {
     }
   }
 
+  async getAllVoteData(kind) {
+    const SatisfactionPoll = this.getModel('SatisfactionPoll');
+    const SatisfactionSurvey = this.getModel('SatisfactionSurvey');
+    const User = this.getModel('User');
+    if (kind === 'site') {
+      const queryStr = "SELECT ss.survey_subject, dui.name as do_user_name, dui.mobile as do_user_mobile, dui.card_num as do_user_card_num, sp.satisfaction_level, sp.options FROM `" + SatisfactionPoll.tableName + "` sp"
+        + " LEFT JOIN `" + SatisfactionSurvey.tableName + "` ss ON ss.id = sp.survey_id"
+        + " LEFT JOIN `" + User.tableName + "` dui ON dui.id = sp.evaluate_person_id"
+        + " WHERE ss.survey_type = 1";
+
+      return await this.connect.query(queryStr, {
+        type: this.sequelize.QueryTypes.SELECT,
+      });
+
+    } else if (kind === 'person') {
+      const queryStr = `SELECT ui.name as survey_name, ui.card_num as survey_card_num, ui.mobile as survey_mobile, dui.name as do_user_name, dui.mobile as do_user_mobile, dui.card_num as do_user_card_num, sp.satisfaction_level, sp.options FROM \`${SatisfactionPoll.tableName}\` as sp LEFT JOIN \`${SatisfactionSurvey.tableName}\` ss ON ss.id = sp.survey_id`
+        + " LEFT JOIN `" + User.tableName + "` ui ON ui.id = ss.survey_user_id"
+        + " LEFT JOIN `" + User.tableName + "` dui ON dui.id = sp.evaluate_person_id"
+        + " WHERE ss.survey_type = 0";
+
+      return await this.connect.query(queryStr, {
+        type: this.sequelize.QueryTypes.SELECT,
+      });
+    }
+  };
+
   // async statisticsVoteByWeek() {
   //   const SatisfactionPoll = this.getModel('SatisfactionPoll');
   //

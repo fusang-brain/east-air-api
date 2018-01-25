@@ -36,6 +36,10 @@ const environment = {
         '/export_doc/statistics/sympathy',
         '/sms/send',
         '/vod/export_history',
+        '/satisfaction/export_sur',
+        '/satisfaction/export_sur/site',
+        '/satisfaction/export_sur/person',
+
       ]
     },
     vod_category: [
@@ -90,6 +94,7 @@ const environment = {
         '/export_doc/statistics/relax_action',
         '/export_doc/statistics/sympathy',
         '/sms/send',
+        '/satisfaction/export',
       ]
     },
     vod_category: [

@@ -1,9 +1,12 @@
 /**
  * Created by alixez on 17-6-17.
  */
+import cacher from 'sequelize-redis-cache';
+import redis from 'redis';
 import {getSuccessCode, getErrorCode} from '../../../config/response';
 
 export default async function (req, params, {models, device}) {
+  var rc = redis.createClient();
   let flag = req.query.flag;
   if (device == 'web' || device == 'pc') {
     flag = 'more';
@@ -61,7 +64,7 @@ export default async function (req, params, {models, device}) {
   };
 
   const includeArgs = getIncludeArgs(deepDeptLevel.dataValues.max_tree_level);
-  console.log('include args', includeArgs[0].include);
+  // console.log('include args', includeArgs[0].include);
   if (device === 'app' || renderType === 'with_member') {
     const condition = {
       state: {
@@ -73,7 +76,9 @@ export default async function (req, params, {models, device}) {
     includeArgs[0].include.push({ model: User, as: 'members', where: condition, required: false, attributes: ['id', 'name', 'avatar'] });
 
   }
-  const list = await DeptModel.findAll({
+  // console.log(DeptModel.cache());
+  var cacheObj = cacher(models.sequelize, rc).model(DeptModel.name).ttl(5);
+  const list = await cacheObj.findAll({
     where: {tree_level: 1},
     include: includeArgs,
   });
