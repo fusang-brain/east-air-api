@@ -6,6 +6,7 @@
 import Service from './Service';
 import Response from '../config/response';
 import moment from 'moment';
+import lodash from 'lodash';
 
 export default class SatisfactionSurveyService extends Service {
   constructor () {
@@ -320,7 +321,10 @@ export default class SatisfactionSurveyService extends Service {
           as: 'not_satisfied_tags',
           required: false,
         }
-      ]
+      ],
+      order: [
+        ['evaluate_time', 'ASC'],
+      ],
     };
 
     if (dept_id) {
@@ -341,6 +345,9 @@ export default class SatisfactionSurveyService extends Service {
     if (survey_id === null) {
       delete condition.where.survey_id;
     }
+    if (filter_by !== 'year') {
+      condition.where.evaluate_year = moment().year();
+    }
 
     const allPolls = await this.getModel('SatisfactionPoll').all(condition);
 
@@ -355,11 +362,31 @@ export default class SatisfactionSurveyService extends Service {
           peopleVoteRecord[poll.evaluate_person_id] = [];
         }
         // console.log(to_heavy, '---- a');
-        if (Array.isArray(peopleVoteRecord[poll.evaluate_person_id]) && peopleVoteRecord[poll.evaluate_person_id].includes(poll.satisfaction_level)) {
-          return;
+        if (Array.isArray(peopleVoteRecord[poll.evaluate_person_id])) {
+          let item = peopleVoteRecord[poll.evaluate_person_id];
+          if (lodash.findIndex(item, (o) => {
+            let ok = o.level === poll.satisfaction_level;
+            if (filter_by === 'week') {
+              return ( ok && o.week === poll.evaluate_week);
+            }
+            if (filter_by === 'year') {
+              return ( ok && o.year === poll.evaluate_year);
+            }
+
+            if (filter_by === 'month') {
+              return (ok && o.month === poll.monty);
+            }
+          }) > 1) {
+            return;
+          }
         }
 
-        peopleVoteRecord[poll.evaluate_person_id].push(poll.satisfaction_level);
+        peopleVoteRecord[poll.evaluate_person_id].push({
+          level: poll.satisfaction_level,
+          week: poll.evaluate_week,
+          monty: poll.evaluate_month,
+          year: poll.evaluate_year
+        });
       }
 
       let key = `${poll.evaluate_week}-${poll.evaluate_month}`;
@@ -438,7 +465,7 @@ export default class SatisfactionSurveyService extends Service {
     const result = [];
     for (let key in resultMapper) {
       for (let tag in resultMapper[key].tags_count) {
-        //mconsole.log(tag);
+        // console.log(tag);
         resultMapper[key].tags_rate[tag] = Math.round(resultMapper[key].tags_count[tag] / resultMapper[key].tags_total * 100);
       }
       result.push(resultMapper[key]);
