@@ -15,6 +15,7 @@ export default class DocService extends Service {
   }
 
   async one(id) {
+
     return await this.getModel().findOne({
       where: {
         id,
@@ -38,6 +39,7 @@ export default class DocService extends Service {
     if (filter && filter.doc_level) {
       condition.doc_level = filter.doc_level;
     }
+    
     const readReceipts = await this.getModel('DocReadReceipts').all({
       where: {
         user_id: userID,

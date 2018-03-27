@@ -175,7 +175,6 @@ export default class ApprovalService extends Service {
    */
   async generateActApproval(projectID, publishID, approvalType = 1 , {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant}) {
     const Approval = this.getModel();
-
     const ApprovalFlows = this.getModel('ApprovalFlows');
     const User = this.getModel('User');
     const Dept = this.getModel('Dept');
