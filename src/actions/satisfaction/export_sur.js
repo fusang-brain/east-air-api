@@ -4,6 +4,7 @@
  * Date: 2018/1/24
  */
 import xlsx from 'node-xlsx';
+import moment from 'moment';
 
 export default async (req, params, {response, services, models, checkAccess}) => {
   // await checkAccess('satisfaction_degree_investigation', 'data_statistics');
@@ -15,7 +16,7 @@ export default async (req, params, {response, services, models, checkAccess}) =>
     const list = await services.satisfaction.getAllVoteData(requestType);
     const buffer = await getOtherExportBuffer(list);
     return res => {
-      res.set('Content-Disposition', `attachment; filename=peopleSurvey.xlsx`);
+      res.set('Content-Disposition', `attachment; filename=peopleSurveySite.xlsx`);
       res.send(buffer);
     }
   }
@@ -24,7 +25,7 @@ export default async (req, params, {response, services, models, checkAccess}) =>
     const list = await services.satisfaction.getAllVoteData(requestType);
     const buffer = await getExportBuffer(list);
     return res => {
-      res.set('Content-Disposition', `attachment; filename=peopleSurvey.xlsx`);
+      res.set('Content-Disposition', `attachment; filename=peopleSurveyPerson.xlsx`);
       res.send(buffer);
     }
   }
@@ -32,7 +33,7 @@ export default async (req, params, {response, services, models, checkAccess}) =>
 }
 
 async function getExportBuffer (list) {
-  let excelData = [['被评价人', '被评价人手机', '被评价人身份证号码', '评价人', '评价人手机', '评价人身份证号', '评价', '评价内容']];
+  let excelData = [['被评价人', '被评价人手机', '被评价人身份证号码', '评价人', '评价人手机', '评价人身份证号', '评价', '评价内容', '评价时间']];
   // 'very_satisfied': 非常满意 'satisfied': 满意 'not_satisfied': 不满意
   const Mapper = {
     'very_satisfied': '非常满意',
@@ -49,6 +50,7 @@ async function getExportBuffer (list) {
       item.do_user_card_num,
       Mapper[item.satisfaction_level],
       item.options,
+      moment(item.evaluate_time).format('YYYY-MM-DD HH:mm:ss'),
       ]);
   }
 
@@ -56,7 +58,7 @@ async function getExportBuffer (list) {
 }
 
 async function getOtherExportBuffer (list) {
-  let excelData = [['评价对象', '评价人', '评价人手机', '评价人身份证号', '评价', '评价内容']];
+  let excelData = [['评价对象', '评价人', '评价人手机', '评价人身份证号', '评价', '评价内容', '评价时间']];
   // 'very_satisfied': 非常满意 'satisfied': 满意 'not_satisfied': 不满意
   const Mapper = {
     'very_satisfied': '非常满意',
@@ -72,6 +74,7 @@ async function getOtherExportBuffer (list) {
       item.do_user_card_num,
       Mapper[item.satisfaction_level],
       item.options,
+      moment(item.evaluate_time).format('YYYY-MM-DD HH:mm:ss'),
     ]);
   }
 
