@@ -50,7 +50,7 @@ async function getExportBuffer (list) {
       item.do_user_card_num,
       Mapper[item.satisfaction_level],
       item.options,
-      moment(item.evaluate_time).format('YYYY-MM-DD HH:mm:ss'),
+      moment(+item.evaluate_time).format('YYYY-MM-DD HH:mm:ss'),
       ]);
   }
 
@@ -74,7 +74,7 @@ async function getOtherExportBuffer (list) {
       item.do_user_card_num,
       Mapper[item.satisfaction_level],
       item.options,
-      moment(item.evaluate_time).format('YYYY-MM-DD HH:mm:ss'),
+      moment(+item.evaluate_time).format('YYYY-MM-DD HH:mm:ss'),
     ]);
   }
 
