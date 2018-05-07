@@ -95,6 +95,7 @@ const environment = {
         '/export_doc/statistics/sympathy',
         '/sms/send',
         '/satisfaction/export',
+        '/vod/video_callback',
       ]
     },
     vod_category: [
