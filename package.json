@@ -29,6 +29,8 @@
     "start": "concurrently --kill-others \"better-npm-run start-prod-api\"",
     "lint": "eslint -c .eslintrc src",
     "app:install": "better-npm-run install",
+    "app:update": "better-npm-run update",
+    "app:update-dev": "better-npm-run update-dev",
     "dev": "better-npm-run dev-api",
     "db:reinstall": "better-npm-run db-reinstall",
     "db:superuser": "better-npm-run db-superuser",
@@ -39,6 +41,7 @@
     "migrate": ""
   },
   "betterScripts": {
+
     "start-prod-api": {
       "command": "node ./bin/api.js",
       "env": {
@@ -60,6 +63,22 @@
       "env": {
         "NODE_ACTION": "install",
         "NODE_ENV": "production",
+        "APIPORT": 3050
+      }
+    },
+    "update": {
+      "command": "node ./bin/update.js",
+      "env": {
+        "NODE_ACTION": "install",
+        "NODE_ENV": "development",
+        "APIPORT": 3050
+      }
+    },
+    "update-dev": {
+      "command": "node ./bin/update.js",
+      "env": {
+        "NODE_ACTION": "install",
+        "NODE_ENV": "development",
         "APIPORT": 3050
       }
     },

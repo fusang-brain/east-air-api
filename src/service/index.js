@@ -12,6 +12,7 @@ import IntentionService from './IntentionService';
 import SatisfactionSurveyService from './SatisfactionSurveyService';
 import VodService from './VodService';
 import UserService from './UserService';
+import ArticleService from './ArticleService';
 
 
 export Service from './Service';
@@ -30,6 +31,7 @@ export {
   SatisfactionSurveyService,
   VodService,
   UserService,
+  ArticleService,
 }
 
 export const registerService = () => {
@@ -47,6 +49,7 @@ export const registerService = () => {
     satisfaction: new SatisfactionSurveyService(),
     vod: new VodService(),
     user: new UserService(),
+    article: new ArticleService(),
   }
 };
 

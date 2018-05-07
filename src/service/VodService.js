@@ -45,6 +45,39 @@ export default class VodService extends Service {
     return true;
   }
 
+  async finishedVideo(id, { cover, fileUrl, duration, definition }) {
+    const VideoModel = this.getModel("Video");
+    const VodModel = this.getModel('Vod');
+
+    const foundVideo = await VideoModel.findOne({
+      where: { id },
+    });
+    
+    // foundVideo.finished = true;
+    if (!foundVideo.file_url || ['FD', 'LD'].includes(definition)) {
+      foundVideo.file_url = fileUrl;
+    }
+
+    // kind && (foundVideo.video_kind = kind);
+    cover && (foundVideo.cover_url = cover);
+    duration && (foundVideo.duration = duration);
+
+    if (foundVideo.cover_url && foundVideo.file_url) {
+      foundVideo.finished = true;
+    }
+    await foundVideo.save();
+    const foundVod = await VodModel.findOne({
+      where: {
+        aliyun_video_id: id,
+      }
+    });
+
+    if (foundVod) {
+      foundVod.exec_finished = true;
+      await foundVod.save();
+    }
+  }
+
   async remove(id) {
     const foundVOD = await this.getModel('Vod').findOne({
       where: {

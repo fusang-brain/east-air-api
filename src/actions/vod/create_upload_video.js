@@ -9,7 +9,7 @@ import { filterParams } from '../../utils/filters';
 import config from '../../config';
 
 // 获取阿里云视频上传地址
-export default async (req, params, {response, services}) => {
+export default async (req, params, {response, models, services}) => {
 
   const args = filterParams(req.body, {
     title: ['string', 'required'],
@@ -26,6 +26,10 @@ export default async (req, params, {response, services}) => {
     title: args.title,
     filename: args.filename,
     filesize: args.filesize,
+  });
+
+  await models.Video.create({
+    id: res.VideoId,
   });
 
   return {
