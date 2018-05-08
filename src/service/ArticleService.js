@@ -249,11 +249,26 @@ export default class ArticleService extends Service {
       where: {
         id
       },
-    }, {
       include: [
         {
           model: this.getModel('Video'),
           as: 'videos',
+        },
+        {
+          model: this.getModel('Video'),
+          as: 'videos',
+        },
+        {
+          model: this.getModel('User'),
+          as: 'publisherObject',
+        },
+        {
+          model: this.getModel('ArticleCategory'),
+          as: 'cate',
+        },
+        {
+          model: this.getModel('ArticleGroup'),
+          as: 'group',
         }
       ],
     });
