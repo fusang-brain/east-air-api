@@ -145,7 +145,7 @@ export default class VodService extends Service {
   }
 
   async list(args) {
-    const {offset, limit, filter} = args;
+    const {offset, limit, filter, device} = args;
     const Vod = this.getModel('Vod');
     const whereCondition = {
       enable: true,
@@ -160,10 +160,27 @@ export default class VodService extends Service {
     }
 
     filter.title && (whereCondition.title = { $like: `%${filter.title}%` });
+    let includes = [];
+    if (String(device) === 'app') {
+      includes.push({
+        model: this.getModel('Video'),
+        as: 'video',
+        required: true,
+        where: {
+          finished: true,
+        },
+      });
+    }
 
     const total = await Vod.count({
       where: whereCondition,
+      include: includes,
     });
+
+    includes.push({
+      model: this.getModel('File'),
+      as: 'cover',
+    })
 
     const list = await Vod.all({
       offset,
@@ -172,20 +189,7 @@ export default class VodService extends Service {
       order: [
         ['create_time', 'DESC'],
       ],
-      include: [
-        {
-          model: this.getModel('File'),
-          as: 'cover',
-        },
-        {
-          model: this.getModel('Video'),
-          as: 'video',
-          required: true,
-          where: {
-            finished: true,
-          },
-        },
-      ]
+      include: includes,
     });
 
     return {
