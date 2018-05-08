@@ -45,23 +45,35 @@ export default class VodService extends Service {
     return true;
   }
 
-  async finishedVideo(id, { cover, fileUrl, duration, definition }) {
+  async finishedVideo(id, { cover, fileUrl, duration, definition, format }) {
     const VideoModel = this.getModel("Video");
     const VodModel = this.getModel('Vod');
     
     const foundVideo = await VideoModel.findOne({
       where: { id },
     });
+
+    if (fileUrl) {
+      if (!foundVideo.file_url) {
+        foundVideo.file_url = fileUrl;
+        duration && (foundVideo.duration = duration);
+      } else {
+        if (String(format) === 'm3u8' && 'LD' === String(definition)) {
+          foundVideo.file_url = fileUrl;
+          duration && (foundVideo.duration = duration);
+        }
+      }
+    }
+
+    
     
     // foundVideo.finished = true;
-    if (!foundVideo.file_url || ['FD', 'LD'].includes(definition)) {
-      foundVideo.file_url = fileUrl;
-    }
+    // if (!foundVideo.file_url || ['FD', 'LD'].includes(definition)) {
+    //   foundVideo.file_url = fileUrl;
+    // }
 
     // kind && (foundVideo.video_kind = kind);
     cover && (foundVideo.cover_url = cover);
-    duration && (foundVideo.duration = duration);
-
     if (foundVideo.cover_url && foundVideo.file_url) {
       foundVideo.finished = true;
     }
