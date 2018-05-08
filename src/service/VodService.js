@@ -211,7 +211,12 @@ export default class VodService extends Service {
 
     const total = await Vod.count({
       where: whereCondition,
-      include: includes,
+      include: [
+        {
+          model: this.getModel('File'),
+          as: 'cover',
+        }
+      ],
     });
 
     // includes.push({
@@ -226,7 +231,20 @@ export default class VodService extends Service {
       order: [
         ['create_time', 'DESC'],
       ],
-      include: includes,
+      include: [
+        {
+          model: this.getModel('File'),
+          as: 'cover',
+        },
+        {
+          model: this.getModel('Video'),
+          as: 'video',
+          required: true,
+          where: {
+            finished: true,
+          },
+        },
+      ],
     });
 
     return {
