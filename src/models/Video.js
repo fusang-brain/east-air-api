@@ -5,6 +5,7 @@
 export default function (sequelize, DataTypes) {
   return sequelize.define('Video', {
     id: {type: DataTypes.STRING, primaryKey: true},
+    // video: {type: }
     // video_kind: {type: DataTypes.INTEGER, defaultValue: 0}, // 0: 视频 1: 音频
     cover_url: {type: DataTypes.STRING}, // 封面路径
     file_url: {type: DataTypes.STRING}, // 文件地址

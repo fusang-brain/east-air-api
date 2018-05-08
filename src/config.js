@@ -39,7 +39,7 @@ const environment = {
         '/satisfaction/export_sur',
         '/satisfaction/export_sur/site',
         '/satisfaction/export_sur/person',
-
+        '/vod/video_callback',
       ]
     },
     vod_category: [

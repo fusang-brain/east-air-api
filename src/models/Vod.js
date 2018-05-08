@@ -27,6 +27,13 @@ export default (sequelize, DataTypes) => sequelize.define('Vod', {
         onDelete: 'cascade',
       });
 
+      this.belongsTo(models.Video, {
+        as: 'video',
+        foreignKey: 'aliyun_video_id',
+        sourceKey: 'id',
+        onDelete: 'cascade',
+      });
+
       this.hasMany(models.VodPlayHistory, {
         as: 'play_history',
         foreignKey: 'vod_id',
