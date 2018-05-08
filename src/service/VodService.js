@@ -48,6 +48,7 @@ export default class VodService extends Service {
   async finishedVideo(id, { cover, fileUrl, duration, definition, format }) {
     const VideoModel = this.getModel("Video");
     const VodModel = this.getModel('Vod');
+    const ArticleModel = this.getModel('Article');
     
     const foundVideo = await VideoModel.findOne({
       where: { id },
@@ -65,19 +66,50 @@ export default class VodService extends Service {
       }
     }
 
-    
-    
     // foundVideo.finished = true;
     // if (!foundVideo.file_url || ['FD', 'LD'].includes(definition)) {
     //   foundVideo.file_url = fileUrl;
     // }
 
     // kind && (foundVideo.video_kind = kind);
-    cover && (foundVideo.cover_url = cover);
+    if (cover) {
+      foundVideo.cover_url = cover
+      const articleVideo = await this.getModel('ArticleVideo').all({
+        video_id: id,
+      });
+      const articleIDs = articleVideo.map(_ => _.article_id);
+      if (articleIDs.length > 0) {
+        await ArticleModel.update({
+          covers: JSON.stringify([cover]),
+        }, {
+          where: {
+            id: {
+              $in: articleIDs,
+            }
+          }
+        });
+      }
+      // const article = await ArticleModel.findOne({
+      //   include: [
+      //     {
+      //       model: this.getModel('Video'),
+      //       as: 'videos',
+      //       required: true,
+      //       where: {
+      //         id: 
+      //       }
+      //     }
+      //   ]
+      // })
+    }
     if (foundVideo.cover_url && foundVideo.file_url) {
       foundVideo.finished = true;
     }
     await foundVideo.save();
+
+    // if (foundVideo.finished) {
+
+    // }
     // const foundVod = await VodModel.findOne({
     //   where: {
     //     aliyun_video_id: id,
