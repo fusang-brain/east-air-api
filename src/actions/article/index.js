@@ -8,3 +8,4 @@ export groups from './groups';
 export categories from './categories';
 export batch_create_category from './batch_create_category';
 export remove_category from './remove_category';
+export remove from './remove';
