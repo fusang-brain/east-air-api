@@ -6,7 +6,7 @@
 import { filterParams } from '../../utils/filters'
 
 // 获取视频列表
-export default async (req, params, {response, services}) => {
+export default async (req, params, {response, services, device}) => {
   const args = filterParams(req.query, {
     offset: 'string',
     limit: 'string',
@@ -28,6 +28,7 @@ export default async (req, params, {response, services}) => {
     limit: args.limit,
     offset: args.offset,
     filter: filter,
+    device,
   });
 
   return {
