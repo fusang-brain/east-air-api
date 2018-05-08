@@ -178,16 +178,114 @@ __请求方式 :__ GET
 |message|String|具体消息|是|本字段是服务器对于本次操作结果的消息描述|
 |data|Array<Object>|服务器附加的数据|否|本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组|
 
-
-#### 请求示例
-
-```json
-
-```
-
 #### 返回示例
 
 ```json
+
+{
+    "code": 1000,
+    "message": "获取列表成功",
+    "data": {
+        "total": 4,
+        "list": [
+            {
+                "coverList": [],
+                "id": "7ee46d9d-9761-46bf-8887-09796fa8d429",
+                "title": "test article",
+                "category": "7408c1a0-71e7-419b-bc4e-e99e2fdee6ca",
+                "group_id": "6f7c2781-524a-458e-86d6-a16e55fc01d3",
+                "description": "desp",
+                "content": "dududud1111",
+                "covers": null,
+                "is_top": true,
+                "is_read": true,
+                "videos": [
+                    {
+                        "id": "654a940935eb43a698b24ec046a7e926",
+                        "cover_url": null,
+                        "file_url": null,
+                        "duration": "0",
+                        "finished": false,
+                        "ArticleVideo": {
+                            "id": "3b30bb75-1001-4cb5-a32f-ae579604c586",
+                            "article_id": "7ee46d9d-9761-46bf-8887-09796fa8d429",
+                            "video_id": "654a940935eb43a698b24ec046a7e926"
+                        }
+                    }
+                ]
+            },
+            {
+                "coverList": [
+                    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png",
+                    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png",
+                    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png"
+                ],
+                "id": "08d4c82c-f28c-4b76-bd59-9be92602db40",
+                "title": "带图片的文章",
+                "category": "7408c1a0-71e7-419b-bc4e-e99e2fdee6ca",
+                "group_id": "6f7c2781-524a-458e-86d6-a16e55fc01d3",
+                "description": "desp",
+                "content": "<p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p><p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p><p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p>",
+                "covers": "[\"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\",\"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\",\"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\"]",
+                "is_top": false,
+                "is_read": true,
+                "videos": [
+                    {
+                        "id": "654a940935eb43a698b24ec046a7e926",
+                        "cover_url": null,
+                        "file_url": null,
+                        "duration": "0",
+                        "finished": false,
+                        "ArticleVideo": {
+                            "id": "df702f52-6050-4c53-a7d4-8d1d9cb40251",
+                            "article_id": "08d4c82c-f28c-4b76-bd59-9be92602db40",
+                            "video_id": "654a940935eb43a698b24ec046a7e926"
+                        }
+                    }
+                ]
+            },
+            {
+                "coverList": [],
+                "id": "13830d2e-e5d2-4e2d-9989-40ca6a3dfbfa",
+                "title": "test article",
+                "category": "7408c1a0-71e7-419b-bc4e-e99e2fdee6ca",
+                "group_id": "6f7c2781-524a-458e-86d6-a16e55fc01d3",
+                "description": "desp",
+                "content": "dududud",
+                "covers": null,
+                "is_top": false,
+                "is_read": true,
+                "videos": []
+            },
+            {
+                "coverList": [],
+                "id": "2db1d926-88b2-4b8c-881d-bb02220137a0",
+                "title": "带图片的文章",
+                "category": "7408c1a0-71e7-419b-bc4e-e99e2fdee6ca",
+                "group_id": "6f7c2781-524a-458e-86d6-a16e55fc01d3",
+                "description": "desp",
+                "content": "<p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p><p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p><p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p>",
+                "covers": null,
+                "is_top": false,
+                "is_read": true,
+                "videos": [
+                    {
+                        "id": "654a940935eb43a698b24ec046a7e926",
+                        "cover_url": null,
+                        "file_url": null,
+                        "duration": "0",
+                        "finished": false,
+                        "ArticleVideo": {
+                            "id": "a61a137c-79b3-462f-974a-3b3fc293a9a3",
+                            "article_id": "2db1d926-88b2-4b8c-881d-bb02220137a0",
+                            "video_id": "654a940935eb43a698b24ec046a7e926"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
 
 ```
 
