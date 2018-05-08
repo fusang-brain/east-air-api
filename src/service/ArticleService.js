@@ -72,6 +72,25 @@ export default class ArticleService extends Service {
     return true;
   }
 
+  async removeCategory(id) {
+    await this.getModel('ArticleCategory').destroy({
+      where: {
+        id,
+      }
+    });
+  }
+
+  async batchCreateCategory({ names, group }) {
+    const CategoryModel = this.getModel('ArticleCategory');
+
+    const cates = names.map(_ => ({
+      name: _,
+      group: group,
+    }));
+
+    await CategoryModel.bulkCreate(cates);
+  }
+
   async create({ title, category, groupID, description, content = '', videos = [] }) {
     const ArticleModel = this.getModel("Article");
     const ArticleVideoModel = this.getModel("ArticleVideo");

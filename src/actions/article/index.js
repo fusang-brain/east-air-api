@@ -6,3 +6,5 @@ export list from './list';
 export details from './details';
 export groups from './groups';
 export categories from './categories';
+export batch_create_category from './batch_create_category';
+export remove_category from './remove_category';
