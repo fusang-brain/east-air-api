@@ -53,12 +53,13 @@ export default class ArticleService extends Service {
     return imgs;
   }
 
-  async createCategory({ kind, name, id_type }) {
+  async createCategory({ kind, name, group, id_type }) {
     const CategoryModel = this.getModel('ArticleCategory');
     const CateGroup = this.getModel('ArticleGroup');
     if (kind === 'cate') {
       await CategoryModel.create({
         name,
+        group,
       });
     }
     if (kind === 'group') {
@@ -130,6 +131,10 @@ export default class ArticleService extends Service {
 
     if (filter && filter.group) {
       condition.group_id = filter.group;
+    }
+
+    if (filter && filter.category) {
+      condition.category = filter.category;
     }
 
     const total = await ArticleModel.count({
@@ -222,5 +227,14 @@ export default class ArticleService extends Service {
     });
 
     return details;
+  }
+
+  async remove(id) {
+    const ArticleModel = this.getModel('video');
+    await ArticleModel.destroy({
+      where: {
+        id,
+      }
+    });
   }
 }

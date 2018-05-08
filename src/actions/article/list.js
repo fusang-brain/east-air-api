@@ -10,6 +10,7 @@ export default async function (req, params, ctx) {
     title: ['string'],
     date: ['string'],
     group: ['string'],
+    category: ['string'],
   });
 
   const { offset, limit, ...filter} = args;

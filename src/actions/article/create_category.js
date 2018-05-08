@@ -5,7 +5,8 @@ export default async function (req, params, ctx) {
   const { services, response } = ctx;
   const args = filterParams(req.body, {
     name: ['string', 'required'],
-    kind: ['string', 'required'],
+    kind: ['string', 'required'], // ['cate', 'group']
+    group: ['string'],
     id_type: ['string'],
   });
 
