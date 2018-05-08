@@ -192,7 +192,12 @@ export default class VodService extends Service {
     }
 
     filter.title && (whereCondition.title = { $like: `%${filter.title}%` });
-    let includes = [];
+    let includes = [
+      {
+        model: this.getModel('File'),
+        as: 'cover',
+      }
+    ];
     if (String(device) === 'app') {
       includes.push({
         model: this.getModel('Video'),
@@ -209,10 +214,10 @@ export default class VodService extends Service {
       include: includes,
     });
 
-    includes.push({
-      model: this.getModel('File'),
-      as: 'cover',
-    })
+    // includes.push({
+    //   model: this.getModel('File'),
+    //   as: 'cover',
+    // })
 
     const list = await Vod.all({
       offset,
