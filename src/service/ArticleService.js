@@ -41,7 +41,7 @@ export default class ArticleService extends Service {
   matchImages(content='') {
     let imgReg = /<img.*?(?:>|\/>)/gi;
     let srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
-    let arr = content.match(imgReg);
+    let arr = content.match(imgReg) || [];
     const imgs = [];
     for (let i = 0;i < arr.length; i ++) {
       const src = arr[i].match(srcReg);
