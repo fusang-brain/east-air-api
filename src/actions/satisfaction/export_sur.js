@@ -33,7 +33,7 @@ export default async (req, params, {response, services, models, checkAccess}) =>
 }
 
 async function getExportBuffer (list) {
-  let excelData = [['被评价人', '被评价人手机', '被评价人身份证号码', '评价人', '评价人手机', '评价人身份证号', '评价', '评价内容', '评价时间', '标签']];
+  let excelData = [['被评价人', '被评价人部门', '被评价人手机', '被评价人身份证号码', '评价人', '评价人部门', '评价人手机', '评价人身份证号', '评价', '评价内容', '评价时间', '标签']];
   // 'very_satisfied': 非常满意 'satisfied': 满意 'not_satisfied': 不满意
   const Mapper = {
     'very_satisfied': '非常满意',
@@ -43,9 +43,11 @@ async function getExportBuffer (list) {
   for (let i = 0; i < list.length; i ++) {
     let item = list[i];
     excelData.push([item.survey_name,
+      item.survey_dept_name,
       item.survey_mobile,
       item.survey_card_num,
       item.do_user_name,
+      item.do_user_dept_name,
       item.do_user_mobile,
       item.do_user_card_num,
       Mapper[item.satisfaction_level],
