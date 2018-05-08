@@ -255,10 +255,6 @@ export default class ArticleService extends Service {
           as: 'videos',
         },
         {
-          model: this.getModel('Video'),
-          as: 'videos',
-        },
-        {
           model: this.getModel('User'),
           as: 'publisherObject',
         },
