@@ -165,10 +165,10 @@ __请求方式 :__ GET
 |-|-|-|-|-|
 |offset|number|偏移量|是|-|
 |limit|number|页数|是|-|
-|title|string|标题|是|filter|
-|date|number|日期|是|filter|
-|group|string|分组ID|是|filter|
-|category|string|分类ID|是|filter|
+|title|string|标题|否|filter|
+|date|number|日期|否|filter|
+|group|string|分组ID|否|filter|
+|category|string|分类ID|否|filter|
 
 #### 返回值
 
@@ -337,7 +337,8 @@ __请求方式 :__ GET
             "content": "<p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p><p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p><p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p>",
             "covers": "[\"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\",\"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\",\"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\"]",
             "is_top": false,
-            "is_read": true
+            "is_read": true,
+            "create_at": 0,
         }
     }
 ```
