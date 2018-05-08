@@ -91,7 +91,7 @@ export default class ArticleService extends Service {
     await CategoryModel.bulkCreate(cates);
   }
 
-  async create({ title, category, groupID, description, content = '', videos = [] }) {
+  async create({ title, category, groupID, description, content = '', videos = [] }, user) {
     const ArticleModel = this.getModel("Article");
     const ArticleVideoModel = this.getModel("ArticleVideo");
     const covers = this.matchImages(content);
@@ -102,6 +102,7 @@ export default class ArticleService extends Service {
       group_id: groupID,
       description,
       content,
+      publisher: user,
       covers: JSON.stringify(covers),
     });
 
@@ -165,7 +166,7 @@ export default class ArticleService extends Service {
     }, {
       where: {
         is_read: false,
-      }
+      },
     });
     const list = await ArticleModel.all({
       offset,
@@ -175,6 +176,18 @@ export default class ArticleService extends Service {
         {
           model: this.getModel('Video'),
           as: 'videos',
+        },
+        {
+          model: this.getModel('User'),
+          as: 'publisherObject',
+        },
+        {
+          model: this.getModel('ArticleCategory'),
+          as: 'cate',
+        },
+        {
+          model: this.getModel('ArticleGroup'),
+          as: 'group',
         }
       ],
       order: [['is_top', 'DESC']]

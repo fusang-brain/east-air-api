@@ -17,6 +17,7 @@ export default function (sequelize, DataTypes) {
     update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
     is_top: {type: DataTypes.BOOLEAN, defaultValue: false},
     is_read: {type: DataTypes.BOOLEAN, defaultValue: false},
+    publisher: {type: DataTypes.UUID},
   }, {
     getterMethods: {
       coverList() {
@@ -61,6 +62,10 @@ export default function (sequelize, DataTypes) {
           },
           foreignKey: 'article_id',
         });
+
+        this.belongsTo(models.User, {as: 'publisherObject', foreignKey: 'publisher', sourceKey: 'id'});
+        this.belongsTo(models.ArticleCategory, {as: 'cate', foreignKey: 'category', sourceKey: 'id'});
+        this.belongsTo(models.ArticleGroup, {as: 'group', foreignKey: 'group_id', sourceKey: 'id'});
       }
     }
   });

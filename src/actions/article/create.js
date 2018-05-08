@@ -12,7 +12,7 @@ export default async function (req, params, ctx) {
     videos: ['array', 'keep'],
   });
 
-  const article = await services.article.create(args);
+  const article = await services.article.create(args, req.user.id);
 
   return {
     code: response.getSuccessCode('insert'),
