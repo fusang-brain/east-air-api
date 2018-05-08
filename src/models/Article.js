@@ -29,7 +29,7 @@ export default function (sequelize, DataTypes) {
     },
     defaultScope: {
       attributes: {
-        exclude: ['deleted', 'update_at', 'create_at']
+        exclude: ['deleted']
       },
       order: [
         ['update_at', 'desc'],
@@ -42,7 +42,7 @@ export default function (sequelize, DataTypes) {
           deleted: false,
         },
         attributes: {
-          exclude: ['deleted', 'update_at', 'create_at']
+          exclude: ['deleted']
         },
         order: [
           ['update_at', 'desc'],
