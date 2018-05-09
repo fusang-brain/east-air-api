@@ -2,6 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import PrettyError from 'pretty-error';
 import http from 'http';
+import path from 'path';
 import bodyParser from 'body-parser';
 import * as actions from './actions/index';
 import config from './config';
@@ -90,6 +91,7 @@ function uploadExcute(req, res, next) {
       req[key] = req[key][0];
     }
   }
+
   next();
 }
 
@@ -99,6 +101,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 
 // file middleware
 app.post('/file/*', uploader.any(), uploadExcute);
+app.post('/upgrade/*', uploader.any(), uploadExcute);
 app.post('/activity/publish', uploader.any(), uploadExcute);
 
 app.get('/file/:name', (req, res) => {
@@ -121,8 +124,54 @@ app.get('/file/:name', (req, res) => {
   })
 });
 
+app.get('/download-ipa/:name', (req, res) => {
+  const fileName = req.params.name;
+  const options = {
+    root: config.storage.uploadFolder,
+    dotfiles: 'deny',
+    headers: {
+      'Content-Disposition': `attachment; filename=EAunion.ipa`,
+      'x-timestamp': Date.now(),
+      'x-sent': true,
+    }
+  };
+  res.sendFile(fileName, options, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(err.status).end();
+    } else {
+      console.log('Sent:', fileName);
+    }
+  })
+});
+
+app.get('/download-apk/:name', (req, res) => {
+  const fileName = req.params.name;
+  const options = {
+    root: config.storage.uploadFolder,
+    dotfiles: 'deny',
+    headers: {
+      'Content-Disposition': `attachment; filename=EAunion.apk`,
+      'x-timestamp': Date.now(),
+      'x-sent': true,
+    }
+  };
+  res.sendFile(fileName, options, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(err.status).end();
+    } else {
+      console.log('Sent:', fileName);
+    }
+  })
+});
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 // auth middleware
 app.use((req, res, next) => {
+  // console.log(config.auth.whitelist, 'whitelist');
   if (config.auth.whitelist.includes(req.path)) {
     next();
     return;

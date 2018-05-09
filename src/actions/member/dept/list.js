@@ -3,6 +3,7 @@
  */
 import cacher from 'sequelize-redis-cache';
 import redis from 'redis';
+import delve from 'dlv';
 import {getSuccessCode, getErrorCode} from '../../../config/response';
 
 export default async function (req, params, {models, device}) {
@@ -30,8 +31,8 @@ export default async function (req, params, {models, device}) {
 
   const Dept = models.Dept;
   const User = models.User;
-  req.dataAccess.push(req.user.department.parent);
-  req.dataAccess.push(req.user.department.id);
+  req.dataAccess.push(delve(req.user, 'department.parent'));
+  req.dataAccess.push(delve(req.user, 'department.id'));
   const getIncludeArgs = (times) => {
     let includeArgs = [];
     if (device === 'app' || renderType === 'with_member') {

@@ -40,6 +40,10 @@ const environment = {
         '/satisfaction/export_sur/site',
         '/satisfaction/export_sur/person',
         '/vod/video_callback',
+        '/upgrade/ios',
+        '/upgrade/recent',
+        '/upgrade/upload',
+        '/upgrade/east',
       ]
     },
     vod_category: [
@@ -96,6 +100,10 @@ const environment = {
         '/sms/send',
         '/satisfaction/export',
         '/vod/video_callback',
+        '/upgrade/ios',
+        '/upgrade/recent',
+        '/upgrade/upload',
+        '/upgrade/east',
       ]
     },
     vod_category: [

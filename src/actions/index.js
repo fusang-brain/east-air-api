@@ -25,3 +25,4 @@ export * as sms from './sms';
 export * as vod from './vod';
 export * as home from './home';
 export * as article from './article';
+export * as upgrade from './upgrade';

@@ -1,5 +1,6 @@
 import Service from './Service';
 import Response from '../config/response';
+import moment from 'moment';
 
 export default class ArticleService extends Service {
   constructor() {
@@ -142,11 +143,22 @@ export default class ArticleService extends Service {
     const ArticleModel = this.getModel("Article");
     const condition = {};
     if (filter && filter.title) {
-      condition.$like = `%${filter.title}%`;
+      condition.title = {
+        $like: `%${filter.title}%`
+      }
     }
 
     if (filter && filter.date) {
-      condition.create_at = filter.date;
+      const d = +filter.date;
+      const startOf = moment(d).startOf('day').valueOf();
+      // console.log(d, '+');
+      const endOf = moment(d).endOf('day').valueOf();
+      // console.log(d, '-');
+      condition.create_at = {
+        $gt: startOf,
+        $lt: endOf,
+      }
+      console.log(condition, 'condition');
     }
 
     if (filter && filter.group) {
@@ -273,7 +285,7 @@ export default class ArticleService extends Service {
   }
 
   async remove(id) {
-    const ArticleModel = this.getModel('video');
+    const ArticleModel = this.getModel('Article');
     await ArticleModel.destroy({
       where: {
         id,
