@@ -48,13 +48,13 @@ export default async function (req, params, ctx) {
 
   // const article = await services.article.create(args, req.user.id);
   if (kind === "android") {
-    upgrade.filename = `http://${config.hostname}/download-apk/${upgrade.filename}`;
+    upgrade.filename = `https://${config.hostname}/download-apk/${upgrade.filename}`;
   }
   if (kind === "ios") {
     // upgrade.filename = `/download-ios/${upgrade.filename}`;
     // upgrade.filename = `itms-services://?action=download-manifest&url=http://${config.hostname}/upgrade/ios`
     // upgrade.filename = `itms-services://?action=download-manifest&url=https://gonghuidownload.mubj-fxb.com/east/ios/manifest.plist`;
-    upgrade.filename = `http://${config.hostname}/upgrade/update_ios`;
+    upgrade.filename = `https://${config.hostname}/upgrade/update_ios`;
   }
   return {
     code: response.getSuccessCode(),

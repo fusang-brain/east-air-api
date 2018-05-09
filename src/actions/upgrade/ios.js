@@ -27,19 +27,19 @@ export default async function (req, params, ctx) {
             <key>kind</key>
             <string>software-package</string>
             <key>url</key>
-            <string>http://${config.hostname}/download-ipa/${upgrade.filename}</string>
+            <string>https://${config.hostname}/download-ipa/${upgrade.filename}</string>
           </dict>
           <dict>
             <key>kind</key>
             <string>display-image</string>
             <key>url</key>
-            <string>http://${config.hostname}/file/ios-app-plist.png</string>
+            <string>https://${config.hostname}/file/ios-app-plist.png</string>
           </dict>
           <dict>
             <key>kind</key>
             <string>full-size-image</string>
             <key>url</key>
-            <string>http://${config.hostname}/file/ios-app-plist.png</string>
+            <string>https://${config.hostname}/file/ios-app-plist.png</string>
           </dict>
         </array>
         <key>metadata</key>
@@ -47,7 +47,7 @@ export default async function (req, params, ctx) {
           <key>bundle-identifier</key>
           <string>com.ceair.BEIunionSPEED</string>
           <key>bundle-version</key>
-          <string>1.0.1.0</string>
+          <string>${upgrade.version}</string>
           <key>kind</key>
           <string>software</string>
           <key>title</key>

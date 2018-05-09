@@ -21,7 +21,7 @@ export default async function (req, params, ctx) {
   });
 
   return (res) => {
-    res.render('east', { ios_plist_href: `http://${config.hostname}/upgrade/ios`, android_href: `http://${config.hostname}/download-apk/${upgradeANDROID.filename}` })
+    res.render('east', { ios_plist_href: `https://${config.hostname}/upgrade/ios`, android_href: `https://${config.hostname}/download-apk/${upgradeANDROID.filename}` })
     // res.send('=====');
   }
 
