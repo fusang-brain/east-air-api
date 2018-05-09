@@ -45,6 +45,8 @@ const environment = {
         '/upgrade/recent',
         '/upgrade/upload',
         '/upgrade/east',
+        '/upgrade/update_ios',
+        '/article/details',
       ]
     },
     vod_category: [
@@ -106,6 +108,8 @@ const environment = {
         '/upgrade/recent',
         '/upgrade/upload',
         '/upgrade/east',
+        '/upgrade/update_ios',
+        '/article/details',
       ]
     },
     vod_category: [

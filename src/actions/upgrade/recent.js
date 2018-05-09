@@ -52,7 +52,9 @@ export default async function (req, params, ctx) {
   }
   if (kind === "ios") {
     // upgrade.filename = `/download-ios/${upgrade.filename}`;
-    upgrade.filename = `itms-services://?action=download-manifest&url=http://${config.hostname}/upgrade/ios`
+    // upgrade.filename = `itms-services://?action=download-manifest&url=http://${config.hostname}/upgrade/ios`
+    // upgrade.filename = `itms-services://?action=download-manifest&url=https://gonghuidownload.mubj-fxb.com/east/ios/manifest.plist`;
+    upgrade.filename = `http://${config.hostname}/upgrade/update_ios`;
   }
   return {
     code: response.getSuccessCode(),
