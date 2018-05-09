@@ -154,7 +154,7 @@ export default class ArticleService extends Service {
       // console.log(d, '+');
       const endOf = moment(d).endOf('day').valueOf();
       // console.log(d, '-');
-      condition.create_at = {
+      condition.update_at = {
         $gt: startOf,
         $lt: endOf,
       }
