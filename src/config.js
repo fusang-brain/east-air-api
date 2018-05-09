@@ -84,7 +84,7 @@ const environment = {
       accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
 
     },
-    hostname: 'mubjfgsgh.mubj-fxb.com/api',
+    hostname: 'gonghuidownload.mubj-fxb.com',
     sms: {
       SignName: '东航北分工会',
       TemplateCode: 'SMS_95620114',
