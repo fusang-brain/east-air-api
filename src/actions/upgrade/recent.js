@@ -1,6 +1,7 @@
 
 
 import {filterParams} from '../../utils/filters';
+import config from '../../config';
 
 export default async function (req, params, ctx) {
   const { services, response, models } = ctx;
@@ -47,11 +48,11 @@ export default async function (req, params, ctx) {
 
   // const article = await services.article.create(args, req.user.id);
   if (kind === "android") {
-    upgrade.filename = `/download-apk/${upgrade.filename}`;
+    upgrade.filename = `http://${config.hostname}/download-apk/${upgrade.filename}`;
   }
   if (kind === "ios") {
     // upgrade.filename = `/download-ios/${upgrade.filename}`;
-    upgrade.filename = `itms-services://?action=download-manifest&url=http://mubjfgsgh.mubj-fxb.com/api/upgrade/ios>`
+    upgrade.filename = `itms-services://?action=download-manifest&url=http://${config.hostname}/upgrade/ios`
   }
   return {
     code: response.getSuccessCode(),

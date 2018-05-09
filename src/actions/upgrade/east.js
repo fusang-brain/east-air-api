@@ -1,5 +1,5 @@
 
-
+import config from '../../config';
 import {filterParams} from '../../utils/filters';
 
 export default async function (req, params, ctx) {
@@ -21,7 +21,7 @@ export default async function (req, params, ctx) {
   });
 
   return (res) => {
-    res.render('east', { ios_plist_href: `http://mubjfgsgh.mubj-fxb.com/api/upgrade/ios`, android_href: `http://mubjfgsgh.mubj-fxb.com/api/download-apk/${upgradeANDROID.filename}` })
+    res.render('east', { ios_plist_href: `http://${config.hostname}/upgrade/ios`, android_href: `http://${config.hostname}/download-apk/${upgradeANDROID.filename}` })
     // res.send('=====');
   }
 

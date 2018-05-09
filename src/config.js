@@ -18,6 +18,7 @@ const environment = {
       accessKeyID: 'LTAI3K9kyKhxejXB',
       accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
     },
+    hostname: '172.17.90.93:3000',
     sms: {
       SignName: '东航北分工会',
       TemplateCode: 'SMS_95620114',
@@ -81,6 +82,7 @@ const environment = {
       accessKeySecret: 'vCaMLD2C337CAQa2Esb5w3IYIsKxIv',
 
     },
+    hostname: 'mubjfgsgh.mubj-fxb.com/api',
     sms: {
       SignName: '东航北分工会',
       TemplateCode: 'SMS_95620114',
