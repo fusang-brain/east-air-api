@@ -22,6 +22,13 @@ export default async function (req, params, {response, checkAccess, services}) {
     content: 'string',
   });
 
+  if (args.content === "" || !args.content) {
+    args.content = {
+      1: '同意',
+      2: '拒绝',
+    }[args.result] || '其他';
+  }
+
   // 处理审批
   const executeResult = await services.approval.executeApproval({
     approval_id: args.approval_id,
