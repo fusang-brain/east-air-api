@@ -32,10 +32,10 @@ export default function (sequelize, DataTypes) {
       attributes: {
         exclude: ['deleted']
       },
-      order: [
-        ['update_at', 'desc'],
-        ['create_at', 'desc'],
-      ]
+      // order: [
+      //   ['update_at', 'desc'],
+      //   ['create_at', 'desc'],
+      // ]
     },
     scopes: {
       list: {
@@ -45,10 +45,10 @@ export default function (sequelize, DataTypes) {
         attributes: {
           exclude: ['deleted']
         },
-        order: [
-          ['update_at', 'desc'],
-          ['create_at', 'desc'],
-        ]
+        // order: [
+        //   ['update_at', 'desc'],
+        //   ['create_at', 'desc'],
+        // ]
       }
     },
     classMethods: {

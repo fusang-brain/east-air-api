@@ -15,7 +15,7 @@ export default async function (req, params, ctx) {
 
   const { offset, limit, ...filter} = args;
 
-  const resp = await services.article.list({ offset: +offset, limit: +limit, filter });
+  const resp = await services.article.list({ offset: +offset, limit: +limit, filter }, req.user.id);
 
   return {
     code: response.getSuccessCode(),

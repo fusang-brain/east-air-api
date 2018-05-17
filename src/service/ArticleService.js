@@ -9,18 +9,39 @@ export default class ArticleService extends Service {
     this.dataAccess = [];
   }
 
-  async groupList() {
+  async groupList(user) {
     const ArticleModel = this.getModel("Article");
     const GroupModel = this.getModel('ArticleGroup');
-    const groups = await GroupModel.all();
+
+    let articleLastRead = await this.getModel('ArticleLastRead').findOne({
+      where: {
+        user_id: user,
+      }
+    });
+
+    if (!articleLastRead) {
+      articleLastRead = await this.getModel('ArticleLastRead').create({
+        user_id: user,
+        time: 0,
+      });
+    }
+    const groups = await GroupModel.all({
+      order: [['sort', 'ASC']],
+    });
     for (let i = 0; i < groups.length; i ++) {
       let group = groups[i];
       let count = await ArticleModel.count({
         where: {
-          is_read: false,
           group_id: group.id,
-        }
+          create_at: {
+            $gt: articleLastRead.time,
+          }
+        },
       });
+
+      if (group.id_type === "video") {
+        count = 0;
+      }
 
       group.setDataValue('unReadCount', count);
     }
@@ -95,6 +116,7 @@ export default class ArticleService extends Service {
   async create({ title, category, groupID, description, content = '', videos = [] }, user) {
     const ArticleModel = this.getModel("Article");
     const ArticleVideoModel = this.getModel("ArticleVideo");
+    const ArticleReadCount = this.getModel("ArticleReadCount");
     const covers = this.matchImages(content);
 
     const article = await ArticleModel.create({
@@ -113,6 +135,12 @@ export default class ArticleService extends Service {
         video_id: _,
       })));
     }
+
+    // await ArticleReadCount.create({
+    //   article_id: article.id,
+    //   group_id: article.group_id,
+    //   user_id: user,
+    // });
 
     return article;
   }
@@ -139,8 +167,22 @@ export default class ArticleService extends Service {
     return foundArticle.is_top;
   }
 
-  async list({offset = 0, limit = 20, filter}) {
+  async list({offset = 0, limit = 20, filter}, user) {
+    let articleLastRead = await this.getModel('ArticleLastRead').findOne({
+      where: {
+        user_id: user,
+      }
+    });
+
+    if (!articleLastRead) {
+      articleLastRead = await this.getModel('ArticleLastRead').create({
+        user_id: user,
+        time: 0,
+      });
+    }
+
     const ArticleModel = this.getModel("Article");
+    
     const condition = {};
     if (filter && filter.title) {
       condition.title = {
@@ -202,8 +244,11 @@ export default class ArticleService extends Service {
           as: 'group',
         }
       ],
-      order: [['is_top', 'DESC']]
+      order: [['is_top', 'DESC'], ['update_at', 'DESC']]
     });
+
+    articleLastRead.time = moment().valueOf();
+    await articleLastRead.save();
 
     return {
       total,
