@@ -24,7 +24,10 @@ require('./utils/seqtask');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-export const redisClient = redis.createClient();
+export const redisClient = redis.createClient({
+  port: config.redis.port,
+  password: config.redis.password,
+});
 
 // mongoose.connect(apiConfig.mongoose.db);
 // mongoose.Promise = Promise;

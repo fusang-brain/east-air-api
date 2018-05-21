@@ -56,6 +56,10 @@ const environment = {
       '入职指南',
       '综合',
     ],
+    redis: {
+      password: 'shijijing@123',
+      port: 6379,
+    },
     storage: {
       pathFolder,
       uploadFolder,
@@ -119,6 +123,10 @@ const environment = {
       '入职指南',
       '综合',
     ],
+    redis: {
+      password: 'shijijing@123',
+      port: 6379,
+    },
     storage: {
       pathFolder,
       uploadFolder,
