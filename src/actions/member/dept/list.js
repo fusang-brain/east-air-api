@@ -4,10 +4,15 @@
 import cacher from 'sequelize-redis-cache';
 import redis from 'redis';
 import delve from 'dlv';
+import config from '../../../config';
 import {getSuccessCode, getErrorCode} from '../../../config/response';
 
 export default async function (req, params, {models, device}) {
-  var rc = redis.createClient();
+  var rc = redis.createClient({
+    port: config.redis.port,
+    password: config.redis.password,
+    auth_pass: config.redis.password,
+  });
   let flag = req.query.flag;
   if (device == 'web' || device == 'pc') {
     flag = 'more';

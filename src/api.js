@@ -27,6 +27,7 @@ bluebird.promisifyAll(redis.Multi.prototype);
 export const redisClient = redis.createClient({
   port: config.redis.port,
   password: config.redis.password,
+  auth_pass: config.redis.password,
 });
 
 // mongoose.connect(apiConfig.mongoose.db);

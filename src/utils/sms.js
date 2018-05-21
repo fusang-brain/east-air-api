@@ -19,7 +19,11 @@ bluebird.promisifyAll(redis.Multi.prototype);
 
 const smsClient = new SMSClient({accessKeyId, secretAccessKey});
 
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({
+  port: config.redis.port,
+  password: config.redis.password,
+  auth_pass: config.redis.password,
+});
 
 export function generateVerifyCode() {
   return Math.floor(1000 + Math.random() * 9000);
