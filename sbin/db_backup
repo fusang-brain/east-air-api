@@ -6,5 +6,5 @@ CurrentPath=$(pwd)
 user=$(bin/rconfig src/config/sequelize.json production.username)
 password=$(bin/rconfig src/config/sequelize.json production.password)
 database=$(bin/rconfig src/config/sequelize.json production.database)
-
+echo "用户" 
 mysqldump -u$user -p$password $database | gzip > $CurrentPath/backup/$filename.gz
