@@ -2,7 +2,8 @@
 import {filterParams} from '../../utils/filters';
 
 export default async function (req, params, ctx) {
-  const { services, response, device } = ctx;
+  const { services, response, device, checkAccess } = ctx;
+  await checkAccess('article', 'view');
   const args = filterParams(req.query, {
     // filter: ['object'],
     offset: ['string', 'required'],

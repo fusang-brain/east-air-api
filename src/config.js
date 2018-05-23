@@ -47,6 +47,7 @@ const environment = {
         '/upgrade/east',
         '/upgrade/update_ios',
         '/article/details',
+        '/home/haha',
       ]
     },
     vod_category: [

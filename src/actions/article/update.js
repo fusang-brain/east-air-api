@@ -2,7 +2,8 @@
 import {filterParams} from '../../utils/filters';
 
 export default async function (req, params, ctx) {
-  const { services, response } = ctx;
+  const { services, response, checkAccess } = ctx;
+  await checkAccess('article', 'edit');
   const args = filterParams(req.body, {
     id: ['string', 'required'],
     title: ['string', 'required'],

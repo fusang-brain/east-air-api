@@ -196,12 +196,12 @@ export default class ArticleService extends Service {
 
     if (filter && filter.start) {
       const startOf = moment(+filter.start).startOf('day').valueOf();
-      createAtCondition['$gt'] = startOf;
+      createAtCondition['$gte'] = startOf;
     }
 
     if (filter && filter.end) {
       const endOf = moment(+filter.end).startOf('day').valueOf()
-      createAtCondition['$lt'] = endOf;
+      createAtCondition['$lte'] = endOf;
     }
 
     if (Object.keys(createAtCondition).length > 0) {
@@ -217,8 +217,8 @@ export default class ArticleService extends Service {
       const endOf = moment(d).endOf('day').valueOf();
       // console.log(d, '-');
       condition.update_at = {
-        $gt: startOf,
-        $lt: endOf,
+        $gte: startOf,
+        $lte: endOf,
       }
       // console.log(condition, 'condition');
     }
