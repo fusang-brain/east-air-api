@@ -6,4 +6,6 @@ values
 ('87uijwiji-98ad-unv3-87jn-jnnjjl9hu23', 'eea6576c-87ff-67hi-93jj-djdiendfsdfa', 'article', '编辑动态', 'edit'),
 ('87uijwiji-98ad-unv3-87jn-jnnjjl9huu8', 'eea6576c-87ff-67hi-93jj-djdiendfsdfa', 'article', '添加动态', 'create'),
 ('87uijwiji-98ad-unv3-87jn-jnnjjl9huu9', 'eea6576c-87ff-67hi-93jj-djdiendfsdfa', 'article', '删除动态', 'deleted'),
+('87uijwiji-98ad-unv3-87jn-jnnjjl9huu9', 'eea6576c-87ff-67hi-93jj-djdiendfsdfa', 'article', '动态分类', 'category'),
+('87uijwiji-98ad-unv3-87jn-jnnjjl9huu9', 'eea6576c-87ff-67hi-93jj-djdiendfsdfa', 'article', '置顶', 'top'),
 ('87uijwiji-98ad-unv3-87jn-jnnjjl9huy7', 'eea6576c-87ff-67hi-93jj-djdiendfsdfa', 'article', '查看动态', 'view');

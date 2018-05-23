@@ -167,7 +167,7 @@ export default class ArticleService extends Service {
     return foundArticle.is_top;
   }
 
-  async list({offset = 0, limit = 20, filter}, user) {
+  async list({offset = 0, limit = 20, filter}, user, device) {
     let articleLastRead = await this.getModel('ArticleLastRead').findOne({
       where: {
         user_id: user,
@@ -190,6 +190,26 @@ export default class ArticleService extends Service {
       }
     }
 
+    // let startOf = null;
+    // let endOf = null;
+    const createAtCondition = {};
+
+    if (filter && filter.start) {
+      const startOf = moment(+filter.start).startOf('day').valueOf();
+      createAtCondition['$gt'] = startOf;
+    }
+
+    if (filter && filter.end) {
+      const endOf = moment(+filter.end).startOf('day').valueOf()
+      createAtCondition['$lt'] = endOf;
+    }
+
+    if (Object.keys(createAtCondition).length > 0) {
+      condition.create_at = createAtCondition;
+    }
+
+    // todo fix date filter
+
     if (filter && filter.date) {
       const d = +filter.date;
       const startOf = moment(d).startOf('day').valueOf();
@@ -200,7 +220,7 @@ export default class ArticleService extends Service {
         $gt: startOf,
         $lt: endOf,
       }
-      console.log(condition, 'condition');
+      // console.log(condition, 'condition');
     }
 
     if (filter && filter.group) {
@@ -215,13 +235,13 @@ export default class ArticleService extends Service {
       where: condition,
 
     });
-    await ArticleModel.update({
-      is_read: true,
-    }, {
-      where: {
-        is_read: false,
-      },
-    });
+    // await ArticleModel.update({
+    //   is_read: true,
+    // }, {
+    //   where: {
+    //     is_read: false,
+    //   },
+    // });
     const list = await ArticleModel.all({
       offset,
       limit,
@@ -244,11 +264,14 @@ export default class ArticleService extends Service {
           as: 'group',
         }
       ],
-      order: [['is_top', 'DESC'], ['update_at', 'DESC']]
+      order: [['is_top', 'DESC'], ['create_at', 'DESC']]
     });
 
-    articleLastRead.time = moment().valueOf();
-    await articleLastRead.save();
+    if (device === 'app') {
+      // 当且仅当app访问列表时更新上次访问时间
+      articleLastRead.time = Date.now();
+      await articleLastRead.save();
+    }
 
     return {
       total,
@@ -256,7 +279,7 @@ export default class ArticleService extends Service {
     }
   }
 
-  async update(id, { title, category, groupID, description, content, videos }) {
+  async update(id, { title, category, groupID, description, content, videos = [] }) {
     const ArticleModel = this.getModel("Article");
     const ArticleVideoModel = this.getModel("ArticleVideo");
     const foundArticle = await ArticleModel.findOne({
@@ -283,11 +306,14 @@ export default class ArticleService extends Service {
     foundArticle.category = category;
     foundArticle.group_id = groupID;
     foundArticle.description = description;
+    if (String(foundArticle.content) !== String(content)) {
+      foundArticle.covers = this.matchImages(content);
+    }
     foundArticle.content = content;
     foundArticle.update_at = Date.now();
     await foundArticle.save();
 
-    if (videos.length > 0) {
+    if ((videos || []).length > 0) {
       await ArticleVideoModel.destroy({
         where: {
           article_id: foundArticle.id,
