@@ -200,7 +200,7 @@ export default class ArticleService extends Service {
     }
 
     if (filter && filter.end) {
-      const endOf = moment(+filter.end).startOf('day').valueOf()
+      const endOf = moment(+filter.end).endOf('day').valueOf()
       createAtCondition['$lte'] = endOf;
     }
 
