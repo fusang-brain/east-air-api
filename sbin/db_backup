@@ -7,4 +7,4 @@ user=$(bin/rconfig src/config/sequelize.json production.username)
 password=$(bin/rconfig src/config/sequelize.json production.password)
 database=$(bin/rconfig src/config/sequelize.json production.database)
 
-mysqldump $database -u $user -p$password | gzip > $CurrentPath/backup/$filename.gz
+mysqldump -u$user -p$password $database | gzip > $CurrentPath/backup/$filename.gz
