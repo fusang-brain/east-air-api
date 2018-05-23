@@ -2,7 +2,7 @@
 import {filterParams} from '../../utils/filters';
 
 export default async function (req, params, ctx) {
-  const { services, response } = ctx;
+  const { services, response, device } = ctx;
   const args = filterParams(req.query, {
     // filter: ['object'],
     offset: ['string', 'required'],
@@ -15,7 +15,7 @@ export default async function (req, params, ctx) {
 
   const { offset, limit, ...filter} = args;
 
-  const resp = await services.article.list({ offset: +offset, limit: +limit, filter }, req.user.id);
+  const resp = await services.article.list({ offset: +offset, limit: +limit, filter }, req.user.id, device);
 
   return {
     code: response.getSuccessCode(),
