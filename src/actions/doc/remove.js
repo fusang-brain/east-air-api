@@ -11,7 +11,7 @@ export default async (req, params, { response, services }) => {
     id: ['string', 'required'],
   })
 
-  await services.doc.remove(args.id);
+  await services.doc.remove(args.id, req.user.id);
 
   return {
     code: Response.getSuccessCode('remove'),
