@@ -307,7 +307,7 @@ export default class ArticleService extends Service {
     foundArticle.group_id = groupID;
     foundArticle.description = description;
     if (String(foundArticle.content) !== String(content)) {
-      foundArticle.covers = this.matchImages(content);
+      foundArticle.covers = JSON.stringify(this.matchImages(content));
     }
     foundArticle.content = content;
     foundArticle.update_at = Date.now();
