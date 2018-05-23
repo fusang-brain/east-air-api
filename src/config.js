@@ -114,6 +114,9 @@ const environment = {
         '/upgrade/east',
         '/upgrade/update_ios',
         '/article/details',
+        '/satisfaction/export_sur',
+        '/satisfaction/export_sur/site',
+        '/satisfaction/export_sur/person',
       ]
     },
     vod_category: [

@@ -9,6 +9,8 @@ export default async function (req, params, ctx) {
     limit: ['string', 'required'],
     title: ['string'],
     date: ['string'],
+    start: ['string'],
+    end: ['string'],
     group: ['string'],
     category: ['string'],
   });
