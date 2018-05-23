@@ -207,6 +207,7 @@ export default class ArticleService extends Service {
     if (Object.keys(createAtCondition).length > 0) {
       condition.create_at = createAtCondition;
     }
+    console.log(createAtCondition, 'createAtCondition');
 
     // todo fix date filter
 
