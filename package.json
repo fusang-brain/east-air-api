@@ -106,7 +106,7 @@
       }
     },
     "db-backup": {
-      "command": "sh ./bin/db_backup_x64 -cfg ../src/config/sequelize.json -out ../src/backup",
+      "command": "./bin/db_backup_x64 -cfg ../src/config/sequelize.json -out ../src/backup",
       "env": {
         "NODE_ACTION": "install",
         "NODE_ENV": "production",
