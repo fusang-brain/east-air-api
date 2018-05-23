@@ -13,8 +13,8 @@ export default function (sequelize, DataTypes) {
     covers: {type: DataTypes.TEXT}, // 封面数组
     // video_id: {type: DataTypes.STRING},
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
-    create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
-    update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
+    create_at: {type: DataTypes.STRING, defaultValue: Date.now},
+    update_at: {type: DataTypes.STRING, defaultValue: Date.now},
     is_top: {type: DataTypes.BOOLEAN, defaultValue: false},
     is_read: {type: DataTypes.BOOLEAN, defaultValue: false},
     publisher: {type: DataTypes.UUID},
