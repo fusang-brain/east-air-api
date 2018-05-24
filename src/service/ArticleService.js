@@ -13,36 +13,83 @@ export default class ArticleService extends Service {
     const ArticleModel = this.getModel("Article");
     const GroupModel = this.getModel('ArticleGroup');
 
-    let articleLastRead = await this.getModel('ArticleLastRead').findOne({
-      where: {
-        user_id: user,
-      }
-    });
+    // let articleLastRead = await this.getModel('ArticleLastRead').findOne({
+    //   where: {
+    //     user_id: user,
+    //     group: 'common',
+    //   }
+    // });
 
-    if (!articleLastRead) {
-      articleLastRead = await this.getModel('ArticleLastRead').create({
-        user_id: user,
-        time: 0,
-      });
-    }
+    // let videoArticleLastRead = await this.getModel('ArticleLastRead').findOne({
+    //   where: {
+    //     user_id: user,
+    //     group: 'video',
+    //   }
+    // });
+
+    // if (!articleLastRead) {
+    //   articleLastRead = await this.getModel('ArticleLastRead').create({
+    //     user_id: user,
+    //     group: 'common',
+    //     time: 0,
+    //   });
+    // }
+
+    // if (!videoArticleLastRead) {
+    //   videoArticleLastRead = await this.getModel('ArticleLastRead').create({
+    //     user_id: user,
+    //     group: 'video',
+    //     time: 0,
+    //   }); 
+    // }
+
     const groups = await GroupModel.all({
       order: [['sort', 'ASC']],
     });
+
+    // let articleLastRead = {};
+
     for (let i = 0; i < groups.length; i ++) {
       let group = groups[i];
+      let lastTime = 0;
+
+      let a = await this.getModel('ArticleLastRead').findOne({
+        where: {
+          user_id: user,
+          group: group.id,
+        }
+      });
+
+      if (!a) {
+        a = await this.getModel('ArticleLastRead').create({
+          user_id: user,
+          group: group.id,
+          time: 0,
+        });
+      }
+
+      // if (!articleLastRead[group.id]) {
+        
+      //   articleLastRead[group.id] = a
+      // }
+
+      // if (group.id_type === "video") {
+      //   lastTime = videoArticleLastRead.time;
+      // } else {
+      //   lastTime = articleLastRead.time;
+      // }
+
       let count = await ArticleModel.count({
         where: {
           group_id: group.id,
           create_at: {
-            $gt: articleLastRead.time,
+            $gt: a.time,
           }
         },
       });
-
-      if (group.id_type === "video") {
-        count = 0;
-      }
-
+      // if (group.id_type === "video") {
+      //   count = 0;
+      // }
       group.setDataValue('unReadCount', count);
     }
 
@@ -168,18 +215,6 @@ export default class ArticleService extends Service {
   }
 
   async list({offset = 0, limit = 20, filter}, user, device) {
-    let articleLastRead = await this.getModel('ArticleLastRead').findOne({
-      where: {
-        user_id: user,
-      }
-    });
-
-    if (!articleLastRead) {
-      articleLastRead = await this.getModel('ArticleLastRead').create({
-        user_id: user,
-        time: 0,
-      });
-    }
 
     const ArticleModel = this.getModel("Article");
     
@@ -207,7 +242,7 @@ export default class ArticleService extends Service {
     if (Object.keys(createAtCondition).length > 0) {
       condition.create_at = createAtCondition;
     }
-    console.log(createAtCondition, 'createAtCondition');
+    // console.log(createAtCondition, 'createAtCondition');
 
     // todo fix date filter
 
@@ -269,6 +304,22 @@ export default class ArticleService extends Service {
     });
 
     if (device === 'app') {
+
+      let articleLastRead = await this.getModel('ArticleLastRead').findOne({
+        where: {
+          user_id: user,
+          group: filter.group,
+        }
+      });
+  
+      if (!articleLastRead) {
+        articleLastRead = await this.getModel('ArticleLastRead').create({
+          user_id: user,
+          group: filter.group,
+          time: 0,
+        });
+      }
+      
       // 当且仅当app访问列表时更新上次访问时间
       articleLastRead.time = Date.now();
       await articleLastRead.save();
