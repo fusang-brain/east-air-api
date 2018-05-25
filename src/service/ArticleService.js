@@ -102,7 +102,7 @@ export default class ArticleService extends Service {
       where: {
         group,
       },
-      order: [['create_at', 'desc']],
+      order: [['create_at', 'asc']],
     });
 
     return categories;
