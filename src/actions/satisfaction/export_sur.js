@@ -61,7 +61,7 @@ async function getExportBuffer (list) {
 }
 
 async function getOtherExportBuffer (list) {
-  let excelData = [['评价对象', '评价人', '评价人手机', '评价人身份证号', '评价', '评价内容', '评价时间', '标签']];
+  let excelData = [['评价对象', '评价人', '评价人部门', '评价人手机', '评价人身份证号', '评价', '评价内容', '评价时间', '标签']];
   // 'very_satisfied': 非常满意 'satisfied': 满意 'not_satisfied': 不满意
   const Mapper = {
     'very_satisfied': '非常满意',
@@ -73,6 +73,7 @@ async function getOtherExportBuffer (list) {
     excelData.push([
       item.survey_subject,
       item.do_user_name,
+      item.do_user_dept_name,
       item.do_user_mobile,
       item.do_user_card_num,
       Mapper[item.satisfaction_level],

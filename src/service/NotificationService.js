@@ -316,7 +316,10 @@ export default class NotificationService extends Service {
     });
 
 
-
+    console.log({
+      total,
+      unreadCount,
+    })
     return {
       total: +total,
       unreadCount,
@@ -324,7 +327,42 @@ export default class NotificationService extends Service {
     };
   }
 
-  async unreadCount() {
+  async unreadCount(dept_id, user_id) {
+    const Notification = this.getModel();
+    const count = await Notification.count({
+      include: [
+        {
+          model: this.getModel('NotificationReaders'),
+          as: 'readers',
+          required: true,
+          where: {
+            user_id: user_id
+          }
+        },
+        {
+          model: this.getModel('NotificationItems'),
+          as: 'items',
+          required: false,
+        },
+        {
+          model: this.getModel('NotificationReceivers'),
+          as: 'receivers',
+          required: true,
+          where: {
+            $or: [
+              {
+                receiver_id: dept_id,
+              },
+              {
+                receiver_id: user_id,
+              }
+            ],
+          }
+        }
+      ]
+    })
 
+    
+    return count;
   }
 }
