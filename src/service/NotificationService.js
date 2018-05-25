@@ -362,7 +362,7 @@ export default class NotificationService extends Service {
       ]
     })
 
-    
+    console.log(count);
     return count;
   }
 }
