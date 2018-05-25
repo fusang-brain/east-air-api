@@ -12,8 +12,8 @@ export default function (sequelize, DataTypes) {
     duration: {type: DataTypes.STRING, defaultValue: '0'},   // 视频长度
     finished: {type: DataTypes.BOOLEAN, defaultValue: false}, // 是否转码完成
     deleted: {type: DataTypes.BOOLEAN, defaultValue: false},
-    create_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
-    update_at: {type: DataTypes.STRING, defaultValue: new Date().getTime()},
+    create_at: {type: DataTypes.STRING, defaultValue: Date.now},
+    update_at: {type: DataTypes.STRING, defaultValue: Date.now},
   }, {
     defaultScope: {
       attributes: {
