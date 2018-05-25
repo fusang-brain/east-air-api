@@ -101,7 +101,8 @@ export default class ArticleService extends Service {
     const categories = await CategoryModel.all({
       where: {
         group,
-      }
+      },
+      order: [['create_at', 'desc']],
     });
 
     return categories;

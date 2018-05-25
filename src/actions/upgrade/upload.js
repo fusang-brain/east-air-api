@@ -5,6 +5,7 @@ import config from '../../config';
 export default async function (req, params, ctx) {
   const { services, response, models } = ctx;
   const { kind, version } = req.body;
+  console.log(req.body, 'body');
   if (!req.package) {
     return {
       code: response.getErrorCode(),
