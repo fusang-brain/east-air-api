@@ -329,7 +329,72 @@ export default class NotificationService extends Service {
 
   async unreadCount(dept_id, user_id) {
     const Notification = this.getModel();
-    const count = await Notification.count({
+    console.log('ok =====', user_id, dept_id);
+    const includeCondition = [
+      // {
+      //   model: this.getModel('NotificationReaders'),
+      //   as: 'readers',
+      //   required: true,
+      //   where: {
+      //     user_id: user_id
+      //   }
+      // },
+      {
+        model: this.getModel('NotificationItems'),
+        as: 'items',
+        required: false,
+      },
+      {
+        model: this.getModel('NotificationReceivers'),
+        as: 'receivers',
+        required: true,
+        where: {
+          $or: [
+            {
+              receiver_id: dept_id,
+            },
+            {
+              receiver_id: user_id,
+            }
+          ],
+        }
+      }
+    ]
+
+    const total = await Notification.count({
+      include: [
+        // {
+        //   model: this.getModel('NotificationReaders'),
+        //   as: 'readers',
+        //   required: true,
+        //   where: {
+        //     user_id: user_id
+        //   }
+        // },
+        {
+          model: this.getModel('NotificationItems'),
+          as: 'items',
+          required: false,
+        },
+        {
+          model: this.getModel('NotificationReceivers'),
+          as: 'receivers',
+          required: true,
+          where: {
+            $or: [
+              {
+                receiver_id: dept_id,
+              },
+              {
+                receiver_id: user_id,
+              }
+            ],
+          }
+        }
+      ],
+    });
+
+    const readTotal = await Notification.count({
       include: [
         {
           model: this.getModel('NotificationReaders'),
@@ -359,10 +424,10 @@ export default class NotificationService extends Service {
             ],
           }
         }
-      ]
-    })
+      ],
+    });
 
-    console.log(count);
-    return count;
+    // console.log(count, "count ......");
+    return total - readTotal;
   }
 }
