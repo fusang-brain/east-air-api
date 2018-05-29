@@ -143,16 +143,16 @@ export default class ApprovalService extends Service {
 
   /**
    * 生成审批
-   * @param projectID
-   * @param publishID
-   * @param approvalType
-   * @param project_subject
-   * @param project_content
-   * @param project_purpose
-   * @param project_type
-   * @param dept_id
-   * @param total_amount
-   * @param has_grant
+   * @param projectID 项目ID
+   * @param publishID 发布人ID
+   * @param approvalType 审批类型
+   * @param project_subject 项目主题
+   * @param project_content 项目内容
+   * @param project_purpose 项目目的
+   * @param project_type 项目类型
+   * @param dept_id 部门ID
+   * @param total_amount 总金额
+   * @param has_grant 是否拥有经费
    * @returns {Promise.<*>}
    */
   async generateApproval(projectID, publishID, approvalType, {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant}) {
@@ -161,16 +161,16 @@ export default class ApprovalService extends Service {
 
   /**
    * 生成活动审批
-   * @param projectID
-   * @param publishID
-   * @param approvalType
-   * @param project_subject
-   * @param project_content
-   * @param project_purpose
-   * @param project_type
-   * @param dept_id
-   * @param total_amount
-   * @param has_grant
+   * @param projectID 项目ID
+   * @param publishID 发布人ID
+   * @param approvalType 审批类型
+   * @param project_subject 项目主题
+   * @param project_content 项目内容
+   * @param project_purpose 项目目的
+   * @param project_type 项目类型
+   * @param dept_id 部门ID
+   * @param total_amount 总金额
+   * @param has_grant 是否拥有经费
    * @returns {Promise.<*>}
    */
   async generateActApproval(projectID, publishID, approvalType = 1 , {project_subject, project_content, project_purpose, project_type, dept_id, total_amount, has_grant}) {
@@ -432,6 +432,9 @@ export default class ApprovalService extends Service {
     };
 
     const flows = await this.approvalFlows(approvalID, publisher);
+
+    
+
     approval.setDataValue('flows', flows);
     return approval;
   }
@@ -492,7 +495,11 @@ export default class ApprovalService extends Service {
     const flows = [
       publisher,
     ];
-
+    const resultMapper = [
+      '待审批',
+      '已同意',
+      '已拒绝',
+    ];
     for (let i = 0; i < approvalFlows.length; i ++) {
       let item = approvalFlows[i];
 
@@ -504,7 +511,7 @@ export default class ApprovalService extends Service {
         user_id: item.approval_man.id,
         name: item.approval_man.name,
         avatar: item.approval_man.avatar,
-        desc: item.result === 0 ? '待审批' : item.content,
+        desc: item.result === 0 ? '待审批' : (item.content || resultMapper[item.result]),
         time: item.approval_date,
         state: item.result,
         sort: i + 1,
@@ -512,6 +519,41 @@ export default class ApprovalService extends Service {
         available: item.available,
         role,
       });
+    }
+
+    // TODO 检测流程中的拒绝项
+    const newFlows = [];
+    let hasRefused = false;
+    for (let i = 0; i < flows.length; i ++) {
+        let flowItem = flows[i];
+        newFlows.push(flowItem);
+
+        if (flowItem.result && +flowItem.result === 2) {
+          // newFlows.push(flowItem);
+          hasRefused = true;
+          newFlows.push({
+            user_id: publisher.user_id,
+            name: publisher.name,
+            avatar: publisher.avatar,
+            desc: '',
+            // role: {},
+            time: flowItem.time,
+            state: 1,
+            isEnd: true,
+            sort: 9999,
+          })
+          break;
+          // continue;
+        }
+
+        
+    }
+
+    console.log(hasRefused, 'hasRefused');
+    console.log(newFlows, 'newFlows');
+    console.log(flows, 'flows');
+    if (hasRefused) {
+      return newFlows;
     }
 
     return flows;
