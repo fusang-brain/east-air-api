@@ -2,6 +2,7 @@ import Service from './Service';
 import Response from '../config/response';
 import moment from 'moment';
 
+
 export default class ArticleService extends Service {
   constructor() {
     super();
@@ -9,6 +10,10 @@ export default class ArticleService extends Service {
     this.dataAccess = [];
   }
 
+  /**
+   * 获取分组列表
+   * @param {*} user 用户ID
+   */
   async groupList(user) {
     const ArticleModel = this.getModel("Article");
     const GroupModel = this.getModel('ArticleGroup');
@@ -96,6 +101,10 @@ export default class ArticleService extends Service {
     return groups;
   }
 
+  /**
+   * 获取分类列表
+   * @param {*} param0 分组ID
+   */
   async categories({ group }) {
     const CategoryModel = this.getModel("ArticleCategory");
     const categories = await CategoryModel.all({
@@ -123,6 +132,10 @@ export default class ArticleService extends Service {
     return imgs;
   }
 
+  /**
+   * 新增分类
+   * @param {*} param0 分类对象
+   */
   async createCategory({ kind, name, group, id_type }) {
     const CategoryModel = this.getModel('ArticleCategory');
     const CateGroup = this.getModel('ArticleGroup');
@@ -142,6 +155,10 @@ export default class ArticleService extends Service {
     return true;
   }
 
+  /**
+   * 移除分类
+   * @param {*} id 分类ID
+   */
   async removeCategory(id) {
     await this.getModel('ArticleCategory').destroy({
       where: {
@@ -150,6 +167,10 @@ export default class ArticleService extends Service {
     });
   }
 
+  /**
+   * 批量创建分类
+   * @param {*} param0 分类对象
+   */
   async batchCreateCategory({ names, group }) {
     const CategoryModel = this.getModel('ArticleCategory');
 
@@ -161,6 +182,11 @@ export default class ArticleService extends Service {
     await CategoryModel.bulkCreate(cates);
   }
 
+  /**
+   * 创建动态
+   * @param {*} param0 文章对象
+   * @param {*} user  用户ID
+   */
   async create({ title, category, groupID, description, content = '', videos = [] }, user) {
     const ArticleModel = this.getModel("Article");
     const ArticleVideoModel = this.getModel("ArticleVideo");
@@ -193,6 +219,10 @@ export default class ArticleService extends Service {
     return article;
   }
 
+  /**
+   * 切换置顶状态
+   * @param {*} id 文章ID 
+   */
   async toggleTop(id) {
     const ArticleModel = this.getModel("Article");
     const foundArticle = await ArticleModel.findOne({
@@ -215,6 +245,12 @@ export default class ArticleService extends Service {
     return foundArticle.is_top;
   }
 
+  /**
+   * 获取文章列表 
+   * @param {*} param0 分页对象
+   * @param {*} user 用户ID 
+   * @param {*} device 设备标示
+   */
   async list({offset = 0, limit = 20, filter}, user, device) {
 
     const ArticleModel = this.getModel("Article");
@@ -332,6 +368,11 @@ export default class ArticleService extends Service {
     }
   }
 
+  /**
+   * 修改动态
+   * @param {*} id 动态ID
+   * @param {*} param1 动态文章对象
+   */
   async update(id, { title, category, groupID, description, content, videos = [] }) {
     const ArticleModel = this.getModel("Article");
     const ArticleVideoModel = this.getModel("ArticleVideo");
@@ -379,6 +420,10 @@ export default class ArticleService extends Service {
     }
   }
 
+  /**
+   * 获取动态详情
+   * @param {*} id 动态文章ID
+   */
   async details(id) {
     const ArticleModel = this.getModel("Article");
     const details = await ArticleModel.findOne({
@@ -408,6 +453,10 @@ export default class ArticleService extends Service {
     return details;
   }
 
+  /**
+   * 删除动态 
+   * @param {*} id 动态文章ID
+   */
   async remove(id) {
     const ArticleModel = this.getModel('Article');
     await ArticleModel.destroy({

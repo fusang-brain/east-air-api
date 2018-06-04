@@ -1,6 +1,12 @@
 
 import {filterParams} from '../../utils/filters';
 
+/**
+ * 切换置顶状态
+ * @param {*} req 
+ * @param {*} params 
+ * @param {*} ctx 
+ */
 export default async function (req, params, ctx) {
   
   const { services, response, checkAccess } = ctx;

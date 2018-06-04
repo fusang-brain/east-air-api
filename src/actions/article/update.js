@@ -1,6 +1,12 @@
 
 import {filterParams} from '../../utils/filters';
 
+/**
+ * 修改动态
+ * @param {*} req 
+ * @param {*} params 
+ * @param {*} ctx 
+ */
 export default async function (req, params, ctx) {
   const { services, response, checkAccess } = ctx;
   await checkAccess('article', 'edit');

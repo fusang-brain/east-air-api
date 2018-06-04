@@ -1,6 +1,12 @@
 
 import {filterParams} from '../../utils/filters';
 
+/**
+ * 活动动态列表
+ * @param {*} req 
+ * @param {*} params 
+ * @param {*} ctx 
+ */
 export default async function (req, params, ctx) {
   const { services, response, device, checkAccess } = ctx;
   await checkAccess('article', 'view');

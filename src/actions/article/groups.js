@@ -1,6 +1,12 @@
 
 import {filterParams} from '../../utils/filters';
 
+/**
+ * 获取所有分组
+ * @param {*} req 
+ * @param {*} params 
+ * @param {*} ctx 
+ */
 export default async function (req, params, ctx) {
   const { services, response } = ctx;
 

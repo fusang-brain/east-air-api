@@ -55,6 +55,11 @@ export default async function (req, params, {response, models, device, services}
     // evaluationStatistics = null;
   }
 
+  // const flows = approvalDetail.getDataValue('flows');
+  // const hasRefused = false;
+
+
+
   return {
     code: response.getSuccessCode(),
     message: '获取详情成功',
