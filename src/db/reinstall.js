@@ -9,7 +9,7 @@ import models from '../models';
 import Auth from '../utils/auth';
 import Config from '../config';
 
-import {permissions, dept, sysuser, roles, defaultImage, SurveyImages, SatisfactionSurvey} from '../config/init_data';
+import {permissions, articleGroup, dept, sysuser, roles, defaultImage, SurveyImages, SatisfactionSurvey} from '../config/init_data';
 
 let defaultDept = null;
 
@@ -110,6 +110,16 @@ async function start() {
     card_num: '100000000000100000',
     password: Auth.encodePassword('C1508FB3AA5E9F4E49920A9618AA96F5DC287182'), // 'itspeed'
   });
+
+  iLog('>> 创建文章分类 >>');
+  for (const group of articleGroup) {
+    await models.ArticleGroup.create({
+      name: group.name,
+      id_type: group.id_type,
+      sort: group.sort,
+    });
+  }
+  iLog('>> 创建文章分类成功 >>');
 
   iLog('* 管理员创建成功');
   iLog('* 初始数据创建成功');

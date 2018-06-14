@@ -3,7 +3,8 @@
  */
 import models from './models';
 import Auth from './utils/auth';
-import {permissions, dept, sysuser, roles, defaultImage, SurveyImages, SatisfactionSurvey} from './config/init_data';
+import {permissions, articleGroup, dept, sysuser, roles, defaultImage, SurveyImages, SatisfactionSurvey} from './config/init_data';
+
 
 const userTotal = 10;
 
@@ -105,6 +106,19 @@ async function start() {
   });
 
   log('>> 管理员创建成功 >>');
+
+  log('>> 创建文章分类 >>');
+
+  for (const group of articleGroup) {
+    console.log(group, 'group');
+    await models.ArticleGroup.create({
+      name: group.name,
+      id_type: group.id_type,
+      sort: group.sort,
+    });
+  }
+  log('>> 创建文章分类成功 >>');
+  
 
   // log('>> 创建公司高层会员 >>');
   // let heads = ['dept_master', 'chile_dept_master', 'dept_finance', 'dept_director'];

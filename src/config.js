@@ -58,7 +58,7 @@ const environment = {
       '综合',
     ],
     redis: {
-      password: 'shijijing@123',
+      // password: 'shijijing@123',
       port: 6379,
     },
     storage: {
@@ -128,7 +128,7 @@ const environment = {
       '综合',
     ],
     redis: {
-      password: 'shijijing@123',
+      // password: 'shijijing@123',
       port: 6379,
     },
     storage: {

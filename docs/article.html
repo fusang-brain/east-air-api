@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>article.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family:  "Meiryo", "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+</head>
+<body>
+<h2 id="1-%E5%8F%91%E5%B8%83%E5%8A%A8%E6%80%81%E6%8E%A5%E5%8F%A3">1. 发布动态接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/create</a></p>
+<p><strong>请求方式 :</strong> POST</p>
+<blockquote>
+<p>发布一个新的动态文章（图文/视频）</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>文章标题</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>category</td>
+<td>UUID<String></td>
+<td>文章分类ID</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>groupID</td>
+<td>UUID<String></td>
+<td>文章分组ID</td>
+<td>是</td>
+<td>这里的分组即一级分类, 目前可选值为（视频、其他）</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>动态描述</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>content</td>
+<td>string</td>
+<td>动态内容</td>
+<td>否</td>
+<td>-</td>
+</tr>
+<tr>
+<td>videos</td>
+<td>string</td>
+<td>视频列表</td>
+<td>否</td>
+<td>视频列表内的每一项应该是正确的视频ID，视频ID是创建视频上传流时返回的 aliyun_video_id 。详情请见接口 [/vod/create_upload_video]</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%AF%B7%E6%B1%82%E7%A4%BA%E4%BE%8B">请求示例</h4>
+<pre class="hljs"><code><div>
+{
+	<span class="hljs-attr">"title"</span>: <span class="hljs-string">"带图片的文章"</span>,
+	<span class="hljs-attr">"category"</span>: <span class="hljs-string">"7408c1a0-71e7-419b-bc4e-e99e2fdee6ca"</span>,
+	<span class="hljs-attr">"groupID"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+	<span class="hljs-attr">"description"</span>: <span class="hljs-string">"desp"</span>,
+	<span class="hljs-attr">"content"</span>: <span class="hljs-string">"&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;"</span>,
+	<span class="hljs-attr">"videos"</span>: [
+		<span class="hljs-string">"654a940935eb43a698b24ec046a7e926"</span>
+	]
+}
+
+</div></code></pre>
+<h2 id="2-%E5%8F%91%E5%B8%83%E5%88%86%E7%B1%BB%E6%8E%A5%E5%8F%A3">2. 发布分类接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/create_category</a></p>
+<p><strong>请求方式 :</strong> POST</p>
+<blockquote>
+<p>发布一个新的动态分类目录</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>分类名</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>kind</td>
+<td>string</td>
+<td>分类类型</td>
+<td>是</td>
+<td>cate、group, 二级分类请使用 cate 类型创建分类</td>
+</tr>
+<tr>
+<td>id_type</td>
+<td>UUID<String></td>
+<td>标示类型</td>
+<td>否</td>
+<td>当 kind 为group时，该字段为必要, 用来标示分组唯一特性, 缺省值为 common</td>
+</tr>
+<tr>
+<td>group</td>
+<td>UUID<String></td>
+<td>分类归属组</td>
+<td>否</td>
+<td>当 kind 为cate时，该字段为必要</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%AF%B7%E6%B1%82%E7%A4%BA%E4%BE%8B">请求示例</h4>
+<pre class="hljs"><code><div>{
+	<span class="hljs-attr">"name"</span>: <span class="hljs-string">"追要闻"</span>,
+  <span class="hljs-attr">"kind"</span>: <span class="hljs-string">"cate"</span>,
+  <span class="hljs-attr">"group"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+}
+</div></code></pre>
+<h4 id="%E8%BF%94%E5%9B%9E%E7%A4%BA%E4%BE%8B">返回示例</h4>
+<pre class="hljs"><code><div>
+
+</div></code></pre>
+<h2 id="3-%E5%88%87%E6%8D%A2%E7%BD%AE%E9%A1%B6%E7%8A%B6%E6%80%81%E6%8E%A5%E5%8F%A3">3. 切换置顶状态接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/toggle_top</a></p>
+<p><strong>请求方式 :</strong> POST</p>
+<blockquote>
+<p>置顶/取消置顶</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID<String></td>
+<td>文章ID</td>
+<td>是</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%AF%B7%E6%B1%82%E7%A4%BA%E4%BE%8B">请求示例</h4>
+<pre class="hljs"><code><div>{
+	<span class="hljs-attr">"id"</span>: <span class="hljs-string">"7ee46d9d-9761-46bf-8887-09796fa8d429"</span>
+}
+</div></code></pre>
+<h4 id="%E8%BF%94%E5%9B%9E%E7%A4%BA%E4%BE%8B">返回示例</h4>
+<pre class="hljs"><code><div>{
+    <span class="hljs-attr">"code"</span>: <span class="hljs-number">1004</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"置顶成功"</span>
+}
+
+</div></code></pre>
+<h2 id="4-%E8%8E%B7%E5%8F%96%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8%E6%8E%A5%E5%8F%A3">4. 获取文章列表接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/list</a></p>
+<p><strong>请求方式 :</strong> GET</p>
+<blockquote>
+<p>获取文章列表</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>offset</td>
+<td>number</td>
+<td>偏移量</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>number</td>
+<td>页数</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>标题</td>
+<td>否</td>
+<td>filter</td>
+</tr>
+<tr>
+<td>date</td>
+<td>number</td>
+<td>日期</td>
+<td>否</td>
+<td>filter</td>
+</tr>
+<tr>
+<td>group</td>
+<td>string</td>
+<td>分组ID</td>
+<td>否</td>
+<td>filter</td>
+</tr>
+<tr>
+<td>category</td>
+<td>string</td>
+<td>分类ID</td>
+<td>否</td>
+<td>filter</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E7%A4%BA%E4%BE%8B">返回示例</h4>
+<pre class="hljs"><code><div>
+{
+    <span class="hljs-attr">"code"</span>: <span class="hljs-number">1000</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"获取列表成功"</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"total"</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">"list"</span>: [
+            {
+                <span class="hljs-attr">"coverList"</span>: [],
+                <span class="hljs-attr">"id"</span>: <span class="hljs-string">"7ee46d9d-9761-46bf-8887-09796fa8d429"</span>,
+                <span class="hljs-attr">"title"</span>: <span class="hljs-string">"test article"</span>,
+                <span class="hljs-attr">"category"</span>: <span class="hljs-string">"7408c1a0-71e7-419b-bc4e-e99e2fdee6ca"</span>,
+                <span class="hljs-attr">"group_id"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+                <span class="hljs-attr">"description"</span>: <span class="hljs-string">"desp"</span>,
+                <span class="hljs-attr">"content"</span>: <span class="hljs-string">"dududud1111"</span>,
+                <span class="hljs-attr">"covers"</span>: <span class="hljs-literal">null</span>,
+                <span class="hljs-attr">"is_top"</span>: <span class="hljs-literal">true</span>,
+                <span class="hljs-attr">"is_read"</span>: <span class="hljs-literal">true</span>,
+                <span class="hljs-attr">"videos"</span>: [
+                    {
+                        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"654a940935eb43a698b24ec046a7e926"</span>,
+                        <span class="hljs-attr">"cover_url"</span>: <span class="hljs-literal">null</span>,
+                        <span class="hljs-attr">"file_url"</span>: <span class="hljs-literal">null</span>,
+                        <span class="hljs-attr">"duration"</span>: <span class="hljs-string">"0"</span>,
+                        <span class="hljs-attr">"finished"</span>: <span class="hljs-literal">false</span>,
+                        <span class="hljs-attr">"ArticleVideo"</span>: {
+                            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"3b30bb75-1001-4cb5-a32f-ae579604c586"</span>,
+                            <span class="hljs-attr">"article_id"</span>: <span class="hljs-string">"7ee46d9d-9761-46bf-8887-09796fa8d429"</span>,
+                            <span class="hljs-attr">"video_id"</span>: <span class="hljs-string">"654a940935eb43a698b24ec046a7e926"</span>
+                        }
+                    }
+                ]
+            },
+            {
+                <span class="hljs-attr">"coverList"</span>: [
+                    <span class="hljs-string">"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png"</span>,
+                    <span class="hljs-string">"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png"</span>,
+                    <span class="hljs-string">"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png"</span>
+                ],
+                <span class="hljs-attr">"id"</span>: <span class="hljs-string">"08d4c82c-f28c-4b76-bd59-9be92602db40"</span>,
+                <span class="hljs-attr">"title"</span>: <span class="hljs-string">"带图片的文章"</span>,
+                <span class="hljs-attr">"category"</span>: <span class="hljs-string">"7408c1a0-71e7-419b-bc4e-e99e2fdee6ca"</span>,
+                <span class="hljs-attr">"group_id"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+                <span class="hljs-attr">"description"</span>: <span class="hljs-string">"desp"</span>,
+                <span class="hljs-attr">"content"</span>: <span class="hljs-string">"&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;"</span>,
+                <span class="hljs-attr">"covers"</span>: <span class="hljs-string">"[\"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\",\"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\",\"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\"]"</span>,
+                <span class="hljs-attr">"is_top"</span>: <span class="hljs-literal">false</span>,
+                <span class="hljs-attr">"is_read"</span>: <span class="hljs-literal">true</span>,
+                <span class="hljs-attr">"videos"</span>: [
+                    {
+                        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"654a940935eb43a698b24ec046a7e926"</span>,
+                        <span class="hljs-attr">"cover_url"</span>: <span class="hljs-literal">null</span>,
+                        <span class="hljs-attr">"file_url"</span>: <span class="hljs-literal">null</span>,
+                        <span class="hljs-attr">"duration"</span>: <span class="hljs-string">"0"</span>,
+                        <span class="hljs-attr">"finished"</span>: <span class="hljs-literal">false</span>,
+                        <span class="hljs-attr">"ArticleVideo"</span>: {
+                            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"df702f52-6050-4c53-a7d4-8d1d9cb40251"</span>,
+                            <span class="hljs-attr">"article_id"</span>: <span class="hljs-string">"08d4c82c-f28c-4b76-bd59-9be92602db40"</span>,
+                            <span class="hljs-attr">"video_id"</span>: <span class="hljs-string">"654a940935eb43a698b24ec046a7e926"</span>
+                        }
+                    }
+                ]
+            },
+            {
+                <span class="hljs-attr">"coverList"</span>: [],
+                <span class="hljs-attr">"id"</span>: <span class="hljs-string">"13830d2e-e5d2-4e2d-9989-40ca6a3dfbfa"</span>,
+                <span class="hljs-attr">"title"</span>: <span class="hljs-string">"test article"</span>,
+                <span class="hljs-attr">"category"</span>: <span class="hljs-string">"7408c1a0-71e7-419b-bc4e-e99e2fdee6ca"</span>,
+                <span class="hljs-attr">"group_id"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+                <span class="hljs-attr">"description"</span>: <span class="hljs-string">"desp"</span>,
+                <span class="hljs-attr">"content"</span>: <span class="hljs-string">"dududud"</span>,
+                <span class="hljs-attr">"covers"</span>: <span class="hljs-literal">null</span>,
+                <span class="hljs-attr">"is_top"</span>: <span class="hljs-literal">false</span>,
+                <span class="hljs-attr">"is_read"</span>: <span class="hljs-literal">true</span>,
+                <span class="hljs-attr">"videos"</span>: []
+            },
+            {
+                <span class="hljs-attr">"coverList"</span>: [],
+                <span class="hljs-attr">"id"</span>: <span class="hljs-string">"2db1d926-88b2-4b8c-881d-bb02220137a0"</span>,
+                <span class="hljs-attr">"title"</span>: <span class="hljs-string">"带图片的文章"</span>,
+                <span class="hljs-attr">"category"</span>: <span class="hljs-string">"7408c1a0-71e7-419b-bc4e-e99e2fdee6ca"</span>,
+                <span class="hljs-attr">"group_id"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+                <span class="hljs-attr">"description"</span>: <span class="hljs-string">"desp"</span>,
+                <span class="hljs-attr">"content"</span>: <span class="hljs-string">"&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;"</span>,
+                <span class="hljs-attr">"covers"</span>: <span class="hljs-literal">null</span>,
+                <span class="hljs-attr">"is_top"</span>: <span class="hljs-literal">false</span>,
+                <span class="hljs-attr">"is_read"</span>: <span class="hljs-literal">true</span>,
+                <span class="hljs-attr">"videos"</span>: [
+                    {
+                        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"654a940935eb43a698b24ec046a7e926"</span>,
+                        <span class="hljs-attr">"cover_url"</span>: <span class="hljs-literal">null</span>,
+                        <span class="hljs-attr">"file_url"</span>: <span class="hljs-literal">null</span>,
+                        <span class="hljs-attr">"duration"</span>: <span class="hljs-string">"0"</span>,
+                        <span class="hljs-attr">"finished"</span>: <span class="hljs-literal">false</span>,
+                        <span class="hljs-attr">"ArticleVideo"</span>: {
+                            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"a61a137c-79b3-462f-974a-3b3fc293a9a3"</span>,
+                            <span class="hljs-attr">"article_id"</span>: <span class="hljs-string">"2db1d926-88b2-4b8c-881d-bb02220137a0"</span>,
+                            <span class="hljs-attr">"video_id"</span>: <span class="hljs-string">"654a940935eb43a698b24ec046a7e926"</span>
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+</div></code></pre>
+<h2 id="5-%E8%8E%B7%E5%8F%96%E6%96%87%E7%AB%A0%E8%AF%A6%E6%83%85%E6%8E%A5%E5%8F%A3">5. 获取文章详情接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/details</a></p>
+<p><strong>请求方式 :</strong> GET</p>
+<blockquote>
+<p>通过文章ID获取文章详情</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>UUID<String></td>
+<td>文章ID</td>
+<td>是</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E7%A4%BA%E4%BE%8B">返回示例</h4>
+<pre class="hljs"><code><div>{
+    <span class="hljs-attr">"code"</span>: <span class="hljs-number">1000</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"获取成功"</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"details"</span>: {
+            <span class="hljs-attr">"coverList"</span>: [
+                <span class="hljs-string">"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png"</span>,
+                <span class="hljs-string">"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png"</span>,
+                <span class="hljs-string">"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png"</span>
+            ],
+            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"08d4c82c-f28c-4b76-bd59-9be92602db40"</span>,
+            <span class="hljs-attr">"title"</span>: <span class="hljs-string">"带图片的文章"</span>,
+            <span class="hljs-attr">"category"</span>: <span class="hljs-string">"7408c1a0-71e7-419b-bc4e-e99e2fdee6ca"</span>,
+            <span class="hljs-attr">"group_id"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+            <span class="hljs-attr">"description"</span>: <span class="hljs-string">"desp"</span>,
+            <span class="hljs-attr">"content"</span>: <span class="hljs-string">"&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;"</span>,
+            <span class="hljs-attr">"covers"</span>: <span class="hljs-string">"[\"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\",\"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\",\"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png\"]"</span>,
+            <span class="hljs-attr">"is_top"</span>: <span class="hljs-literal">false</span>,
+            <span class="hljs-attr">"is_read"</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">"create_at"</span>: <span class="hljs-number">0</span>,
+        }
+    }
+</div></code></pre>
+<h2 id="6-%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E5%88%86%E7%BB%84%E6%8E%A5%E5%8F%A3">6. 获取所有分组接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/groups</a></p>
+<p><strong>请求方式 :</strong> GET</p>
+<blockquote>
+<p>获取所有的文章分组</p>
+</blockquote>
+<hr>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E7%A4%BA%E4%BE%8B">返回示例</h4>
+<pre class="hljs"><code><div>  {
+    <span class="hljs-attr">"code"</span>: <span class="hljs-number">1000</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"获取成功"</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"groups"</span>: [
+            {
+                <span class="hljs-attr">"id"</span>: <span class="hljs-string">"39e1f6e7-f1a0-4810-968d-dbf859c4963d"</span>,
+                <span class="hljs-attr">"name"</span>: <span class="hljs-string">"视频"</span>,
+                <span class="hljs-attr">"id_type"</span>: <span class="hljs-string">"video"</span>,
+                <span class="hljs-attr">"unReadCount"</span>: <span class="hljs-number">0</span>
+            },
+            {
+                <span class="hljs-attr">"id"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+                <span class="hljs-attr">"name"</span>: <span class="hljs-string">"新闻"</span>,
+                <span class="hljs-attr">"id_type"</span>: <span class="hljs-string">"common"</span>,
+                <span class="hljs-attr">"unReadCount"</span>: <span class="hljs-number">0</span>
+            }
+        ]
+    }
+  }
+</div></code></pre>
+<h2 id="7-%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E5%88%86%E7%B1%BB%E6%8E%A5%E5%8F%A3">7. 获取所有分类接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/categories</a></p>
+<p><strong>请求方式 :</strong> GET</p>
+<blockquote>
+<p>获取所有的文章分类</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>group</td>
+<td>String</td>
+<td>文章ID</td>
+<td>是</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E7%A4%BA%E4%BE%8B">返回示例</h4>
+<pre class="hljs"><code><div>  {
+    <span class="hljs-attr">"code"</span>: <span class="hljs-number">1000</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"获取成功"</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"categories"</span>: [
+            {
+                <span class="hljs-attr">"id"</span>: <span class="hljs-string">"7408c1a0-71e7-419b-bc4e-e99e2fdee6ca"</span>,
+                <span class="hljs-attr">"name"</span>: <span class="hljs-string">"追要闻"</span>,
+                <span class="hljs-attr">"group"</span>: <span class="hljs-string">"39e1f6e7-f1a0-4810-968d-dbf859c4963d"</span>
+            }
+        ]
+    }
+  }
+</div></code></pre>
+<h2 id="8-%E7%BC%96%E8%BE%91%E5%8A%A8%E6%80%81">8. 编辑动态</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/update</a></p>
+<p><strong>请求方式 :</strong> POST</p>
+<blockquote>
+<p>编辑一个动态文章（图文/视频）</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>文章ID</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>文章标题</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>category</td>
+<td>UUID<String></td>
+<td>文章分类ID</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>groupID</td>
+<td>UUID<String></td>
+<td>文章分组ID</td>
+<td>是</td>
+<td>这里的分组即一级分类, 目前可选值为（视频、其他）</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>动态描述</td>
+<td>是</td>
+<td>-</td>
+</tr>
+<tr>
+<td>content</td>
+<td>string</td>
+<td>动态内容</td>
+<td>否</td>
+<td>-</td>
+</tr>
+<tr>
+<td>videos</td>
+<td>string</td>
+<td>视频列表</td>
+<td>否</td>
+<td>视频列表内的每一项应该是正确的视频ID，视频ID是创建视频上传流时返回的 aliyun_video_id 。详情请见接口 [/vod/create_upload_video]</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%AF%B7%E6%B1%82%E7%A4%BA%E4%BE%8B">请求示例</h4>
+<pre class="hljs"><code><div>
+{
+	<span class="hljs-attr">"title"</span>: <span class="hljs-string">"带图片的文章"</span>,
+	<span class="hljs-attr">"category"</span>: <span class="hljs-string">"7408c1a0-71e7-419b-bc4e-e99e2fdee6ca"</span>,
+	<span class="hljs-attr">"groupID"</span>: <span class="hljs-string">"6f7c2781-524a-458e-86d6-a16e55fc01d3"</span>,
+	<span class="hljs-attr">"description"</span>: <span class="hljs-string">"desp"</span>,
+	<span class="hljs-attr">"content"</span>: <span class="hljs-string">"&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;&lt;p&gt;jaidfjia&lt;/p&gt;&lt;p class='ql-align-center'&gt;sdfk &lt;/p&gt;&lt;p class='ql-align-center'&gt;&lt;img src='https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1525965671&amp;di=5d77c21966d77354b1eaa7aaa3ab771b&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'&gt;&lt;/p&gt;"</span>,
+	<span class="hljs-attr">"videos"</span>: [
+		<span class="hljs-string">"654a940935eb43a698b24ec046a7e926"</span>
+	]
+}
+
+</div></code></pre>
+<h2 id="9-%E5%88%A0%E9%99%A4%E5%8A%A8%E6%80%81%E6%8E%A5%E5%8F%A3">9. 删除动态接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/article/remove</a></p>
+<p><strong>请求方式 :</strong> POST</p>
+<blockquote>
+<p>编辑一个动态文章（图文/视频）</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>文章ID</td>
+<td>是</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="../readme.md">返回索引</a></li>
+</ul>
+
+</body>
+</html>

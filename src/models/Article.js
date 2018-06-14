@@ -6,8 +6,8 @@ export default function (sequelize, DataTypes) {
   return sequelize.define('Article', {
     id: {type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true},
     title: {type: DataTypes.STRING},
-    category: {type: DataTypes.UUID, defaultValue: 0},
-    group_id: {type: DataTypes.UUID, defaultValue: 0},
+    category: {type: DataTypes.UUID},
+    group_id: {type: DataTypes.UUID},
     description: {type: DataTypes.STRING},
     content: {type: DataTypes.TEXT},
     covers: {type: DataTypes.TEXT}, // 封面数组

@@ -88,6 +88,10 @@ const permissions = [
     slug: 'satisfaction_degree_investigation',
     permission: [
       {
+        name: '导出',
+        slug: 'export',
+      },
+      {
         name: '发起调查',
         slug: 'create',
       },
@@ -249,7 +253,7 @@ const permissions = [
     ]
   },
   {
-    name: '技能培训',
+    name: '公开课',
     slug: 'skill_training',
     permission: [
       {
@@ -279,6 +283,36 @@ const permissions = [
         slug: 'view',
       }
     ]
+  },
+  {
+    name: '我们家的事',
+    slug: 'article',
+    permission: [
+      {
+        name: '编辑动态',
+        slug: 'edit',
+      },
+      {
+        name: '添加动态',
+        slug: 'create',
+      },
+      {
+        name: '删除动态',
+        slug: 'deleted',
+      },
+      {
+        name: '动态分类',
+        slug: 'category',
+      },
+      {
+        name: '置顶',
+        slug: 'top',
+      },
+      {
+        name: '查看动态',
+        slug: 'view',
+      },
+    ],
   }
 ];
 
@@ -296,6 +330,18 @@ const sysuser = {
   card_num: '--',
   // password: Auth.encodePassword('05B530AD0FB56286FE051D5F8BE5B8453F1CD93F') // 88888888
 };
+
+const articleGroup = [
+  {
+    name: '视频',
+    id_type: 'video',
+    sort: 2,
+  }, {
+    name: '新闻',
+    id_type: 'common',
+    sort: 1,
+  }
+]
 
 const roles = [
   {
@@ -345,21 +391,39 @@ const dept = [
     children: [
       {
         name: '飞行部分会',
+        children: {
+          name: '测试部门一',
+        }
       },
       {
         name: '地服部分会',
+        children: {
+          name: '测试部门二',
+        }
       },
       {
         name: '客舱部分会',
+        children: {
+          name: '测试部门三',
+        }
       },
       {
-        name: '运控部分会'
+        name: '运控部分会',
+        children: {
+          name: '测试部门四',
+        }
       },
       {
         name: '货运部分会',
+        children: {
+          name: '测试部门五',
+        }
       },
       {
         name: '机关分会',
+        children: {
+          name: '测试部门六',
+        }
       }
     ]
   }
@@ -439,4 +503,14 @@ function getMasterRole() {
   })
 }
 
-export {permissions, dept, sysuser, roles, getMasterRole, defaultImage, SatisfactionSurvey, SurveyImages};
+export {
+  articleGroup,
+  permissions, 
+  dept, 
+  sysuser, 
+  roles, 
+  getMasterRole, 
+  defaultImage, 
+  SatisfactionSurvey, 
+  SurveyImages
+};

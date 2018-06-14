@@ -48,13 +48,6 @@ __请求方式 :__ POST
 
 ```
 
-#### 返回示例
-
-```json
-
-
-```
-
 ## 2. 发布分类接口
 
 ### 接口调用说明
@@ -297,7 +290,7 @@ __请求地址 :__ [/article/details](#)
 
 __请求方式 :__ GET
 
-> 
+> 通过文章ID获取文章详情
 
 --------------------------------------
 
@@ -351,7 +344,7 @@ __请求地址 :__ [/article/groups](#)
 
 __请求方式 :__ GET
 
-> 
+> 获取所有的文章分组
 
 --------------------------------------
 
@@ -362,11 +355,6 @@ __请求方式 :__ GET
 |code|Integer|1000 或其他|是|当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的|
 |message|String|具体消息|是|本字段是服务器对于本次操作结果的消息描述|
 |data|Array<Object>|服务器附加的数据|否|本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组|
-
-_data 说明_
-
-|字段名|类型|描述|是否必要|备注|
-|-|-|-|-|-|
 
 
 #### 返回示例
@@ -402,7 +390,7 @@ __请求地址 :__ [/article/categories](#)
 
 __请求方式 :__ GET
 
-> 
+> 获取所有的文章分类
 
 --------------------------------------
 
@@ -419,11 +407,6 @@ __请求方式 :__ GET
 |code|Integer|1000 或其他|是|当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的|
 |message|String|具体消息|是|本字段是服务器对于本次操作结果的消息描述|
 |data|Array<Object>|服务器附加的数据|否|本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组|
-
-_data 说明_
-
-|字段名|类型|描述|是否必要|备注|
-|-|-|-|-|-|
 
 
 #### 返回示例
@@ -443,5 +426,73 @@ _data 说明_
     }
   }
 ```
+
+## 8. 编辑动态
+### 接口调用说明
+
+__请求地址 :__ [/article/update](#)
+
+__请求方式 :__ POST
+
+> 编辑一个动态文章（图文/视频）
+
+--------------------------------------
+
+#### 参数列表
+
+|字段名|类型|描述|是否必要|备注|
+|-|-|-|-|-|
+|id|string|文章ID|是|-|
+|title|string|文章标题|是|-|
+|category|UUID<String>|文章分类ID|是|-|
+|groupID|UUID<String>|文章分组ID|是|这里的分组即一级分类, 目前可选值为（视频、其他）|
+|description|string|动态描述|是|-|
+|content|string|动态内容|否|-|
+|videos|string|视频列表|否|视频列表内的每一项应该是正确的视频ID，视频ID是创建视频上传流时返回的 aliyun_video_id 。详情请见接口 [/vod/create_upload_video]|
+
+
+#### 返回值
+
+|字段名|类型|描述|是否必要|备注|
+|-|-|-|-|-|
+|code|Integer|1000 或其他|是|当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的|
+|message|String|具体消息|是|本字段是服务器对于本次操作结果的消息描述|
+|data|Array<Object>|服务器附加的数据|否|本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组|
+
+
+#### 请求示例
+
+```json
+
+{
+	"title": "带图片的文章",
+	"category": "7408c1a0-71e7-419b-bc4e-e99e2fdee6ca",
+	"groupID": "6f7c2781-524a-458e-86d6-a16e55fc01d3",
+	"description": "desp",
+	"content": "<p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p><p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p><p>jaidfjia</p><p class='ql-align-center'>sdfk </p><p class='ql-align-center'><img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525965671&di=5d77c21966d77354b1eaa7aaa3ab771b&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fpoi%2F1411%2F42%2F426b6e816975338ecdb.png_r_1024x683x95_183d8e53.png'></p>",
+	"videos": [
+		"654a940935eb43a698b24ec046a7e926"
+	]
+}
+
+```
+
+## 9. 删除动态接口
+### 接口调用说明
+
+__请求地址 :__ [/article/remove](#)
+
+__请求方式 :__ POST
+
+> 编辑一个动态文章（图文/视频）
+
+--------------------------------------
+
+#### 参数列表
+
+|字段名|类型|描述|是否必要|备注|
+|-|-|-|-|-|
+|id|string|文章ID|是|-|
+
 
 * [返回索引](../readme.md)

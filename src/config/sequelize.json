@@ -18,8 +18,8 @@
 
   "production": {
     "username": "root",
-    "password": "donghang2017",
-    "database": "eastern",
+    "password": "root",
+    "database": "eastern_air",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

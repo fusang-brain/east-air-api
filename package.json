@@ -28,6 +28,7 @@
   "scripts": {
     "start": "concurrently --kill-others \"better-npm-run start-prod-api\"",
     "lint": "eslint -c .eslintrc src",
+    "install": "better-npm-run install",
     "app:install": "better-npm-run install",
     "app:update": "better-npm-run update",
     "app:update-dev": "better-npm-run update-dev",
