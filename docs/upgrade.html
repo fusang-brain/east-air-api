@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>upgrade.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family:  "Meiryo", "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="%E6%9B%B4%E6%96%B0%E6%A8%A1%E5%9D%97%E9%85%8D%E7%BD%AE%E5%92%8C%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3">更新模块配置和接口说明文档</h1>
+<h2 id="1-%E8%8E%B7%E5%8F%96%E8%BF%91%E6%9C%9F%E6%9B%B4%E6%96%B0">1. 获取近期更新</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/upgrade/recent</a></p>
+<p><strong>请求方式 :</strong> GET</p>
+<blockquote>
+<p>获取最近的更新包信息</p>
+</blockquote>
+<hr>
+<h4 id="%E8%BF%94%E5%9B%9E%E5%80%BC">返回值</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>Integer</td>
+<td>1000 或其他</td>
+<td>是</td>
+<td>当code取值范围为 1000 - 2000 之间时（包含1000, 不包含2000）表示此次操作是成功的。当code取值范围为 2000 - 3000 (包含2000, 不包含3000)表示此次操作是失败的</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>具体消息</td>
+<td>是</td>
+<td>本字段是服务器对于本次操作结果的消息描述</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Array<Object></td>
+<td>服务器附加的数据</td>
+<td>否</td>
+<td>本字段服务器并不是每次都会返回，大当每次请求需要返回相应的数据时本字段将会返回，并且是一个数组</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E8%BF%94%E5%9B%9E%E7%A4%BA%E4%BE%8B">返回示例</h4>
+<pre class="hljs"><code><div>{
+    <span class="hljs-attr">"code"</span>: <span class="hljs-number">1000</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"获取成功"</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"702c809d-defc-4b33-b67f-2bae91ac8022"</span>,
+        <span class="hljs-attr">"kind"</span>: <span class="hljs-string">"ios"</span>, // android or ios
+        <span class="hljs-attr">"version"</span>: <span class="hljs-string">"1.0.10"</span>, // 本次更新的版本号
+        <span class="hljs-attr">"filename"</span>: <span class="hljs-string">"itms-services://?action=download-manifest&amp;url=http://mubjfgsgh.mubj-fxb.com/api/upgrade/ios&gt;"</span>, // 更新的地址， 
+        <span class="hljs-attr">"create_at"</span>: <span class="hljs-string">"1525849264668"</span>,
+        <span class="hljs-attr">"update_at"</span>: <span class="hljs-string">"1525849264668"</span>
+    }
+}
+
+</div></code></pre>
+<div STYLE="page-break-after: always;"></div>
+<h2 id="2-%E4%B8%8A%E4%BC%A0%E6%9B%B4%E6%96%B0%E6%8E%A5%E5%8F%A3">2. 上传更新接口</h2>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E">接口调用说明</h3>
+<p><strong>请求地址 :</strong> <a href="#">/upgrade/upload</a></p>
+<p><strong>请求方式 :</strong> POST</p>
+<blockquote>
+<p>上传App更新包</p>
+</blockquote>
+<hr>
+<h4 id="%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8">参数列表</h4>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>描述</th>
+<th>是否必要</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kind</td>
+<td>string</td>
+<td>版本类型</td>
+<td>是</td>
+<td>安装包类型 ‘android’ 或者 ‘ios’</td>
+</tr>
+<tr>
+<td>version</td>
+<td>string</td>
+<td>版本号</td>
+<td>是</td>
+<td>需要和安装包的实际版本一致</td>
+</tr>
+<tr>
+<td>package</td>
+<td>file</td>
+<td>文件</td>
+<td>是</td>
+<td>必须是正确的安装包</td>
+</tr>
+</tbody>
+</table>
+<div STYLE="page-break-after: always;"></div>
+<h2 id="3-%E5%85%B3%E4%BA%8Eapp%E6%9B%B4%E6%96%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AF%B4%E6%98%8E">3. 关于App更新的一些说明</h2>
+<blockquote>
+<p>本教程中所有描述的域名都具有相同的含义，就是域名！，请不要自己偷换概念，将ip当做域名</p>
+</blockquote>
+<h3 id="31-%E5%9F%9F%E5%90%8D-%E4%B8%8E-ip-%E7%9A%84%E5%B7%AE%E5%88%AB">3.1 域名 与 IP 的差别</h3>
+<blockquote>
+<p>IP地址是指互联网协议地址（英语：Internet Protocol Address，又译为网际协议地址），是IP Address的缩写。例如：100.0.0.1。域名（Domain Name），是由一串用点分隔的名字组成的Internet上某一台计算机或计算机组的名称，用于在数据传输时标识计算机的电子方位（有时也指地理位置，地理上的域名，指代有行政自主权的一个地方区域）。例如： www.baidu.com</p>
+</blockquote>
+<h3 id="32-%E7%9B%B8%E5%85%B3%E7%9B%AE%E5%BD%95%E8%AF%B4%E6%98%8E">3.2 相关目录说明</h3>
+<pre class="hljs"><code><div>.
++-- src
+|  +-- config.js         # 一些配置文件
+|  ...
++-- storage
+|  +-- origin            # 上传后的 apk文件（ANDROID）、ipa 文件（IOS）在这里
++-- run.json
++-- package.json
+</div></code></pre>
+<h3 id="33-%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E5%9C%A8%E4%BB%80%E4%B9%88%E5%9C%B0%E6%96%B9%EF%BC%9F">3.3 文件存储在什么地方？</h3>
+<p>看上面 3.2 的相关目录结构，有说明</p>
+<h3 id="34-%E5%A6%82%E4%BD%95%E7%A1%AE%E4%BF%9D%E6%9B%B4%E6%96%B0%E6%A8%A1%E5%9D%97%E6%AD%A3%E7%A1%AE%E8%BF%90%E8%A1%8C">3.4 如何确保更新模块正确运行</h3>
+<h4 id="1-%E7%A1%AE%E4%BF%9Dapi%E6%9C%8D%E5%8A%A1%E6%AD%A3%E7%A1%AE%E9%83%A8%E7%BD%B2%EF%BC%8C%08%E5%B9%B6%E4%B8%94%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E3%80%82">1) 确保API服务正确部署，并且成功运行。</h4>
+<h4 id="2-%E9%85%8D%E7%BD%AEnginx-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%A6%82%E4%B8%8B">2) 配置Nginx, 配置文件如下</h4>
+<blockquote>
+<p>切记，这里不能使用私有证书进行ssl配置。还有，下面的配置只是参考，实际情况请实际配置。你不能直接复制粘贴！！！</p>
+</blockquote>
+<pre class="hljs"><code><div> server {
+        listen 443;
+        ssl on;
+
+        # server_name 配置项，需要填写ssl证书所对应的域名
+        # 若这里的域名修改了，底下所有用到这个域名的地方都需要修改。
+        server_name  gonghuidownload.mubj-fxb.com;
+        root         /usr/share/nginx/html;
+
+        # ssl证书相关配置 (ssl证书配置项，请见nginx的官方描述)
+
+        # ssl_certificate 配置项填写您的真实证书文件
+        ssl_certificate   /usr/share/nginx/cert/214328400790871.pem;
+
+        # ssl_certificate_key 配置项填写您的真实证书文件
+        ssl_certificate_key  /usr/share/nginx/cert/214328400790871.key;
+
+        ssl_session_timeout 5m;
+        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_prefer_server_ciphers on;
+
+        location / {
+          # 这里应该是 api服务器启动的地址，在本地启动时就是localhost
+          proxy_pass http://localhost:3000; 
+        }
+
+
+         error_page 404 /404.html;
+            location = /40x.html {
+           }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+           }
+    }
+
+</div></code></pre>
+<p><em><strong>nginx 配置成功之后，记得重启Nginx服务。并检查是否配置成功。检测方法，在浏览器访问https://域名/upgrade/east, 出现正确的App下载页面，方为配置成功。否则重复此步骤，直到配置成功为止！！！</strong></em></p>
+<h4 id="3-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE">3) 修改配置</h4>
+<p>将 src/config.js 文件中的所有 hostname 字段的值修改为您实际在nginx中配置的域名</p>
+<h4 id="4%EF%BC%89-%E5%A6%82%E4%BD%95%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F%EF%BC%9F">4） 如何下载安装程序？</h4>
+<p>通过地址 https://域名/upgrade/east 访问App下载页面 (这个页面每次下载到的都是最新的安装包)</p>
+<blockquote>
+<p>e.g. 本例子中，配置的域名为 gonghuidownload.mubj-fxb.com， 因此本例子下载地址为 https://gonghuidownload.mubj-fxb.com/upgrade/east</p>
+</blockquote>
+<h4 id="5%EF%BC%89-%E5%A6%82%E4%BD%95%E4%B8%8A%E4%BC%A0%E6%9B%B4%E6%96%B0%EF%BC%9F">5） 如何上传更新？</h4>
+<p>通过接口 https://域名/upgrade/upload 上传更新，上传接口详情请见上面</p>
+<blockquote>
+<p>e.g. 本例子中，配置的域名为 gonghuidownload.mubj-fxb.com， 因此本例子下载地址为 https://gonghuidownload.mubj-fxb.com/upgrade/east</p>
+</blockquote>
+<ul>
+<li><a href="../readme.md">返回索引</a></li>
+</ul>
+
+</body>
+</html>

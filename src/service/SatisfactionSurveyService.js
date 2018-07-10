@@ -302,6 +302,10 @@ export default class SatisfactionSurveyService extends Service {
     }
   }
 
+  /**
+   * 
+   * @param {*} param0 
+   */
   async statisticVote({survey_id, dept_id, filter_by, filter_dept, to_heavy}) {
     // const SatisfactionPoll = this.getModel('SatisfactionPoll');
     const resultMapper = [];
@@ -356,7 +360,7 @@ export default class SatisfactionSurveyService extends Service {
     const peopleVoteRecord = {};
 
     allPolls.forEach(poll => {
-
+      // 如果去重
       if (to_heavy) {
         if (!peopleVoteRecord[poll.evaluate_person_id]) {
           peopleVoteRecord[poll.evaluate_person_id] = [];
@@ -374,7 +378,7 @@ export default class SatisfactionSurveyService extends Service {
             }
 
             if (filter_by === 'month') {
-              return (ok && o.month === poll.monty);
+              return (ok && o.month === poll.evaluate_month);
             }
           }) > 1) {
             return;
@@ -384,7 +388,7 @@ export default class SatisfactionSurveyService extends Service {
         peopleVoteRecord[poll.evaluate_person_id].push({
           level: poll.satisfaction_level,
           week: poll.evaluate_week,
-          monty: poll.evaluate_month,
+          month: poll.evaluate_month,
           year: poll.evaluate_year
         });
       }
