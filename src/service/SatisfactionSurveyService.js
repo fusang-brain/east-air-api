@@ -358,8 +358,8 @@ export default class SatisfactionSurveyService extends Service {
     const peopleCountMapper = {};
     const satisfiedPeopleCountMapper = {};
     const peopleVoteRecord = {};
-
-    allPolls.forEach(poll => {
+    for (let i = 0; i < allPolls.length; i ++) {
+      const poll = allPolls[i];
       // 如果去重
       if (to_heavy) {
         if (!peopleVoteRecord[poll.evaluate_person_id]) {
@@ -371,7 +371,7 @@ export default class SatisfactionSurveyService extends Service {
           if (lodash.findIndex(item, (o) => {
             let ok = o.level === poll.satisfaction_level;
             if (filter_by === 'week') {
-              return ( ok && o.week === poll.evaluate_week);
+              return ( ok && o.week === `${poll.evaluate_week}-${poll.evaluate_month}`);
             }
             if (filter_by === 'year') {
               return ( ok && o.year === poll.evaluate_year);
@@ -380,16 +380,21 @@ export default class SatisfactionSurveyService extends Service {
             if (filter_by === 'month') {
               return (ok && o.month === poll.evaluate_month);
             }
-          }) > 1) {
-            return;
+
+            if (filter_by === 'quarterly') {
+              return (ok && o.quarterly === poll.evaluate_quarterly)
+            }
+          }) >= 0) {
+            continue;
           }
         }
 
         peopleVoteRecord[poll.evaluate_person_id].push({
           level: poll.satisfaction_level,
-          week: poll.evaluate_week,
+          week: `${poll.evaluate_week}-${poll.evaluate_month}`,
           month: poll.evaluate_month,
-          year: poll.evaluate_year
+          year: poll.evaluate_year,
+          quarterly: poll.evaluate_quarterly,
         });
       }
 
@@ -427,13 +432,14 @@ export default class SatisfactionSurveyService extends Service {
       }
 
       resultMapper[key].vote_count += 1;
-      if (!peopleCountMapper[poll.evaluate_person_id]) {
+      const personUniqueKey = `${key}_${poll.evaluate_person_id}`;
+      if (!peopleCountMapper[personUniqueKey]) {
         resultMapper[key].people_count += 1;
-        peopleCountMapper[poll.evaluate_person_id] = true;
+        peopleCountMapper[personUniqueKey] = true;
       }
-      if (poll.satisfaction_level !== 'not_satisfied' && !satisfiedPeopleCountMapper[poll.evaluate_person_id]) {
+      if (poll.satisfaction_level !== 'not_satisfied' && !satisfiedPeopleCountMapper[personUniqueKey]) {
         resultMapper[key].satisfied_people_count += 1;
-        satisfiedPeopleCountMapper[poll.evaluate_person_id] = true;
+        satisfiedPeopleCountMapper[personUniqueKey] = true;
       }
 
       switch (poll.satisfaction_level) {
@@ -460,11 +466,14 @@ export default class SatisfactionSurveyService extends Service {
       let verySatisfiedRate = Math.round(resultMapper[key].very_satisfied_count / resultMapper[key].vote_count * 10000) / 100;
       let satisfiedRate = Math.round(resultMapper[key].satisfied_count / vote_count * 10000) / 100;
       let notSatisfiedRate = Math.round(resultMapper[key].not_satisfied_count / vote_count * 10000) / 100;
+      if (+resultMapper[key].not_satisfied_count === 0) {
+        satisfiedRate = 100 - (verySatisfiedRate);
+      }
       resultMapper[key].very_satisfied_rate = verySatisfiedRate;
       resultMapper[key].satisfied_rate = satisfiedRate;
       resultMapper[key].not_satisfied_rate = 100 - (verySatisfiedRate + satisfiedRate);
 
-    });
+    }
 
     const result = [];
     for (let key in resultMapper) {
