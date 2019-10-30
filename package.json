@@ -176,7 +176,7 @@
     "pretty-error": "^2.0.3",
     "querystring": "^0.2.0",
     "redis": "^2.8.0",
-    "sequelize": "^3.30.4",
+    "sequelize": "^5.15.1",
     "sequelize-cache": "^0.0.1",
     "sequelize-redis-cache": "^2.0.1",
     "sequelize-transparent-cache": "^1.1.2",
