@@ -141,7 +141,7 @@
   },
   "dependencies": {
     "@alicloud/sms-sdk": "^1.0.2",
-    "axios": "^0.15.3",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.23.0",
     "babel-register": "^6.24.0",
     "bcrypt-nodejs": "0.0.3",
