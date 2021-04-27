@@ -175,7 +175,7 @@
     "piping": "^1.0.0-rc.4",
     "pretty-error": "^2.0.3",
     "querystring": "^0.2.0",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "sequelize": "^3.30.4",
     "sequelize-cache": "^0.0.1",
     "sequelize-redis-cache": "^2.0.1",
