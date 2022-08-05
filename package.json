@@ -166,7 +166,7 @@
     "mdi": "^1.8.36",
     "memcached": "^2.2.2",
     "moment": "^2.18.1",
-    "mongoose": "^4.9.2",
+    "mongoose": "^5.7.5",
     "multer": "^1.3.0",
     "mysql": "^2.13.0",
     "node-schedule": "^1.2.5",
