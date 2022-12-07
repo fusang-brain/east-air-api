@@ -155,7 +155,7 @@
     "decimal.js": "^7.2.3",
     "dlv": "^1.1.1",
     "ejs": "^2.6.1",
-    "express": "^4.15.2",
+    "express": "^4.17.3",
     "express-session": "^1.15.2",
     "fs": "0.0.1-security",
     "http": "^0.0.0",
